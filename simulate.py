@@ -10,15 +10,29 @@ import mujoco
 
 ROOT = Path(__file__).resolve().parent
 MODEL_PATH = ROOT / "model" / "spider.xml"
+STANDING_KNEE_TARGET = 0.8
+
+
+def set_standing_pose(model: mujoco.MjModel, data: mujoco.MjData) -> None:
+    """Place the robot above the ground and give each motor a stand target."""
+    data.qpos[0:7] = [0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0]
+    for leg in range(6):
+        hip = 2 * leg
+        knee = hip + 1
+        data.qpos[7 + hip] = 0.0
+        data.qpos[7 + knee] = STANDING_KNEE_TARGET
+        data.ctrl[hip] = 0.0
+        data.ctrl[knee] = STANDING_KNEE_TARGET
+    mujoco.mj_forward(model, data)
 
 
 def run(seconds: float) -> tuple[mujoco.MjModel, mujoco.MjData]:
     model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
     data = mujoco.MjData(model)
+    set_standing_pose(model, data)
 
     steps = round(seconds / model.opt.timestep)
     for _ in range(steps):
-        data.ctrl[:] = 0.0
         mujoco.mj_step(model, data)
 
     return model, data
