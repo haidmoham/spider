@@ -9,7 +9,7 @@
 
   <worldbody>
     <light name="main" pos="0 0 2" dir="0 0 -1"/>
-    <geom name="ground" type="plane" size="3 3 0.1" rgba="0.18 0.18 0.18 1"/>
+    <geom name="ground" type="plane" size="12 12 0.1" rgba="0.91 0.925 0.945 1"/>
 
     <body name="torso" pos="0 0 0.38">
       <freejoint name="root"/>
