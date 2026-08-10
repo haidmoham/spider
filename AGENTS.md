@@ -4,6 +4,15 @@
 
 These instructions apply to the entire repository.
 
+## Robot identity
+
+- The public robot identity is **C-1N**. Do not introduce new public references that call the robot Spider.
+- `haidmoham/spider`, `model/spider.xml`, and other existing `spider` implementation identifiers are legacy compatibility names, not the public identity.
+- Public checkpoints use `C-1N // NN · CODENAME`.
+- Increment the checkpoint only for a robotics capability or understood failure worth preserving and comparing. Do not increment for cleanup, presentation polish, or elapsed time.
+- The current public checkpoint is `C-1N // 01 · SHUFFLE`.
+- `C-1N // 02 · FRAME` and `C-1N // 03 · STRIDE` are reserved future boundaries. Do not present them as completed before the corresponding evidence lands.
+
 ## Working agreements
 
 - Keep changes small and easy to review.
