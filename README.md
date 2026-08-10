@@ -31,19 +31,22 @@ Current and planned lineage:
 ```text
 C-1N // 00 · POSE     motor-assisted static-pose baseline
 C-1N // 01 · SHUFFLE  current coordinated gait failure
-C-1N // 02 · FRAME    planned task-space instrumentation checkpoint
-C-1N // 03 · STAND    reserved for the first support-aware stable stance
-C-1N // 04 · STRIDE   reserved for the first materially better walk
+C-1N // 02 · STAND    reserved for the first support-aware stable stance
+C-1N // 03 · STRIDE   reserved for the first materially better walk
 ```
 
 Only `// 01 · SHUFFLE` is the current public checkpoint. `POSE` is historical.
-`FRAME`, `STAND`, and `STRIDE` are names for future boundaries, not completed
-releases.
+`STAND` and `STRIDE` are names for future boundaries, not completed releases.
 
 `POSE` does not claim that C-1N learned to stand. It records only that the
 simulator can initialize a static pose and that the position actuators can hold
 that pose under the baseline conditions. `STAND` is reserved for a later
 checkpoint that demonstrates understood support and stable equilibrium.
+
+Bench integrations do not require a public checkpoint. In particular, issue #6
+may add task-space telemetry and improve the explanation of the current failure
+without creating a `FRAME` release. A new checkpoint is cut only when the robot
+capability or understood failure itself is worth preserving.
 
 ## C-1N // 01 · SHUFFLE
 
@@ -85,10 +88,11 @@ For a headless walking check:
 python walk.py --headless --duration 20
 ```
 
-The next relevant bench checkpoint is issue #6, Jacobians and task space. Once
-that isolated experiment closes, the optional C-1N hook is to add torso-frame
-foot task-space telemetry before changing the gait controller. That boundary
-becomes `C-1N // 02 · FRAME` only when the evidence is actually integrated.
+The current route is bench issue #6, Jacobians and task space, then bench issue
+#20, static support and equilibrium. Task-space telemetry from #6 may integrate
+into C-1N without a public checkpoint. If the later #20 integration demonstrates
+understood support-aware stable equilibrium, that boundary becomes
+`C-1N // 02 · STAND`.
 
 The browser artifact should preserve historical checkpoints so the robot's
 behavior and the reasoning that changed it can be compared over time.
