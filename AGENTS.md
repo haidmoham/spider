@@ -21,5 +21,7 @@ These instructions apply to the entire repository.
 - Keep changes small and easy to review.
 - Read relevant files before editing them.
 - Prefer clear, direct documentation.
+- Do not assume formal physics coursework when the mechanism is part of the learning target.
+- Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the torque or force that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
 - Verify important changes with a focused check.
 - Do not commit secrets or generated credentials.
