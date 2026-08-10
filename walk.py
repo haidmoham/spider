@@ -8,10 +8,9 @@ import math
 import time
 
 import mujoco
-import mujoco.viewer
 import numpy as np
 
-from simulate import MODEL_PATH, set_standing_pose
+from simulation import load_model, reset, step
 
 
 GAIT_FREQUENCY = 0.65
@@ -160,10 +159,7 @@ class GaitCoordinator:
 
 def apply_gait_control(coordinator: GaitCoordinator, data: mujoco.MjData):
     targets, contact, body_errors = coordinator.targets(data)
-    for leg in range(6):
-        data.ctrl[2 * leg] = targets[2 * leg]
-        data.ctrl[2 * leg + 1] = targets[2 * leg + 1]
-    return contact, body_errors
+    return targets, contact, body_errors
 
 
 def make_figure(title: str) -> mujoco.MjvFigure:
@@ -237,15 +233,15 @@ def update_figures(viewer, torque_figures: tuple, position_figures: tuple, sampl
 
 
 def run_headless(duration: float) -> None:
-    model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
+    model = load_model()
     data = mujoco.MjData(model)
-    set_standing_pose(model, data)
+    reset(model, data)
     coordinator = GaitCoordinator(model, data)
     start_x = float(data.qpos[0])
 
     while data.time < duration:
-        apply_gait_control(coordinator, data)
-        mujoco.mj_step(model, data)
+        targets, _, _ = apply_gait_control(coordinator, data)
+        step(model, data, targets)
 
     print(f"duration={data.time:.3f}s")
     print(f"displacement_x={data.qpos[0] - start_x:.3f}m")
@@ -253,9 +249,11 @@ def run_headless(duration: float) -> None:
 
 
 def run_viewer() -> None:
-    model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
+    import mujoco.viewer
+
+    model = load_model()
     data = mujoco.MjData(model)
-    set_standing_pose(model, data)
+    reset(model, data)
     coordinator = GaitCoordinator(model, data)
     figures = (
         make_figure("Applied actuator torque (N-m)"),
@@ -277,8 +275,8 @@ def run_viewer() -> None:
     with mujoco.viewer.launch_passive(model, data) as viewer:
         while viewer.is_running():
             wall_start = time.time()
-            contact, body_errors = apply_gait_control(coordinator, data)
-            mujoco.mj_step(model, data)
+            targets, contact, body_errors = apply_gait_control(coordinator, data)
+            step(model, data, targets)
 
             torque = np.array(
                 [
