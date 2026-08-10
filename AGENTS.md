@@ -4,6 +4,14 @@
 
 These instructions apply to the entire repository.
 
+## Experiment queue
+
+`TODO.md` is the authoritative ordered queue for Spider experiments.
+
+- Treat the first unchecked experiment as the next experiment.
+- Do not skip, reorder, or replace queued experiments unless the user explicitly changes priority.
+- Preserve completed experiments with a short result note or commit reference.
+
 ## Working agreements
 
 - Keep changes small and easy to review.
