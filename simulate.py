@@ -1,4 +1,4 @@
-"""Run the C-1N // 00 · STAND baseline without a viewer."""
+"""Run the C-1N // 00 · POSE baseline without a viewer."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ STANDING_KNEE_TARGET = 0.8
 
 
 def set_standing_pose(model: mujoco.MjModel, data: mujoco.MjData) -> None:
-    """Place the robot above the ground and give each motor a stand target."""
+    """Place the robot above the ground and give each motor a static pose target."""
     data.qpos[0:7] = [0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0]
     for leg in range(6):
         hip = 2 * leg
