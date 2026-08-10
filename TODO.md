@@ -2,9 +2,10 @@
 
 This file is the authoritative ordered queue for Spider experiments.
 
-- The first unchecked experiment is the next experiment.
+- The first experiment with `Status: NEXT` is the next experiment.
+- Exactly one experiment should have `Status: NEXT`.
 - Do not skip or reorder experiments automatically.
-- Keep completed experiments in this file with a short result note or commit reference.
+- Keep completed experiments in this file with `Status: DONE` and a short result note or commit reference.
 - Add new ideas after the current next experiment unless the user explicitly changes priority.
 
 ## 1. Task-space telemetry: see what the feet are doing
