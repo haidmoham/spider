@@ -13,7 +13,6 @@ These instructions apply to the entire repository.
 - `C-1N // 00 · POSE` is the historical motor-assisted static-pose baseline. Do not describe it as a demonstrated standing capability.
 - The current public checkpoint is `C-1N // 01 · SHUFFLE`.
 - `C-1N // 02 · STAND` and `C-1N // 03 · STRIDE` are reserved future boundaries. Do not present them as completed before the corresponding evidence lands.
-- Task-space instrumentation from robotics-test-bench issue #6 may integrate without creating a public checkpoint. `FRAME` is not a reserved release name.
 - Before landing a commit that changes public identity, checkpoint state, capability claims, or test-bench provenance, use the installed `commit-boundary` skill with `.ontology/commit-rules.md`.
 
 ## Working agreements
@@ -22,8 +21,15 @@ These instructions apply to the entire repository.
 - Read relevant files before editing them.
 - Prefer clear, direct documentation.
 - Do not assume formal physics coursework when the mechanism is part of the learning target.
-- Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the torque or force that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
-- Use C-1N as the integration surface for closed test-bench concepts. As the learning frontier matures, prefer changes that expose production robotics constraints: explicit state and command interfaces, sensor noise, timing, logging and replay, ROS 2 and C++ boundaries, and physical hardware when available.
-- Do not treat simulator polish as a substitute for real-system exposure. A simulation-only capability must have a clear learning, transfer, or integration reason.
+- Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the force or torque that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
+- Preserve the standing foundation. Robotics-test-bench issue #24 defines the support-state experiment that must precede `C-1N // 02 · STAND`.
+- `STAND` requires support-aware, reproducible rollout evidence. A plausible initial pose or a single attractive run is not sufficient.
+- After `STAND`, use C-1N primarily as a simulation subject for learned locomotion, evaluation, simulator calibration, uncertainty, differentiable dynamics, and simulation scaling.
+- Treat controls, contact mechanics, actuator limits, estimation, and numerical methods as supporting mechanisms. Pull them in when a concrete simulation failure requires them.
+- Do not route the project toward ROS 2, embedded systems, or physical hardware by default.
+- Hardware is not a graduation requirement. Physical-system realism matters because simulator assumptions must remain interpretable and falsifiable.
+- Prefer population-level evaluation across fixed scenarios, seeds, or parameter draws when comparing policies or simulator changes.
+- Preserve objective terms, policy checkpoints, evaluation scenarios, and model parameters when learned behavior or statistical comparison is the evidence target.
+- Keep browser and WASM work downstream of useful simulation behavior. The web surface should expose evidence, not create the learning target.
 - Verify important changes with a focused check.
 - Do not commit secrets or generated credentials.
