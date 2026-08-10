@@ -1,4 +1,4 @@
-"""Launch the interactive v0.1 Spider walking viewer."""
+"""Launch the interactive C-1N // 01 · SHUFFLE viewer."""
 
 from __future__ import annotations
 
