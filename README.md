@@ -29,14 +29,21 @@ primary public identity.
 Current and planned lineage:
 
 ```text
-C-1N // 00 · STAND    motor-assisted standing baseline
+C-1N // 00 · POSE     motor-assisted static-pose baseline
 C-1N // 01 · SHUFFLE  current coordinated gait failure
 C-1N // 02 · FRAME    planned task-space instrumentation checkpoint
-C-1N // 03 · STRIDE   reserved for the first materially better walk
+C-1N // 03 · STAND    reserved for the first support-aware stable stance
+C-1N // 04 · STRIDE   reserved for the first materially better walk
 ```
 
-Only `// 01 · SHUFFLE` is the current public checkpoint. `FRAME` and `STRIDE`
-are names for future boundaries, not completed releases.
+Only `// 01 · SHUFFLE` is the current public checkpoint. `POSE` is historical.
+`FRAME`, `STAND`, and `STRIDE` are names for future boundaries, not completed
+releases.
+
+`POSE` does not claim that C-1N learned to stand. It records only that the
+simulator can initialize a static pose and that the position actuators can hold
+that pose under the baseline conditions. `STAND` is reserved for a later
+checkpoint that demonstrates understood support and stable equilibrium.
 
 ## C-1N // 01 · SHUFFLE
 
@@ -44,7 +51,7 @@ The current implementation is a deliberately limited baseline:
 
 - a six-legged MuJoCo body with two hinge joints per leg;
 - independent joint-position actuators;
-- a motor-assisted standing pose;
+- a motor-assisted static pose baseline;
 - a low-clearance, phase-shifted tripod shuffle gait;
 - a headless stepping script and interactive viewer with rolling telemetry.
 
@@ -52,7 +59,7 @@ The gait shares one phase across all six legs. It reads torso orientation and
 foot-ground contacts and uses those signals to bias joint targets. It does not
 produce sustained walking. That failure is preserved as part of the project.
 
-Run the standing baseline with:
+Run the static pose baseline with:
 
 ```bash
 pip install mujoco
