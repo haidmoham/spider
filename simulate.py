@@ -1,4 +1,4 @@
-"""Run the v0.1 Spider model without a viewer."""
+"""Run the C-1N // 00 · STAND baseline without a viewer."""
 
 from __future__ import annotations
 
