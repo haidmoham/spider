@@ -14,6 +14,7 @@ These instructions apply to the entire repository.
 - The current public checkpoint is `C-1N // 01 · SHUFFLE`.
 - `C-1N // 02 · STAND` and `C-1N // 03 · STRIDE` are reserved future boundaries. Do not present them as completed before the corresponding evidence lands.
 - Task-space instrumentation from robotics-test-bench issue #6 may integrate without creating a public checkpoint. `FRAME` is not a reserved release name.
+- Before landing a commit that changes public identity, checkpoint state, capability claims, or test-bench provenance, use the installed `commit-boundary` skill with `.ontology/commit-rules.md`.
 
 ## Working agreements
 
