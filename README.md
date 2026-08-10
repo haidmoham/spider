@@ -1,23 +1,46 @@
-# Spider
+# C-1N
 
-Spider is a longitudinal MuJoCo spider-robot project. It starts intentionally
-simple, and it may be bad at first. The goal is to integrate robotics concepts
-as they become understood in
+C-1N is a longitudinal six-legged MuJoCo robot project. The name is rooted in
+*Cien Fleur: Spider Net*: a Straw Hat reference hidden inside a machine-like
+model designation.
+
+C-1N starts intentionally simple, and it may be bad at first. The goal is to
+integrate robotics concepts as they become understood in
 [`robotics-test-bench`](https://github.com/haidmoham/robotics-test-bench), where
 individual mechanisms are isolated and tested.
 
-Meaningful versions should preserve either a new robotics capability or an
+Meaningful checkpoints preserve either a new robotics capability or an
 understood failure. Completed test-bench experiments may suggest targeted
-improvements to Spider, but they are optional hooks rather than dependencies or
-a fixed roadmap.
+improvements to C-1N, but they are optional hooks rather than dependencies or a
+fixed roadmap.
 
-Likely integration areas include coupled joints, trajectory-based gait control,
-contact and friction, actuator limits, model mismatch, system identification,
-and differentiable dynamics.
+## Checkpoint grammar
 
-## v0.1
+Public checkpoints use:
 
-The first implementation is a deliberately limited baseline:
+```text
+C-1N // NN · CODENAME
+```
+
+The number preserves chronology. The codename records the capability or
+understanding gained at that boundary. Do not use semantic versioning as the
+primary public identity.
+
+Current and planned lineage:
+
+```text
+C-1N // 00 · STAND    motor-assisted standing baseline
+C-1N // 01 · SHUFFLE  current coordinated gait failure
+C-1N // 02 · FRAME    planned task-space instrumentation checkpoint
+C-1N // 03 · STRIDE   reserved for the first materially better walk
+```
+
+Only `// 01 · SHUFFLE` is the current public checkpoint. `FRAME` and `STRIDE`
+are names for future boundaries, not completed releases.
+
+## C-1N // 01 · SHUFFLE
+
+The current implementation is a deliberately limited baseline:
 
 - a six-legged MuJoCo body with two hinge joints per leg;
 - independent joint-position actuators;
@@ -25,9 +48,9 @@ The first implementation is a deliberately limited baseline:
 - a low-clearance, phase-shifted tripod shuffle gait;
 - a headless stepping script and interactive viewer with rolling telemetry.
 
-It does not implement a gait controller. The motors currently hold a fixed
-joint target to offset gravity. Its purpose is to provide a concrete simulation
-and a baseline that can fail in understandable ways.
+The gait shares one phase across all six legs. It reads torso orientation and
+foot-ground contacts and uses those signals to bias joint targets. It does not
+produce sustained walking. That failure is preserved as part of the project.
 
 Run the standing baseline with:
 
@@ -47,12 +70,7 @@ representative tripod actuator torque, torque rate, and torque acceleration.
 The left stack shows representative joint position, velocity, and acceleration.
 Both use the recent simulation window. The stack structure follows the
 model-based-control experiment in `robotics-test-bench`; its numeric values are
-specific to Spider.
-
-The gait controller shares one phase across the legs. It reads a simulated torso
-orientation sensor, compares it with the world gravity vector, and checks
-foot-ground contacts. It uses those signals to bias leg targets while keeping
-the tripod phases synchronized.
+specific to C-1N.
 
 For a headless walking check:
 
@@ -60,5 +78,10 @@ For a headless walking check:
 python walk.py --headless --duration 20
 ```
 
-Once the simulation has useful behavior and understandable failures, it may
-become an interactive WASM portfolio artifact.
+The next relevant bench checkpoint is issue #6, Jacobians and task space. Once
+that isolated experiment closes, the optional C-1N hook is to add torso-frame
+foot task-space telemetry before changing the gait controller. That boundary
+becomes `C-1N // 02 · FRAME` only when the evidence is actually integrated.
+
+The browser artifact should preserve historical checkpoints so the robot's
+behavior and the reasoning that changed it can be compared over time.
