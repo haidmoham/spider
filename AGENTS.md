@@ -23,5 +23,7 @@ These instructions apply to the entire repository.
 - Prefer clear, direct documentation.
 - Do not assume formal physics coursework when the mechanism is part of the learning target.
 - Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the torque or force that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
+- Use C-1N as the integration surface for closed test-bench concepts. As the learning frontier matures, prefer changes that expose production robotics constraints: explicit state and command interfaces, sensor noise, timing, logging and replay, ROS 2 and C++ boundaries, and physical hardware when available.
+- Do not treat simulator polish as a substitute for real-system exposure. A simulation-only capability must have a clear learning, transfer, or integration reason.
 - Verify important changes with a focused check.
 - Do not commit secrets or generated credentials.
