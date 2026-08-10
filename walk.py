@@ -1,4 +1,4 @@
-"""Walk the Spider with a coordinated, gravity-aware tripod gait."""
+"""Run the legacy C-1N tripod gait experiment."""
 
 from __future__ import annotations
 

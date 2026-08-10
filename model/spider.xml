@@ -1,5 +1,5 @@
 <mujoco model="spider">
-  <compiler angle="degree" autolimits="true"/>
+  <compiler angle="degree" autolimits="true" eulerseq="zyx"/>
   <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast"/>
 
   <default>
@@ -16,7 +16,7 @@
       <geom name="torso_geom" type="box" size="0.22 0.16 0.07" rgba="0.01 0.01 0.015 1"/>
       <site name="torso_center" pos="0 0 0" size="0.02" rgba="1 0 0 1"/>
 
-      <body name="front_left" pos="0.14 0.11 0" euler="0 55 38">
+      <body name="front_left" pos="0.14 0.11 0" euler="38 55 0">
         <joint name="front_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="front_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="front_left_shin" pos="0.26 0 0">
@@ -27,7 +27,7 @@
         </body>
       </body>
 
-      <body name="front_right" pos="0.14 -0.11 0" euler="0 55 -38">
+      <body name="front_right" pos="0.14 -0.11 0" euler="-38 55 0">
         <joint name="front_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="front_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="front_right_shin" pos="0.26 0 0">
@@ -38,7 +38,7 @@
         </body>
       </body>
 
-      <body name="middle_left" pos="0 0.16 0" euler="0 55 90">
+      <body name="middle_left" pos="0 0.16 0" euler="90 55 0">
         <joint name="middle_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="middle_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="middle_left_shin" pos="0.26 0 0">
@@ -49,7 +49,7 @@
         </body>
       </body>
 
-      <body name="middle_right" pos="0 -0.16 0" euler="0 55 -90">
+      <body name="middle_right" pos="0 -0.16 0" euler="-90 55 0">
         <joint name="middle_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="middle_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="middle_right_shin" pos="0.26 0 0">
@@ -60,7 +60,7 @@
         </body>
       </body>
 
-      <body name="rear_left" pos="-0.14 0.11 0" euler="0 55 142">
+      <body name="rear_left" pos="-0.14 0.11 0" euler="142 55 0">
         <joint name="rear_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="rear_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="rear_left_shin" pos="0.26 0 0">
@@ -71,7 +71,7 @@
         </body>
       </body>
 
-      <body name="rear_right" pos="-0.14 -0.11 0" euler="0 55 -142">
+      <body name="rear_right" pos="-0.14 -0.11 0" euler="-142 55 0">
         <joint name="rear_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
         <geom name="rear_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035"/>
         <body name="rear_right_shin" pos="0.26 0 0">
@@ -85,18 +85,18 @@
   </worldbody>
 
   <actuator>
-    <position name="front_left_hip_motor" joint="front_left_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="front_left_knee_motor" joint="front_left_knee" kp="100" ctrlrange="-1.4 1.4"/>
-    <position name="front_right_hip_motor" joint="front_right_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="front_right_knee_motor" joint="front_right_knee" kp="100" ctrlrange="-1.4 1.4"/>
-    <position name="middle_left_hip_motor" joint="middle_left_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="middle_left_knee_motor" joint="middle_left_knee" kp="100" ctrlrange="-1.4 1.4"/>
-    <position name="middle_right_hip_motor" joint="middle_right_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="middle_right_knee_motor" joint="middle_right_knee" kp="100" ctrlrange="-1.4 1.4"/>
-    <position name="rear_left_hip_motor" joint="rear_left_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="rear_left_knee_motor" joint="rear_left_knee" kp="100" ctrlrange="-1.4 1.4"/>
-    <position name="rear_right_hip_motor" joint="rear_right_hip" kp="100" ctrlrange="-0.8 0.8"/>
-    <position name="rear_right_knee_motor" joint="rear_right_knee" kp="100" ctrlrange="-1.4 1.4"/>
+    <position name="front_left_hip_motor" joint="front_left_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="front_left_knee_motor" joint="front_left_knee" kp="300" ctrlrange="-1.4 1.4"/>
+    <position name="front_right_hip_motor" joint="front_right_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="front_right_knee_motor" joint="front_right_knee" kp="300" ctrlrange="-1.4 1.4"/>
+    <position name="middle_left_hip_motor" joint="middle_left_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="middle_left_knee_motor" joint="middle_left_knee" kp="300" ctrlrange="-1.4 1.4"/>
+    <position name="middle_right_hip_motor" joint="middle_right_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="middle_right_knee_motor" joint="middle_right_knee" kp="300" ctrlrange="-1.4 1.4"/>
+    <position name="rear_left_hip_motor" joint="rear_left_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="rear_left_knee_motor" joint="rear_left_knee" kp="300" ctrlrange="-1.4 1.4"/>
+    <position name="rear_right_hip_motor" joint="rear_right_hip" kp="300" ctrlrange="-0.8 0.8"/>
+    <position name="rear_right_knee_motor" joint="rear_right_knee" kp="300" ctrlrange="-1.4 1.4"/>
   </actuator>
 
   <sensor>
