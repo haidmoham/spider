@@ -26,7 +26,9 @@ These instructions apply to the entire repository.
 - `STAND` requires support-aware, reproducible rollout evidence. A plausible initial pose or a single attractive run is not sufficient.
 - After `STAND`, use C-1N primarily as a simulation subject for learned locomotion, evaluation, simulator calibration, uncertainty, differentiable dynamics, and simulation scaling.
 - Treat controls, contact mechanics, actuator limits, estimation, and numerical methods as supporting mechanisms. Pull them in when a concrete simulation failure requires them.
-- Do not route the project toward ROS 2, embedded systems, or physical hardware by default.
+- C++ is in scope when it improves simulator performance, robotics software, autonomy integration, numerical code, or compatibility with target libraries. Do not use C++ as a reason to redirect the project into embedded or firmware work.
+- ROS 2 is in scope when simulation or autonomy interoperability needs it. It is not a required destination.
+- Do not route the project toward firmware, device drivers, microcontrollers, board-level electronics, or other EE/CPE-style low-level work by default.
 - Hardware is not a graduation requirement. Physical-system realism matters because simulator assumptions must remain interpretable and falsifiable.
 - Prefer population-level evaluation across fixed scenarios, seeds, or parameter draws when comparing policies or simulator changes.
 - Preserve objective terms, policy checkpoints, evaluation scenarios, and model parameters when learned behavior or statistical comparison is the evidence target.
