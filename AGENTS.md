@@ -31,3 +31,17 @@ These instructions apply to the entire repository.
 - Keep browser and WASM work downstream of useful simulation behavior. The web surface should expose evidence, not create the learning target.
 - Verify important changes with a focused check.
 - Do not commit secrets or generated credentials.
+
+## Code Review Rules
+
+### Physical behavior and evidence
+
+- Flag changes that alter model parameters, timestep, reset state, contact behavior, control logic, MuJoCo `qpos` or `qvel` indexing, or pinned numerical baselines without an explicit physical rationale and reproducible test evidence. Safe path: preserve existing behavior, or document why the baseline changed and add or update regression evidence.
+
+### State and frame boundaries
+
+- Flag changes that mix commanded targets with measured MuJoCo state, duplicate state derivation across surfaces, or expose telemetry with an unverified dimension, order, unit, or coordinate frame. Safe path: derive canonical measured state once, serialize it consistently, and test reset plus stepped behavior.
+
+### Capability claims
+
+- Flag standing or locomotion claims based on appearance, one rollout, or an initial pose. Safe path: require support-aware, reproducible rollout evidence and preserve known failure signatures until they are intentionally superseded.
