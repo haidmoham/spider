@@ -10,7 +10,7 @@ These instructions apply to the entire repository.
 - `haidmoham/spider`, `model/spider.xml`, and other existing `spider` implementation identifiers are legacy compatibility names, not the public identity.
 - Public checkpoints use `C-1N // NN · CODENAME`.
 - Increment the checkpoint only for a robotics capability or understood failure worth preserving and comparing. Do not increment for instrumentation, cleanup, presentation polish, or elapsed time.
-- `C-1N // 00 · POSE` is the historical motor-assisted static-pose baseline. Do not describe it as a demonstrated standing capability.
+- `C-1N // 00 · SPAWN` is the historical motor-assisted static-pose baseline. Do not describe it as a demonstrated standing capability.
 - The current public checkpoint is `C-1N // 01 · SHUFFLE`.
 - `C-1N // 02 · STAND` and `C-1N // 03 · STRIDE` are reserved future boundaries. Do not present them as completed before the corresponding evidence lands.
 - Task-space instrumentation from robotics-test-bench issue #6 may integrate without creating a public checkpoint. `FRAME` is not a reserved release name.

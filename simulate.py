@@ -1,4 +1,4 @@
-"""Run the C-1N // 00 · POSE baseline without a viewer."""
+"""Run the C-1N // 00 · SPAWN baseline without a viewer."""
 
 from __future__ import annotations
 

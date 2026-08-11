@@ -29,16 +29,16 @@ primary public identity.
 Current and planned lineage:
 
 ```text
-C-1N // 00 · POSE     motor-assisted static-pose baseline
+C-1N // 00 · SPAWN    motor-assisted static-pose baseline
 C-1N // 01 · SHUFFLE  current coordinated gait failure
 C-1N // 02 · STAND    reserved for the first support-aware stable stance
 C-1N // 03 · STRIDE   reserved for the first materially better walk
 ```
 
-Only `// 01 · SHUFFLE` is the current public checkpoint. `POSE` is historical.
+Only `// 01 · SHUFFLE` is the current public checkpoint. `SPAWN` is historical.
 `STAND` and `STRIDE` are names for future boundaries, not completed releases.
 
-`POSE` does not claim that C-1N learned to stand. It records only that the
+`SPAWN` does not claim that C-1N learned to stand. It records only that the
 simulator can initialize a static pose and that the position actuators can hold
 that pose under the baseline conditions. `STAND` is reserved for a later
 checkpoint that demonstrates understood support and stable equilibrium.
