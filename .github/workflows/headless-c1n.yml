@@ -5,6 +5,13 @@ on:
   push:
     branches: [master]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   headless-c1n:
     name: Headless C-1N simulation
@@ -22,7 +29,7 @@ jobs:
       - name: Check installed dependencies
         run: python -m pip check
       - name: Run deterministic regression suite
-        run: python -m unittest -v test_simulation.py
+        run: python -m unittest discover -v
       - name: Run static baseline
         run: python simulate.py --seconds 1
       - name: Run legacy SHUFFLE headlessly
