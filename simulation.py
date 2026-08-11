@@ -39,6 +39,7 @@ class MeasuredState:
     torso_angular_velocity: tuple[float, float, float]
     joint_positions: tuple[float, ...]
     joint_velocities: tuple[float, ...]
+    actuator_forces: tuple[float, ...]
     foot_positions: dict[str, tuple[float, float, float]]
     foot_contacts: tuple[str, ...]
 
@@ -105,6 +106,7 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
         torso_angular_velocity=tuple(float(value) for value in data.qvel[3:6]),
         joint_positions=tuple(float(value) for value in data.qpos[7:]),
         joint_velocities=tuple(float(value) for value in data.qvel[6:]),
+        actuator_forces=tuple(float(value) for value in data.actuator_force),
         foot_positions={
             name: tuple(float(value) for value in data.geom_xpos[model.geom(f"{name}_foot").id])
             for name in FOOT_NAMES

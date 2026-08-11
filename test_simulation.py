@@ -31,6 +31,7 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(first.torso_angular_velocity, (0.0, 0.0, 0.0))
         self.assertEqual(first.joint_positions, (0.0, 0.8) * 6)
         self.assertEqual(first.joint_velocities, (0.0,) * 12)
+        self.assertEqual(first.actuator_forces, (0.0,) * 12)
 
     def test_targets_are_commands_not_measured_state(self) -> None:
         reset(self.model, self.data)
@@ -70,6 +71,7 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(response["torso_orientation"], [1.0, 0.0, 0.0, 0.0])
         self.assertEqual(response["torso_angular_velocity"], [0.0, 0.0, 0.0])
         self.assertEqual(response["joint_velocities"], [0.0] * 12)
+        self.assertEqual(response["actuator_forces"], [0.0] * 12)
         self.assertEqual(response["controls"], [0.0, 0.8] * 6)
 
 
