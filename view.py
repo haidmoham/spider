@@ -1,4 +1,4 @@
-"""Launch the interactive C-1N // 01 · SHUFFLE viewer."""
+"""Launch the legacy interactive C-1N gait viewer."""
 
 from __future__ import annotations
 
