@@ -3,6 +3,14 @@
 The core owns model loading, reset, measured state, commanded targets, and
 stepping. Viewers and experiments may depend on this module; it never depends
 on them.
+
+Future experiment seams (intentionally not implemented here):
+- COM/support results belong beside ``MeasuredState`` as measurements, never
+  as commands.
+- Desired-foot workspace results must be translated into the joint target
+  vector before ``set_targets`` or ``step`` receives it.
+- A later Jacobian adapter belongs between those Cartesian foot corrections
+  and that existing joint-target vector; it must not be folded into stepping.
 """
 
 from __future__ import annotations
@@ -34,9 +42,12 @@ class MeasuredState:
 
     time: float
     torso_position: tuple[float, float, float]
+    torso_orientation: tuple[float, float, float, float]
     torso_velocity: tuple[float, float, float]
+    torso_angular_velocity: tuple[float, float, float]
     joint_positions: tuple[float, ...]
     joint_velocities: tuple[float, ...]
+    actuator_forces: tuple[float, ...]
     foot_positions: dict[str, tuple[float, float, float]]
     foot_contacts: tuple[str, ...]
 
@@ -98,9 +109,12 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
     return MeasuredState(
         time=float(data.time),
         torso_position=tuple(float(value) for value in data.qpos[:3]),
+        torso_orientation=tuple(float(value) for value in data.qpos[3:7]),
         torso_velocity=tuple(float(value) for value in data.qvel[:3]),
+        torso_angular_velocity=tuple(float(value) for value in data.qvel[3:6]),
         joint_positions=tuple(float(value) for value in data.qpos[7:]),
         joint_velocities=tuple(float(value) for value in data.qvel[6:]),
+        actuator_forces=tuple(float(value) for value in data.actuator_force),
         foot_positions={
             name: tuple(float(value) for value in data.geom_xpos[model.geom(f"{name}_foot").id])
             for name in FOOT_NAMES
