@@ -34,7 +34,9 @@ class MeasuredState:
 
     time: float
     torso_position: tuple[float, float, float]
+    torso_orientation: tuple[float, float, float, float]
     torso_velocity: tuple[float, float, float]
+    torso_angular_velocity: tuple[float, float, float]
     joint_positions: tuple[float, ...]
     joint_velocities: tuple[float, ...]
     foot_positions: dict[str, tuple[float, float, float]]
@@ -98,7 +100,9 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
     return MeasuredState(
         time=float(data.time),
         torso_position=tuple(float(value) for value in data.qpos[:3]),
+        torso_orientation=tuple(float(value) for value in data.qpos[3:7]),
         torso_velocity=tuple(float(value) for value in data.qvel[:3]),
+        torso_angular_velocity=tuple(float(value) for value in data.qvel[3:6]),
         joint_positions=tuple(float(value) for value in data.qpos[7:]),
         joint_velocities=tuple(float(value) for value in data.qvel[6:]),
         foot_positions={

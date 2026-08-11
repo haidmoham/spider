@@ -51,7 +51,9 @@ def state(model: mujoco.MjModel, data: mujoco.MjData, power: StancePower, experi
     return {
         "time": observed.time,
         "torso_position": list(observed.torso_position),
+        "torso_orientation": list(observed.torso_orientation),
         "torso_velocity": list(observed.torso_velocity),
+        "torso_angular_velocity": list(observed.torso_angular_velocity),
         "joint_positions": list(observed.joint_positions),
         "controls": data.ctrl.tolist(),
         "foot_positions": {name: list(position) for name, position in observed.foot_positions.items()},
