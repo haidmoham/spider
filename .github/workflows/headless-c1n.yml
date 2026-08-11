@@ -1,0 +1,33 @@
+name: Headless C-1N
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  headless-c1n:
+    name: Headless C-1N simulation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+      - name: Install runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check installed dependencies
+        run: python -m pip check
+      - name: Run deterministic regression suite
+        run: python -m unittest -v test_simulation.py
+      - name: Run static baseline
+        run: python simulate.py --seconds 1
+      - name: Run legacy SHUFFLE headlessly
+        run: python walk.py --headless --duration 2
+      - name: Run canonical live path headlessly
+        run: python interact.py --headless --seconds 1
+      - name: Run SHUFFLE through live path headlessly
+        run: python interact.py --headless --experiment shuffle --seconds 2
