@@ -74,6 +74,33 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(response["actuator_forces"], [0.0] * 12)
         self.assertEqual(response["controls"], [0.0, 0.8] * 6)
 
+    def test_interact_state_reports_live_measured_telemetry(self) -> None:
+        model, data, power, coordinator = build_simulation("none")
+
+        initial = execute({"command": "state"}, model, data, power, "none", coordinator)
+        observed_initial = measured_state(model, data)
+        self.assertEqual(initial["joint_positions"], list(observed_initial.joint_positions))
+        self.assertEqual(initial["joint_velocities"], list(observed_initial.joint_velocities))
+        self.assertEqual(initial["actuator_forces"], list(observed_initial.actuator_forces))
+        self.assertEqual(initial["foot_contacts"], list(observed_initial.foot_contacts))
+        self.assertEqual(initial["controls"], data.ctrl.tolist())
+
+        stepped = execute({"command": "step", "n": 2}, model, data, power, "none", coordinator)
+        observed_stepped = measured_state(model, data)
+        self.assertEqual(stepped["time"], observed_stepped.time)
+        self.assertEqual(stepped["torso_position"], list(observed_stepped.torso_position))
+        self.assertEqual(stepped["torso_orientation"], list(observed_stepped.torso_orientation))
+        self.assertEqual(stepped["torso_velocity"], list(observed_stepped.torso_velocity))
+        self.assertEqual(stepped["torso_angular_velocity"], list(observed_stepped.torso_angular_velocity))
+        self.assertEqual(stepped["joint_positions"], list(observed_stepped.joint_positions))
+        self.assertEqual(stepped["joint_velocities"], list(observed_stepped.joint_velocities))
+        self.assertEqual(stepped["actuator_forces"], list(observed_stepped.actuator_forces))
+        self.assertEqual(stepped["foot_positions"], {name: list(position) for name, position in observed_stepped.foot_positions.items()})
+        self.assertEqual(stepped["foot_contacts"], list(observed_stepped.foot_contacts))
+        self.assertEqual(stepped["controls"], data.ctrl.tolist())
+        self.assertTrue(any(value != 0.0 for value in stepped["joint_velocities"]))
+        self.assertTrue(any(value != 0.0 for value in stepped["actuator_forces"]))
+
 
 if __name__ == "__main__":
     unittest.main()
