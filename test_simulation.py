@@ -84,6 +84,7 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(initial["actuator_forces"], list(observed_initial.actuator_forces))
         self.assertEqual(initial["foot_contacts"], list(observed_initial.foot_contacts))
         self.assertEqual(initial["controls"], data.ctrl.tolist())
+        self.assertEqual(set(initial["legs"]), set(FOOT_NAMES))
 
         stepped = execute({"command": "step", "n": 2}, model, data, power, "none", coordinator)
         observed_stepped = measured_state(model, data)
@@ -100,6 +101,17 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(stepped["controls"], data.ctrl.tolist())
         self.assertTrue(any(value != 0.0 for value in stepped["joint_velocities"]))
         self.assertTrue(any(value != 0.0 for value in stepped["actuator_forces"]))
+        for index, name in enumerate(FOOT_NAMES):
+            leg = stepped["legs"][name]
+            self.assertEqual(leg["foot_position"], list(observed_stepped.foot_positions[name]))
+            self.assertEqual(leg["in_ground_contact"], name in observed_stepped.foot_contacts)
+            for offset, joint in enumerate(("hip", "knee")):
+                joint_state = leg["joints"][joint]
+                actuator = index * 2 + offset
+                self.assertEqual(joint_state["target"], data.ctrl[actuator])
+                self.assertEqual(joint_state["position"], observed_stepped.joint_positions[actuator])
+                self.assertEqual(joint_state["velocity"], observed_stepped.joint_velocities[actuator])
+                self.assertEqual(joint_state["actuator_force"], observed_stepped.actuator_forces[actuator])
 
 
 if __name__ == "__main__":

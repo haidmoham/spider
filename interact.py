@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 import mujoco
 
-from simulation import load_model, measured_state, reset, step
+from simulation import FOOT_NAMES, load_model, measured_state, reset, step
 from walk import GaitCoordinator, apply_gait_control
 
 
@@ -48,6 +48,22 @@ class StancePower:
 
 def state(model: mujoco.MjModel, data: mujoco.MjData, power: StancePower, experiment: str) -> dict:
     observed = measured_state(model, data)
+    legs = {
+        name: {
+            "foot_position": list(observed.foot_positions[name]),
+            "in_ground_contact": name in observed.foot_contacts,
+            "joints": {
+                joint: {
+                    "target": float(data.ctrl[index * 2 + offset]),
+                    "position": observed.joint_positions[index * 2 + offset],
+                    "velocity": observed.joint_velocities[index * 2 + offset],
+                    "actuator_force": observed.actuator_forces[index * 2 + offset],
+                }
+                for offset, joint in enumerate(("hip", "knee"))
+            },
+        }
+        for index, name in enumerate(FOOT_NAMES)
+    }
     return {
         "time": observed.time,
         "torso_position": list(observed.torso_position),
@@ -60,6 +76,7 @@ def state(model: mujoco.MjModel, data: mujoco.MjData, power: StancePower, experi
         "controls": data.ctrl.tolist(),
         "foot_positions": {name: list(position) for name, position in observed.foot_positions.items()},
         "foot_contacts": list(observed.foot_contacts),
+        "legs": legs,
         "pair_powers": power.values,
         "experiment": experiment,
     }
