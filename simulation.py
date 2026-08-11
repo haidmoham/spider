@@ -3,6 +3,14 @@
 The core owns model loading, reset, measured state, commanded targets, and
 stepping. Viewers and experiments may depend on this module; it never depends
 on them.
+
+Future experiment seams (intentionally not implemented here):
+- COM/support results belong beside ``MeasuredState`` as measurements, never
+  as commands.
+- Desired-foot workspace results must be translated into the joint target
+  vector before ``set_targets`` or ``step`` receives it.
+- A later Jacobian adapter belongs between those Cartesian foot corrections
+  and that existing joint-target vector; it must not be folded into stepping.
 """
 
 from __future__ import annotations

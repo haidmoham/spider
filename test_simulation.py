@@ -8,7 +8,7 @@ import mujoco
 
 from interact import build_simulation, execute
 from simulate import run
-from simulation import FOOT_NAMES, load_model, measured_state, reset, set_targets, step
+from simulation import FOOT_NAMES, load_model, measured_state, neutral_targets, reset, set_targets, step
 from walk import GaitCoordinator, apply_gait_control
 
 
@@ -46,7 +46,7 @@ class SimulationCoreTests(unittest.TestCase):
         """Protect current physics evidence without treating it as a capability claim."""
         reset(self.model, self.data)
         for _ in range(round(1.0 / self.model.opt.timestep)):
-            step(self.model, self.data)
+            step(self.model, self.data, neutral_targets())
         self.assertAlmostEqual(self.data.qpos[2], 0.4925214786895183, places=10)
         self.assertAlmostEqual(self.data.qvel[2], -0.0001325950249269702, places=10)
 
