@@ -26,8 +26,8 @@ HOST = "127.0.0.1"
 PORT = 5555
 JOINT_NAMES = ("coxa", "hip", "knee")
 SHOVE_DURATION_S = 0.2
-SHOVE_ANGLE_DEG = 135.0
-SHOVE_MULTIPLES = (0.0, 0.25, 0.5, 1.0)
+SHOVE_ANGLES_DEG = tuple(float(angle) for angle in range(0, 360, 45))
+SHOVE_MULTIPLES = (0.0, 0.25, 0.5, 0.75, 1.0)
 TELEMETRY_SAMPLE_INTERVAL_S = 0.02
 TELEMETRY_HISTORY_SECONDS = 6.0
 
@@ -319,7 +319,7 @@ def write_rollout_trace(path: Path, model: mujoco.MjModel, experiment: str, reco
 def run_headless(seconds: float, experiment: str, trace_path: Path | None = None, shove_force_n: tuple[float, float, float] | None = None, shove_duration_s: float = SHOVE_DURATION_S, trace_metadata: dict | None = None) -> dict:
     model, data, power, coordinator, controller, perturbation = build_simulation(experiment)
     initial_state = state(model, data, power, experiment, controller, perturbation)
-    shove_direction = (math.cos(math.radians(SHOVE_ANGLE_DEG)), math.sin(math.radians(SHOVE_ANGLE_DEG)), 0.0)
+    shove_direction = (1.0, 0.0, 0.0)
     direction = shove_direction if shove_force_n is None or np.linalg.norm(shove_force_n) == 0.0 else tuple(np.asarray(shove_force_n) / np.linalg.norm(shove_force_n))
     recorder = StandTelemetryRecorder(direction, tuple(initial_state["torso_position"][:2]))
     recorder.sample_if_due(model, data, perturbation)
@@ -342,29 +342,32 @@ def run_headless(seconds: float, experiment: str, trace_path: Path | None = None
 
 
 def shove_cases(model: mujoco.MjModel) -> list[tuple[str, tuple[float, float, float], dict]]:
-    """Define the shared force convention for visual and headless shove runs."""
+    """Define the eight-direction force grid for visual and headless shove runs."""
     mass_kg = float(model.body_mass[1:].sum())
     gravity_m_per_s2 = abs(float(model.opt.gravity[2]))
     weight_n = mass_kg * gravity_m_per_s2
-    angle_rad = math.radians(SHOVE_ANGLE_DEG)
-    direction = (math.cos(angle_rad), math.sin(angle_rad), 0.0)
     cases = []
-    for multiple in SHOVE_MULTIPLES:
-        force = tuple(multiple * weight_n * component for component in direction)
-        label = f"{multiple:g}mg"
-        cases.append((label, force, {
-            "test": "stand_shove",
-            "label": label,
-            "mass_kg": mass_kg,
-            "gravity_m_per_s2": gravity_m_per_s2,
-            "weight_n": weight_n,
-            "force_multiple_of_mg": multiple,
-            "force_angle_deg": SHOVE_ANGLE_DEG,
-            "angle_reference": "world +X, counter-clockwise toward world +Y",
-            "force_direction_unit_vector": list(direction),
-            "force_n": list(force),
-            "duration_s": SHOVE_DURATION_S,
-        }))
+    for angle_deg in SHOVE_ANGLES_DEG:
+        angle_rad = math.radians(angle_deg)
+        direction = (math.cos(angle_rad), math.sin(angle_rad), 0.0)
+        direction_label = f"{angle_deg:03.0f}deg"
+        for multiple in SHOVE_MULTIPLES:
+            force = tuple(multiple * weight_n * component for component in direction)
+            label = f"{multiple:g}mg"
+            cases.append((label, force, {
+                "test": "stand_shove",
+                "label": label,
+                "direction_label": direction_label,
+                "mass_kg": mass_kg,
+                "gravity_m_per_s2": gravity_m_per_s2,
+                "weight_n": weight_n,
+                "force_multiple_of_mg": multiple,
+                "force_angle_deg": angle_deg,
+                "angle_reference": "world +X, counter-clockwise toward world +Y",
+                "force_direction_unit_vector": list(direction),
+                "force_n": list(force),
+                "duration_s": SHOVE_DURATION_S,
+            }))
     return cases
 
 
@@ -422,7 +425,7 @@ def run_shove_suite(seconds: float, trace_directory: Path) -> list[dict]:
     model = load_model()
     results = []
     for label, force, metadata in shove_cases(model):
-        trace_path = trace_directory / f"{label}.npz"
+        trace_path = trace_directory / metadata["direction_label"] / f"{label}.npz"
         final_state = run_headless(
             seconds,
             "stand",
@@ -447,8 +450,8 @@ def run_shove_suite_viewer(seconds: float, trace_directory: Path) -> None:
             recorder = StandTelemetryRecorder(tuple(metadata["force_direction_unit_vector"]), tuple(initial_state["torso_position"][:2]))
             recorder.sample_if_due(model, data, perturbation)
             displayed_samples: deque[StandTelemetrySample] = deque(maxlen=round(TELEMETRY_HISTORY_SECONDS / TELEMETRY_SAMPLE_INTERVAL_S))
-            figures = _make_stand_figures(label)
-            print(f"Showing {label}: {metadata['force_n']} N for {SHOVE_DURATION_S:.3f} s")
+            figures = _make_stand_figures(f"{metadata['direction_label']} {label}")
+            print(f"Showing {metadata['direction_label']} {label}: {metadata['force_n']} N for {SHOVE_DURATION_S:.3f} s")
             remaining_steps = round(seconds / model.opt.timestep)
             steps_per_frame = max(1, round((1.0 / 60.0) / model.opt.timestep))
             while remaining_steps:
@@ -473,7 +476,7 @@ def run_shove_suite_viewer(seconds: float, trace_directory: Path) -> None:
                 wait_s = (1.0 / 60.0) - (time.perf_counter() - started)
                 if wait_s > 0:
                     time.sleep(wait_s)
-            write_rollout_trace(trace_directory / f"{label}.npz", model, "stand", recorder, metadata)
+            write_rollout_trace(trace_directory / metadata["direction_label"] / f"{label}.npz", model, "stand", recorder, metadata)
 
 
 def run_viewer(experiment: str) -> None:
@@ -509,7 +512,7 @@ def main() -> None:
     parser.add_argument("--seconds", type=float, default=1.0, help="headless duration in seconds")
     parser.add_argument("--experiment", choices=("none", "stand", "shuffle"), default="stand", help="explicit target generator")
     parser.add_argument("--trace", type=Path, help="write compact 50 Hz Telemetry v1 samples to this .npz file")
-    parser.add_argument("--shove-suite", type=Path, metavar="DIRECTORY", help="run 0, 0.25, 0.5, and 1 mg 135-degree shoves and save traces here")
+    parser.add_argument("--shove-suite", type=Path, metavar="DIRECTORY", help="run 0, 0.25, 0.5, and 1 mg shoves in eight world-frame directions and save traces here")
     args = parser.parse_args()
     if args.seconds <= 0:
         parser.error("--seconds must be greater than zero")

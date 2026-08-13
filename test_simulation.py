@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 import mujoco
 import numpy as np
 
-from interact import build_simulation, execute, run_headless
+from interact import build_simulation, execute, run_headless, shove_cases
 from simulate import run
 from simulation import FOOT_NAMES, JOINTS_PER_LEG, load_model, measured_state, neutral_foot_positions, neutral_targets, reset, set_targets, step
 from standing import SupportAwareStanceController
@@ -181,6 +181,13 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(force[0], 0.0)
         self.assertTrue(np.isfinite(margin[0]))
         self.assertEqual(final_state["time"], 0.004)
+
+    def test_shove_grid_has_eight_directions_and_five_magnitudes(self) -> None:
+        cases = shove_cases(self.model)
+
+        self.assertEqual(len(cases), 40)
+        self.assertEqual({metadata["direction_label"] for _, _, metadata in cases}, {f"{angle:03d}deg" for angle in range(0, 360, 45)})
+        self.assertEqual({metadata["label"] for _, _, metadata in cases}, {"0mg", "0.25mg", "0.5mg", "0.75mg", "1mg"})
 
 
 if __name__ == "__main__":
