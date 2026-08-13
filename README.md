@@ -26,6 +26,34 @@ The current implementation includes:
 - torso-orientation and foot-contact telemetry;
 - deterministic headless and live simulation modes.
 
+## Visual identity
+
+The `Googly Surveyor` presentation gives C-1N a clear +X face without changing
+his mechanics. Two mismatched googly pupils give the face a curious expression.
+In live viewers, gravity pulls the pupils down in their sockets. Shoves and
+body acceleration make them lag, bounce at the socket rim, and wobble before
+their different spring rates settle each eye at a slightly different time.
+This response changes only render-site positions.
+Ceramic upper links, graphite lower links, and vermilion feet keep the load path
+and ground contacts readable.
+
+The added `*_visual` sites use MuJoCo visual group 2. Sites follow physical
+bodies, but they have no mass, inertia, or contact behavior. Existing physical
+geoms keep their original shapes and contact properties. The frozen source
+model is preserved in `model/spider_physics_baseline.xml`.
+
+Render matched baseline and redesign views:
+
+```bash
+python render_redesign.py
+```
+
+Verify compiled mechanics and deterministic behavior:
+
+```bash
+python -m unittest -v test_visual_invariants.py test_simulation.py
+```
+
 ## Canonical simulation path
 
 `simulation.py` is the only owner of model loading, deterministic neutral reset,

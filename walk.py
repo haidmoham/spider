@@ -11,6 +11,7 @@ import mujoco
 import numpy as np
 
 from simulation import JOINTS_PER_LEG, load_model, reset, step
+from visuals import ResponsivePupils
 
 
 GAIT_FREQUENCY = 0.65
@@ -260,6 +261,7 @@ def run_viewer() -> None:
     data = mujoco.MjData(model)
     reset(model, data)
     coordinator = GaitCoordinator(model, data)
+    pupils = ResponsivePupils(model)
     figures = (
         make_figure("Applied actuator torque (N-m)"),
         make_figure("Torque rate (N-m/s)"),
@@ -326,6 +328,7 @@ def run_viewer() -> None:
                 next_report += REPORT_INTERVAL
 
             update_figures(viewer, figures, position_figures, samples)
+            pupils.update(model, data)
             viewer.sync()
 
             remaining = model.opt.timestep - (time.time() - wall_start)

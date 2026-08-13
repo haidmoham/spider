@@ -19,6 +19,7 @@ import numpy as np
 
 from simulation import FOOT_NAMES, JOINTS_PER_LEG, MODEL_PATH, ROOT, load_model, measured_state, reset, step
 from standing import SupportAwareStanceController
+from visuals import ResponsivePupils
 from walk import GaitCoordinator, apply_gait_control
 
 
@@ -444,9 +445,11 @@ def run_shove_suite_viewer(seconds: float, trace_directory: Path) -> None:
     import mujoco.viewer
 
     model, data, power, coordinator, controller, perturbation = build_simulation("stand")
+    pupils = ResponsivePupils(model)
     with mujoco.viewer.launch_passive(model, data) as viewer:
         for label, force, metadata in shove_cases(model):
             reset(model, data)
+            pupils.reset(model)
             perturbation.schedule(list(force), SHOVE_DURATION_S, model.opt.timestep)
             initial_state = state(model, data, power, "stand", controller, perturbation)
             recorder = StandTelemetryRecorder(tuple(metadata["force_direction_unit_vector"]), tuple(initial_state["torso_position"][:2]))
@@ -474,6 +477,7 @@ def run_shove_suite_viewer(seconds: float, trace_directory: Path) -> None:
                 if recorder.samples and (not displayed_samples or displayed_samples[-1] is not recorder.samples[-1]):
                     displayed_samples.append(recorder.samples[-1])
                 _update_stand_figures(viewer, figures, displayed_samples)
+                pupils.update(model, data)
                 viewer.sync()
                 wait_s = (1.0 / 60.0) - (time.perf_counter() - started)
                 if wait_s > 0:
@@ -485,6 +489,7 @@ def run_viewer(experiment: str) -> None:
     import mujoco.viewer
 
     model, data, power, coordinator, controller, perturbation = build_simulation(experiment)
+    pupils = ResponsivePupils(model)
     requests: queue.Queue[Request] = queue.Queue()
     threading.Thread(target=listener, args=(requests,), daemon=True).start()
     print(f"Listening on {HOST}:{PORT}; experiment={experiment}. Close the viewer to stop.")
@@ -502,6 +507,7 @@ def run_viewer(experiment: str) -> None:
                     request.response = {"error": str(error)}
                 finally:
                     request.done.set()
+            pupils.update(model, data)
             viewer.sync()
             remaining = model.opt.timestep - (time.perf_counter() - started)
             if remaining > 0:
