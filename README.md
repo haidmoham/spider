@@ -2,6 +2,16 @@
 
 C-1N is a six-legged MuJoCo robot simulation for locomotion, evaluation, and simulation experiments.
 
+## Start here
+
+- Read the C-1N v0.2 - STAND checkpoint below for the supported baseline and its limits.
+- Run `python interact.py --headless --seconds 10 --experiment stand --trace telemetry/stand.npz` to produce the canonical trace.
+- Inspect `notebooks/stand_rollout_diagnostics.ipynb` for contacts, support margin, torso motion, and controller activity.
+- Use [robotics-test-bench](https://github.com/haidmoham/robotics-test-bench) for the small physical and numerical experiments that inform this model.
+- Browse [spider-web](https://github.com/haidmoham/spider-web) for the WebAssembly playback surface.
+
+The STAND checkpoint is a six-contact support baseline, not disturbance recovery or sustained walking.
+
 Checkpoint lineage:
 
 - `C-1N v0.0 - SPAWN`: deterministic six-foot spawn baseline.
