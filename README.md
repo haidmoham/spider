@@ -93,8 +93,10 @@ world-frame force. The eight directions are spaced by 45 degrees from world
 python interact.py --seconds 10 --shove-suite telemetry/shoves
 ```
 
-The force magnitudes are `0`, `0.25 mg`, `0.5 mg`, `0.75 mg`, and `1.0 mg` in
-each direction. The viewer shows all 40 reset-and-shove cases. Its three live plots
+The force magnitudes are `0`, `0.25 mg`, `0.5 mg`, `0.75 mg`, and `1.0 mg`.
+The viewer shows the single `0 mg` baseline first. It then shows all eight
+directions for each nonzero magnitude in increasing order, for 33 cases total.
+Its three live plots
 show the applied force and motion, support state, and pair loads. It writes the
 same 50 Hz compact `Telemetry v1` records that the notebook compares. Use
 `--headless` to run the same suite without the viewer.

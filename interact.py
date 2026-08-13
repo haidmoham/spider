@@ -347,17 +347,19 @@ def shove_cases(model: mujoco.MjModel) -> list[tuple[str, tuple[float, float, fl
     gravity_m_per_s2 = abs(float(model.opt.gravity[2]))
     weight_n = mass_kg * gravity_m_per_s2
     cases = []
-    for angle_deg in SHOVE_ANGLES_DEG:
-        angle_rad = math.radians(angle_deg)
-        direction = (math.cos(angle_rad), math.sin(angle_rad), 0.0)
-        direction_label = f"{angle_deg:03.0f}deg"
-        for multiple in SHOVE_MULTIPLES:
+    for multiple in SHOVE_MULTIPLES:
+        angles = (0.0,) if multiple == 0.0 else SHOVE_ANGLES_DEG
+        for angle_deg in angles:
+            angle_rad = math.radians(angle_deg)
+            direction = (math.cos(angle_rad), math.sin(angle_rad), 0.0)
+            direction_label = f"{angle_deg:03.0f}deg"
             force = tuple(multiple * weight_n * component for component in direction)
             label = f"{multiple:g}mg"
             cases.append((label, force, {
                 "test": "stand_shove",
                 "label": label,
                 "direction_label": direction_label,
+                "case_role": "control" if multiple == 0.0 else "treatment",
                 "mass_kg": mass_kg,
                 "gravity_m_per_s2": gravity_m_per_s2,
                 "weight_n": weight_n,

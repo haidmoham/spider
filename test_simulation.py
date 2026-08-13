@@ -182,12 +182,15 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertTrue(np.isfinite(margin[0]))
         self.assertEqual(final_state["time"], 0.004)
 
-    def test_shove_grid_has_eight_directions_and_five_magnitudes(self) -> None:
+    def test_shove_grid_has_one_baseline_then_eight_directions_per_force(self) -> None:
         cases = shove_cases(self.model)
 
-        self.assertEqual(len(cases), 40)
+        self.assertEqual(len(cases), 33)
         self.assertEqual({metadata["direction_label"] for _, _, metadata in cases}, {f"{angle:03d}deg" for angle in range(0, 360, 45)})
         self.assertEqual({metadata["label"] for _, _, metadata in cases}, {"0mg", "0.25mg", "0.5mg", "0.75mg", "1mg"})
+        self.assertEqual(sum(metadata["case_role"] == "control" for _, _, metadata in cases), 1)
+        self.assertEqual(sum(metadata["case_role"] == "treatment" for _, _, metadata in cases), 32)
+        self.assertEqual([metadata["label"] for _, _, metadata in cases], ["0mg"] + [f"{multiple:g}mg" for multiple in (0.25, 0.5, 0.75, 1.0) for _ in range(8)])
 
 
 if __name__ == "__main__":
