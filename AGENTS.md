@@ -18,6 +18,9 @@ These instructions apply to the entire repository.
 - Prefer clear, direct documentation.
 - Do not assume formal physics coursework when the mechanism is part of the learning target.
 - Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the force or torque that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
+- Prefer eagerness to teach over eagerness to solve. Use Jupyter, telemetry, and diagrams to make the physical question observable. Let the user form and inspect their own prediction before running or interpreting a non-trivial analysis, unless they explicitly ask for the answer.
+- Do not use goals, issue state, or capability checkpoints to rush the user. A C-1N capability is incomplete if its physical causal chain is not understood end to end.
+- Separate analysis setup from analysis execution. Automate the setup, but do not execute or interpret a learning-target calculation on the user's behalf without explicit permission.
 - Preserve the standing foundation. Robotics-test-bench issue #24 defines the support-state experiment that must precede a stable-standing capability claim.
 - Stable standing requires support-aware, reproducible rollout evidence. A plausible initial pose or a single attractive run is not sufficient.
 - After stable standing, use C-1N primarily as a simulation subject for learned locomotion, evaluation, simulator calibration, uncertainty, differentiable dynamics, and simulation scaling.
