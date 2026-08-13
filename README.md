@@ -6,9 +6,16 @@ Checkpoint lineage:
 
 - `C-1N v0.0 - SPAWN`: deterministic six-foot spawn baseline.
 - `C-1N v0.1 - SHUFFLE`: legacy, explicit gait experiment.
+- `C-1N v0.2 - STAND`: reproducible six-contact support baseline.
 
 Current instrumentation: `C-1N v0.11` uses `Telemetry v1` for STAND
 experiments. It is not a standing capability claim.
+
+`C-1N v0.2 - STAND` is supported by a deterministic 10-second headless
+baseline: all six feet remained in contact, support margin stayed at or above
+`0.2346 m`, torso height stayed at or above `0.4495 m`, and torso angular speed
+remained numerically zero. The declared `1 mg` shove is retained as a failed
+recovery case; disturbance recovery is not part of this checkpoint.
 
 The current implementation includes:
 
