@@ -11,16 +11,20 @@ import mujoco
 ROOT = Path(__file__).resolve().parent
 MODEL_PATH = ROOT / "model" / "spider.xml"
 STANDING_KNEE_TARGET = 0.8
+JOINTS_PER_LEG = 3
 
 
 def set_standing_pose(model: mujoco.MjModel, data: mujoco.MjData) -> None:
     """Place the robot above the ground and give each motor a static pose target."""
     data.qpos[0:7] = [0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0]
     for leg in range(6):
-        hip = 2 * leg
-        knee = hip + 1
+        coxa = JOINTS_PER_LEG * leg
+        hip = coxa + 1
+        knee = coxa + 2
+        data.qpos[7 + coxa] = 0.0
         data.qpos[7 + hip] = 0.0
         data.qpos[7 + knee] = STANDING_KNEE_TARGET
+        data.ctrl[coxa] = 0.0
         data.ctrl[hip] = 0.0
         data.ctrl[knee] = STANDING_KNEE_TARGET
     mujoco.mj_forward(model, data)

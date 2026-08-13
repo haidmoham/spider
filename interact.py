@@ -16,7 +16,7 @@ import mujoco
 import mujoco.viewer
 import numpy as np
 
-from simulate import MODEL_PATH, set_standing_pose
+from simulate import JOINTS_PER_LEG, MODEL_PATH, set_standing_pose
 
 
 HOST = "127.0.0.1"
@@ -61,8 +61,10 @@ def apply_open_loop_gait(data: mujoco.MjData) -> None:
         ) ** 2
         fore_aft = 1.0 if leg < 2 else -1.0 if leg >= 4 else 0.0
         side = 1.0 if leg % 2 == 0 else -1.0
-        data.ctrl[2 * leg] = -fore_aft * hip_wave + side * LATERAL_SWEEP * hip_wave
-        data.ctrl[2 * leg + 1] = knee
+        coxa = JOINTS_PER_LEG * leg
+        data.ctrl[coxa] = 0.0
+        data.ctrl[coxa + 1] = -fore_aft * hip_wave + side * LATERAL_SWEEP * hip_wave
+        data.ctrl[coxa + 2] = knee
 
 
 class StancePower:
@@ -79,7 +81,7 @@ class StancePower:
             raise ValueError("power requires three non-negative values")
         self.values = np.array(values, dtype=float)
         for pair, value in enumerate(self.values):
-            actuator_slice = slice(pair * 4, pair * 4 + 4)
+            actuator_slice = slice(pair * 2 * JOINTS_PER_LEG, (pair + 1) * 2 * JOINTS_PER_LEG)
             self.model.actuator_gainprm[actuator_slice] = (
                 self.base_gainprm[actuator_slice] * value
             )
@@ -93,7 +95,7 @@ def initialize_stance(model: mujoco.MjModel, data: mujoco.MjData) -> None:
     set_standing_pose(model, data)
     data.qpos[2] = SQUAT_TORSO_HEIGHT
     data.qpos[3:7] = (0.0, 0.0, 0.0, 1.0)
-    data.qpos[7:] = np.tile((0.0, SQUAT_KNEE_TARGET), 6)
+    data.qpos[7:] = np.tile((0.0, 0.0, SQUAT_KNEE_TARGET), 6)
     apply_open_loop_gait(data)
     mujoco.mj_forward(model, data)
 

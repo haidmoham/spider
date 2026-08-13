@@ -11,7 +11,7 @@ import mujoco
 import mujoco.viewer
 import numpy as np
 
-from simulate import MODEL_PATH, set_standing_pose
+from simulate import JOINTS_PER_LEG, MODEL_PATH, set_standing_pose
 
 
 GAIT_FREQUENCY = 0.65
@@ -161,8 +161,10 @@ class GaitCoordinator:
 def apply_gait_control(coordinator: GaitCoordinator, data: mujoco.MjData):
     targets, contact, body_errors = coordinator.targets(data)
     for leg in range(6):
-        data.ctrl[2 * leg] = targets[2 * leg]
-        data.ctrl[2 * leg + 1] = targets[2 * leg + 1]
+        coxa = JOINTS_PER_LEG * leg
+        data.ctrl[coxa] = 0.0
+        data.ctrl[coxa + 1] = targets[2 * leg]
+        data.ctrl[coxa + 2] = targets[2 * leg + 1]
     return contact, body_errors
 
 
@@ -282,15 +284,15 @@ def run_viewer() -> None:
 
             torque = np.array(
                 [
-                    data.qfrc_actuator[6],
                     data.qfrc_actuator[7],
                     data.qfrc_actuator[8],
-                    data.qfrc_actuator[9],
+                    data.qfrc_actuator[10],
+                    data.qfrc_actuator[11],
                 ]
             )
-            joint_position = np.array(data.qpos[7:11])
-            joint_velocity = np.array(data.qvel[6:10])
-            joint_acceleration = np.array(data.qacc[6:10])
+            joint_position = np.array(data.qpos[[8, 9, 11, 12]])
+            joint_velocity = np.array(data.qvel[[7, 8, 10, 11]])
+            joint_acceleration = np.array(data.qacc[[7, 8, 10, 11]])
             if previous_torque is None:
                 rate = np.zeros_like(torque)
                 acceleration = np.zeros_like(torque)
