@@ -37,6 +37,8 @@ def main() -> None:
     state = measured_state(model, data)
     print(f"torso height: {state.torso_position[2]:.3f}m")
     print(f"torso vertical speed: {state.torso_velocity[2]:.3f}m/s")
+    print(f"whole-stance foot residual: {state.foot_position_residual_norm:.6f}m")
+    print(f"whole-stance J^T r direction: {state.joint_space_update_direction_norm:.6f}m^2/rad")
 
 
 if __name__ == "__main__":
