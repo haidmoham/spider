@@ -17,6 +17,15 @@ Checkpoint lineage:
 - `C-1N v0.0 - SPAWN`: deterministic six-foot spawn baseline.
 - `C-1N v0.1 - SHUFFLE`: legacy, explicit gait experiment.
 - `C-1N v0.2 - STAND`: reproducible six-contact support baseline.
+- `C-1N v0.3 - STRIDE`: next capability target; not yet earned.
+
+## Current frontier
+
+`C-1N // 02 · STAND` is earned. The next planned capability is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17) and [robotics-test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25).
+
+ROBUST_STAND is not a blocking checkpoint. Preserve the current standing baseline and its known disturbance failures as evidence. Revisit standing robustness, contact mechanics, actuator limits, estimation, or morphology only when a concrete locomotion failure makes one of those mechanisms necessary.
+
+Do not claim `C-1N // 03 · STRIDE` from one attractive rollout. STRIDE requires materially better sustained locomotion than the preserved SHUFFLE failure under fixed, reproducible evaluation.
 
 Current instrumentation: `C-1N v0.11` uses `Telemetry v1` for STAND
 experiments. It is not a standing capability claim.
