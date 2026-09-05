@@ -1,0 +1,9 @@
+# Keep the physics baseline identical to the CLI environment.
+-r requirements.txt
+# Notebook tooling. Record installed versions with comparisons.
+jupyterlab
+ipykernel
+nbformat
+nbclient
+matplotlib
+# Add PyTorch when the user-written RL phase starts.
