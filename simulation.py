@@ -4,13 +4,8 @@ The core owns model loading, reset, measured state, commanded targets, and
 stepping. Viewers and experiments may depend on this module; it never depends
 on them.
 
-Future experiment seams (intentionally not implemented here):
-- COM/support results belong beside ``MeasuredState`` as measurements, never
-  as commands.
-- Desired-foot workspace results must be translated into the joint target
-  vector before ``set_targets`` or ``step`` receives it.
-- A later Jacobian adapter belongs between those Cartesian foot corrections
-  and that existing joint-target vector; it must not be folded into stepping.
+Measurement helpers expose contact support and neutral foot-placement diagnostics.
+Controllers translate these measurements into commands outside this module.
 """
 
 from __future__ import annotations
@@ -161,14 +156,37 @@ def run(model: mujoco.MjModel, data: mujoco.MjData, seconds: float, targets: tup
         step(model, data, targets)
 
 
-def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
-    """Read physical state and whole-stance kinematic diagnostics.
+@dataclass(frozen=True)
+class SupportMeasurements:
+    """Declared ground contacts, normal loads in N, and world-XY geometry in m."""
 
-    The residual stacks target-minus-current XYZ positions for all six feet.
-    The update direction is ``J_actuated.T @ residual``. ``J_actuated`` has
-    one row per foot coordinate and one column per actuator joint. These are
-    diagnostics for the neutral foot-placement task. They are not a standing
-    controller or a measure of contact force, slip, or dynamic stability.
+    foot_contacts: tuple[str, ...]
+    foot_normal_loads: dict[str, float]
+    com_projection: tuple[float, float]
+    support_polygon: tuple[tuple[float, float], ...]
+    support_margin: float | None
+
+
+def foot_positions_world(model: mujoco.MjModel, data: mujoco.MjData) -> dict[str, tuple[float, float, float]]:
+    """Read each foot geom centre in world XYZ metres without advancing physics."""
+    foot_positions = {
+        name: tuple(float(value) for value in data.geom_xpos[model.geom(f"{name}_foot").id])
+        for name in FOOT_NAMES
+    }
+    return foot_positions
+
+
+def measure_support(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    foot_positions: dict[str, tuple[float, float, float]],
+) -> SupportMeasurements:
+    """Read support from the current MuJoCo contact state and world foot centres.
+
+    A declared contact need not carry positive load. Loads sum nonnegative
+    contact-frame normal forces in N. The polygon uses declared foot centres,
+    not individual contact points. Its signed margin is in world-XY metres.
+    This geometric diagnostic does not establish dynamic stability.
     """
     ground_id = model.geom("ground").id
     feet = {model.geom(f"{name}_foot").id: name for name in FOOT_NAMES}
@@ -183,10 +201,29 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
             contact_force = np.empty(6)
             mujoco.mj_contactForce(model, data, index, contact_force)
             normal_loads[name] += max(0.0, float(contact_force[0]))
-    foot_positions = {
-        name: tuple(float(value) for value in data.geom_xpos[model.geom(f"{name}_foot").id])
-        for name in FOOT_NAMES
-    }
+    torso_id = model.body("torso").id
+    com_projection = tuple(float(value) for value in data.subtree_com[torso_id, :2])
+    support_polygon = _convex_hull([foot_positions[name][:2] for name in contacts])
+    margin = _support_margin(com_projection, support_polygon)
+    return SupportMeasurements(
+        tuple(sorted(contacts)), normal_loads, com_projection, support_polygon, margin,
+    )
+
+
+def foot_placement_diagnostics(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    foot_positions: dict[str, tuple[float, float, float]],
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return neutral foot residuals and their joint-space update direction.
+
+    Residuals stack target-minus-current world XYZ metres in FOOT_NAMES order.
+    The translational Jacobian maps generalized velocity to world velocity.
+    Its actuated columns are in m/rad for this hinge-only model. Thus J.T @ r
+    has units m^2/rad; it is neither torque nor a joint-angle command by itself.
+    The stance controller applies its gain and actuator target limits later.
+    Read both inputs from the same simulator state. This does not step physics.
+    """
     targets = neutral_foot_positions(model)
     residual = np.concatenate(
         [np.subtract(targets[name], foot_positions[name]) for name in FOOT_NAMES]
@@ -207,10 +244,21 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
     # use mixed units. This leaves the 18 actuated joints as one coherent
     # update vector while retaining all six feet in the task residual.
     joint_update_direction = jacobian[:, 6:].T @ residual
-    torso_id = model.body("torso").id
-    com_projection = tuple(float(value) for value in data.subtree_com[torso_id, :2])
-    support_polygon = _convex_hull([foot_positions[name][:2] for name in contacts])
-    margin = _support_margin(com_projection, support_polygon)
+    return residual, joint_update_direction
+
+
+def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
+    """Read physical state and whole-stance kinematic diagnostics.
+
+    The residual stacks target-minus-current XYZ positions for all six feet.
+    The update direction is ``J_actuated.T @ residual``. ``J_actuated`` has
+    one row per foot coordinate and one column per actuator joint. These are
+    diagnostics for the neutral foot-placement task. They are not a standing
+    controller or a measure of contact force, slip, or dynamic stability.
+    """
+    foot_positions = foot_positions_world(model, data)
+    support = measure_support(model, data, foot_positions)
+    residual, joint_update_direction = foot_placement_diagnostics(model, data, foot_positions)
     return MeasuredState(
         time=float(data.time),
         torso_position=tuple(float(value) for value in data.qpos[:3]),
@@ -221,11 +269,11 @@ def measured_state(model: mujoco.MjModel, data: mujoco.MjData) -> MeasuredState:
         joint_velocities=tuple(float(value) for value in data.qvel[6:]),
         actuator_forces=tuple(float(value) for value in data.actuator_force),
         foot_positions=foot_positions,
-        foot_contacts=tuple(sorted(contacts)),
-        com_projection=com_projection,
-        support_polygon=support_polygon,
-        support_margin=margin,
-        foot_normal_loads=normal_loads,
+        foot_contacts=support.foot_contacts,
+        com_projection=support.com_projection,
+        support_polygon=support.support_polygon,
+        support_margin=support.support_margin,
+        foot_normal_loads=support.foot_normal_loads,
         foot_position_residual=tuple(float(value) for value in residual),
         foot_position_residual_norm=float(np.linalg.norm(residual)),
         joint_space_update_direction=tuple(float(value) for value in joint_update_direction),
