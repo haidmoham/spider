@@ -7,6 +7,9 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 The refactor and notebook setup are verified. The first prediction exercise is
 still unanswered. No user-written RL or PPO algorithm has been implemented.
 
+Study is deferred to the next session. Invoke `$study-mode` to resume here.
+Preparation does not start the lesson or answer the prediction.
+
 From this checkout, resume with the prepared environment:
 
 ```powershell
@@ -36,6 +39,12 @@ Select that environment's Python kernel. The first notebook works from the repo 
 ## Learning standard and ownership
 
 Success means you can trace a control step from the physical picture to math and code. You can predict a change, implement it, and diagnose the result with evidence. A passing test does not verify your understanding. A notebook execution does not close an experiment.
+
+The standard is epistemic ownership: you understand and can defend the code's
+behavior and your decisions. You do not need to type every character yourself.
+Start from your attempt and use hints before a complete solution. Ask for a
+direct explanation or solution whenever you need one. The agent can automate
+plumbing while you retain ownership of the learning decisions.
 
 You own predictions, hypotheses, objectives, algorithm code, tradeoffs, and interpretation. The agent prepares imports, environment setup, plotting, and repetitive plumbing. Before conceptual help, the agent asks for your prediction or diagnosis. Review starts from your attempt. Use counterexamples and small independent implementation exercises to check transfer.
 

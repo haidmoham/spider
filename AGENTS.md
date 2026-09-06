@@ -37,6 +37,8 @@ These instructions apply to the entire repository.
 
 ## Notebook learning contract
 
+- Use `$study-mode` to resume the learning route in `LEARNING.md`. During preparation-only requests, prepare the workspace without starting a lesson or asking prediction questions.
+- Aim for epistemic ownership, not every-character authorship. Start with the user's attempt and offer hints. Give direct explanations or solutions when requested. Automate repetitive plumbing while preserving the user's learning decisions.
 - Use `notebooks/01_control_step.ipynb` as the learning entry point. Keep reusable simulation behavior in Python modules.
 - Keep notebook setup separate from learning calculations. Default Run All must not execute prediction-gated experiments or reveal their answers.
 - The human writes RL and PPO with PyTorch operations, autograd, and optimizers. Do not prewrite algorithm solutions or substitute a ready-made trainer.
