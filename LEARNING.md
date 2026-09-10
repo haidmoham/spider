@@ -6,8 +6,10 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 
 Continue in [02_first_policy.ipynb](notebooks/02_first_policy.ipynb). The user
 accepted the visible control treatment and requested that the beginner RL
-lesson use C-1N directly. The next learning step is the user's first
-observation-dependent action rule, followed by a small REINFORCE learning loop.
+lesson use C-1N directly. The user wants to write the literal policy code,
+with agent-provided stubs and one small coding step at a time. Start at the
+`policy(observation)` stub. Do not advance into design questions or later
+algorithm stages before reviewing the current line.
 No user-written policy, RL update, or PPO algorithm has been implemented yet.
 The new notebook contains setup and a focused first task, not its solution.
 
@@ -27,11 +29,11 @@ From this checkout, resume with the prepared environment:
 .venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
 ```
 
-Begin with the first action rule in the new notebook. A conversational attempt
-counts. Choose the observations and action options together before writing the
-policy. The proposed two-treatment simplification is a teaching option, not a
-confirmed walking-policy architecture. Then define reward, episode boundaries,
-and action timing before running a learning experiment.
+The current coding step is to create an array of 18 zero target offsets inside
+the policy stub. The user writes that line. The agent supplies setup, then
+reviews the user's code before introducing the next step. Define observations,
+reward, episode boundaries, and action timing when the implementation reaches
+those choices.
 
 The test bench also contains an older Ant-v5 scaffold using Stable-Baselines3.
 Preserve it as prior work. It does not replace your own RL/PPO implementation.

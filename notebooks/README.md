@@ -2,8 +2,8 @@
 
 Start with [01_control_step.ipynb](01_control_step.ipynb).
 Continue with [02_first_policy.ipynb](02_first_policy.ipynb) for the current
-C-1N policy lesson. It prepares the environment and measurement inventory;
-the user writes the policy and learning update with conversational guidance.
+C-1N policy lesson. It provides setup and a function stub. The user writes the
+body one small step at a time with conversational review.
 Use [the learning guide](../LEARNING.md) to prepare the environment.
 The cells run normally. Run All executes the control-step experiment and plots.
 The agent gets your first attempt in conversation before advancing the learning
