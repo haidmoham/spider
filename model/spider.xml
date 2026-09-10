@@ -4,13 +4,20 @@
 
   <!-- C-1N's identity layer. Sites are render-only: they have no mass or contact. -->
   <asset>
-    <material name="ceramic" rgba="0.68 0.71 0.69 1"/>
-    <material name="upper_link" rgba="0.48 0.51 0.50 1"/>
-    <material name="graphite" rgba="0.055 0.065 0.065 1"/>
-    <material name="vermilion" rgba="0.90 0.16 0.07 1"/>
-    <material name="eye_white" rgba="0.96 0.96 0.90 1"/>
-    <material name="marking" rgba="0.92 0.88 0.72 1"/>
+    <texture name="twilight" type="skybox" builtin="gradient" rgb1="0.055 0.05 0.08" rgb2="0.16 0.145 0.19" width="512" height="3072"/>
+    <material name="ceramic" rgba="0.76 0.70 0.61 1" specular="0.12" shininess="0.25"/>
+    <material name="upper_link" rgba="0.64 0.66 0.70 1"/>
+    <material name="graphite" rgba="0.095 0.10 0.17 1" specular="0.36" shininess="0.45"/>
+    <material name="vermilion" rgba="0.82 0.36 0.27 1"/>
+    <material name="eye_white" rgba="0.98 0.94 0.84 1"/>
+    <material name="marking" rgba="0.58 0.81 0.86 1" emission="0.35"/>
   </asset>
+
+  <visual>
+    <headlight ambient="0.20 0.20 0.25" diffuse="0.28 0.28 0.32" specular="0.15 0.15 0.15"/>
+    <rgba haze="0.09 0.10 0.15 1"/>
+    <quality shadowsize="4096"/>
+  </visual>
 
   <default>
     <joint damping="0.5" armature="0.01"/>
@@ -18,31 +25,42 @@
   </default>
 
   <worldbody>
-    <light name="main" pos="0 0 2" dir="0 0 -1"/>
-    <geom name="ground" type="plane" size="12 12 0.1" rgba="0.91 0.925 0.945 1"/>
+    <light name="main" pos="1 -1 2.5" dir="-0.4 0.4 -1" directional="false" diffuse="0.60 0.55 0.49" specular="0.35 0.30 0.25"/>
+    <light name="rim" pos="-1 1 1.5" dir="0.5 -0.5 -1" directional="true" diffuse="0.30 0.37 0.55" specular="0.18 0.22 0.32" castshadow="false"/>
+    <geom name="ground" type="plane" size="12 12 0.1" rgba="0.16 0.145 0.19 1"/>
 
     <body name="torso" pos="0 0 0.38">
       <freejoint name="root"/>
-      <geom name="torso_geom" type="box" size="0.22 0.16 0.07" material="ceramic" rgba="0.68 0.71 0.69 1"/>
+      <geom name="torso_geom" type="box" size="0.22 0.16 0.07" material="ceramic" rgba="0.76 0.70 0.61 1"/>
       <site name="torso_center" pos="0 0 0" size="0.02" rgba="1 0 0 1"/>
 
-      <!-- Googly Surveyor. Group 2 is the viewer-visible visual layer. -->
-      <site name="cowl_visual" type="box" pos="0 0 0.078" size="0.17 0.125 0.009" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
-      <site name="left_eye_visual" type="sphere" pos="0.235 0.065 0.012" size="0.050" material="eye_white" rgba="0.96 0.96 0.90 1" group="2"/>
-      <site name="right_eye_visual" type="sphere" pos="0.235 -0.065 0.012" size="0.050" material="eye_white" rgba="0.96 0.96 0.90 1" group="2"/>
-      <site name="left_pupil_visual" type="sphere" pos="0.279 0.054 0.022" size="0.019" material="graphite" rgba="0.015 0.018 0.018 1" group="2"/>
-      <site name="right_pupil_visual" type="sphere" pos="0.279 -0.076 -0.002" size="0.019" material="graphite" rgba="0.015 0.018 0.018 1" group="2"/>
-      <site name="spine_visual" type="capsule" fromto="-0.16 0 0.091 -0.09 0 0.091" size="0.008" material="marking" rgba="0.92 0.88 0.72 1" group="2"/>
+      <!-- Porcelain Surveyor. Group 2 is the viewer-visible visual layer. -->
+      <site name="cowl_visual" type="ellipsoid" pos="-0.018 0 0.074" size="0.185 0.14 0.025" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
+      <!-- Narrow shell seam and face sockets clarify the ceramic / mechanism boundary. -->
+      <site name="shell_seam_visual" type="box" pos="0 0 0.042" size="0.221 0.161 0.003" material="graphite" group="2"/>
+      <site name="left_socket_visual" type="sphere" pos="0.220 0.065 0.012" size="0.054" material="graphite" group="2"/>
+      <site name="right_socket_visual" type="sphere" pos="0.220 -0.065 0.012" size="0.054" material="graphite" group="2"/>
+      <site name="rear_badge_visual" type="box" pos="-0.223 0 0.003" size="0.002 0.025 0.013" material="vermilion" group="2"/>
+      <site name="left_eye_visual" type="sphere" pos="0.235 0.065 0.012" size="0.050" material="eye_white" rgba="0.98 0.94 0.84 1" group="2"/>
+      <site name="right_eye_visual" type="sphere" pos="0.235 -0.065 0.012" size="0.050" material="eye_white" rgba="0.98 0.94 0.84 1" group="2"/>
+      <site name="left_pupil_visual" type="sphere" pos="0.279 0.054 0.022" size="0.019" material="graphite" rgba="0.025 0.027 0.045 1" group="2"/>
+      <site name="right_pupil_visual" type="sphere" pos="0.279 -0.076 -0.002" size="0.019" material="graphite" rgba="0.025 0.027 0.045 1" group="2"/>
+      <site name="spine_visual" type="capsule" fromto="-0.13 0 0.098 0.075 0 0.098" size="0.004" material="marking" rgba="0.58 0.81 0.86 1" group="2"/>
 
       <body name="front_left" pos="0.14 0.11 0" euler="38 55 0">
         <joint name="front_left_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="front_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="front_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="front_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="front_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="front_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="front_left_shin" pos="0.26 0 0">
           <joint name="front_left_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="front_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="front_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="front_left_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="front_left_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="front_left_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="front_left_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="front_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="front_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="front_left_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>
@@ -50,12 +68,17 @@
       <body name="front_right" pos="0.14 -0.11 0" euler="-38 55 0">
         <joint name="front_right_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="front_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="front_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="front_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="front_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="front_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="front_right_shin" pos="0.26 0 0">
           <joint name="front_right_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="front_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="front_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="front_right_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="front_right_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="front_right_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="front_right_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="front_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="front_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="front_right_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>
@@ -63,12 +86,17 @@
       <body name="middle_left" pos="0 0.16 0" euler="90 55 0">
         <joint name="middle_left_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="middle_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="middle_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="middle_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="middle_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="middle_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="middle_left_shin" pos="0.26 0 0">
           <joint name="middle_left_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="middle_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="middle_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="middle_left_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="middle_left_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="middle_left_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="middle_left_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="middle_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="middle_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="middle_left_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>
@@ -76,12 +104,17 @@
       <body name="middle_right" pos="0 -0.16 0" euler="-90 55 0">
         <joint name="middle_right_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="middle_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="middle_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="middle_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="middle_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="middle_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="middle_right_shin" pos="0.26 0 0">
           <joint name="middle_right_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="middle_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="middle_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="middle_right_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="middle_right_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="middle_right_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="middle_right_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="middle_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="middle_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="middle_right_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>
@@ -89,12 +122,17 @@
       <body name="rear_left" pos="-0.14 0.11 0" euler="142 55 0">
         <joint name="rear_left_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="rear_left_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="rear_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="rear_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="rear_left_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="rear_left_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="rear_left_shin" pos="0.26 0 0">
           <joint name="rear_left_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="rear_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="rear_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="rear_left_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="rear_left_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="rear_left_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="rear_left_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="rear_left_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="rear_left_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="rear_left_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>
@@ -102,12 +140,17 @@
       <body name="rear_right" pos="-0.14 -0.11 0" euler="-142 55 0">
         <joint name="rear_right_coxa" type="hinge" axis="0 0 1" range="-45 45"/>
         <joint name="rear_right_hip" type="hinge" axis="0 1 0" range="-45 45"/>
-        <geom name="rear_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.48 0.51 0.50 1"/>
-        <site name="rear_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.055 0.065 0.065 1" group="2"/>
+        <geom name="rear_right_thigh" type="capsule" fromto="0 0 0 0.26 0 0" size="0.035" material="upper_link" rgba="0.64 0.66 0.70 1"/>
+        <site name="rear_right_joint_visual" type="sphere" size="0.052" material="graphite" rgba="0.095 0.10 0.17 1" group="2"/>
         <body name="rear_right_shin" pos="0.26 0 0">
           <joint name="rear_right_knee" type="hinge" axis="0 1 0" range="-80 80"/>
-          <geom name="rear_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.055 0.065 0.065 1"/>
-          <geom name="rear_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.90 0.16 0.07 1"/>
+          <!-- Render-only knee bearing and shin inlay. -->
+          <site name="rear_right_knee_visual" type="sphere" size="0.039" material="graphite" group="2"/>
+          <site name="rear_right_outer_hub_visual" type="cylinder" pos="0 0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="rear_right_inner_hub_visual" type="cylinder" pos="0 -0.034 0" euler="0 0 90" size="0.022 0.006" material="ceramic" group="2"/>
+          <site name="rear_right_shin_inlay_visual" type="capsule" fromto="0.055 0 0.029 0.175 0 0.029" size="0.004" material="upper_link" group="2"/>
+          <geom name="rear_right_shin_geom" type="capsule" fromto="0 0 0 0.24 0 0" size="0.03" material="graphite" rgba="0.095 0.10 0.17 1"/>
+          <geom name="rear_right_foot" type="sphere" pos="0.24 0 0" size="0.045" material="vermilion" rgba="0.82 0.36 0.27 1"/>
           <site name="rear_right_contact_site" pos="0.24 0 0" size="0.02"/>
         </body>
       </body>

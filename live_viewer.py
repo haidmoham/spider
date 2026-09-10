@@ -27,8 +27,17 @@ def _make_stand_figures(label: str) -> tuple[mujoco.MjvFigure, mujoco.MjvFigure,
         result.flg_extend = 0
         result.flg_legend = 1
         result.linewidth = 2.0
+        result.figurergba[:] = (0.09, 0.09, 0.14, 0.96)
+        result.panergba[:] = (0.12, 0.12, 0.18, 1.0)
+        result.legendrgba[:] = (0.09, 0.09, 0.14, 0.94)
+        result.textrgb[:] = (0.91, 0.88, 0.84)
+        result.gridrgb[:] = (0.27, 0.26, 0.34)
+        result.gridwidth = 1.0
+        result.xlabel = "Time (s)"
+        colors = ((0.96, 0.58, 0.43), (0.59, 0.78, 0.83), (0.76, 0.66, 0.91))
         for index, line in enumerate(lines):
             result.linename[index] = line
+            result.linergb[index] = colors[index]
         return result
     return (
         figure(f"{label}: shove and motion", ("force along shove (N)", "displacement along shove (m)")),
