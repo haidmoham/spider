@@ -1,5 +1,17 @@
 # Repository instructions
 
+<!-- shared-practice:start -->
+<!-- Source: robotics-test-bench/guidance/practice.md. Refresh with scripts/sync_practice_contract.py from that repository. -->
+## Shared practice rule
+
+- Before advancing a meaningful learning step, get one real attempt from the user: code, a prediction, an explanation, a diagnosis, or a proposed design with a reason. A conversational attempt counts. Reuse a relevant attempt already supplied; do not restart this check every turn. Acknowledgment alone does not count.
+- Keep this boundary in the conversation. If no attempt exists, pause the learning step and help the user make one. Do not supply the attempt yourself or move ahead to its solution, run, or interpretation.
+- Do not require an "Iteration 0" label, a written form, a prediction variable, or a code switch to enforce participation. Do not turn each explanation into a quiz. Answer direct conceptual questions and offer hints that help the user attempt the work.
+- Review the attempt with the user. Let that feedback guide the next change. Do not count agent output, setup checks, or notebook execution as demonstrated user capability.
+- Automate peripheral setup, cleanup, and verification. Preparing a notebook does not authorize executing its learning experiment. Notebook cells can run normally when the user chooses to run them; the agent must preserve the conversational boundary before running them on the user's behalf.
+- Honor an explicit request for a full solution for that part only. Keep the remaining learning work with the user.
+<!-- shared-practice:end -->
+
 ## Scope
 
 These instructions apply to the entire repository.
@@ -19,7 +31,7 @@ These instructions apply to the entire repository.
 - Prefer clear, direct documentation.
 - Do not assume formal physics coursework when the mechanism is part of the learning target.
 - Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the force or torque that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
-- Prefer eagerness to teach over eagerness to solve. Use Jupyter, telemetry, and diagrams to make the physical question observable. Let the user form and inspect their own prediction before running or interpreting a non-trivial analysis, unless they explicitly ask for the answer.
+- Prefer eagerness to teach over eagerness to solve. Use Jupyter, telemetry, and diagrams to make the physical question observable. Follow the shared practice rule for the user's first attempt.
 - Do not use goals, issue state, or capability checkpoints to rush the user. Track the user's understanding separately from the earned robot capability. Do not reopen STAND merely because a learning question remains.
 - Separate analysis setup from analysis execution. Automate the setup, but do not execute or interpret a learning-target calculation on the user's behalf without explicit permission.
 - Preserve the existing STAND baseline and its limits. Issue #24 remains a support-understanding question; do not infer human understanding from the robot checkpoint. The current learning route is in `LEARNING.md`.
@@ -41,7 +53,7 @@ These instructions apply to the entire repository.
 - Use `$practice` for the learning route in `LEARNING.md`; use `$study-mode` for codebase scaffolding. Use production for peripheral setup, cleanup, and verification. During preparation-only requests, prepare the workspace without starting a lesson or asking prediction questions.
 - Aim for the user's ability to understand and defend the work, not every-character authorship. Start with the user's attempt and offer hints. Give direct explanations or solutions when requested. Automate repetitive plumbing while preserving the decisions the user is learning to make.
 - Use `notebooks/01_control_step.ipynb` as the learning entry point. Keep reusable simulation behavior in Python modules.
-- Keep notebook setup separate from learning calculations. Default Run All must not execute prediction-gated experiments or reveal their answers.
+- Keep notebook setup separate from learning calculations. Run All may execute the experiment; do not use it as a preparation check. Validate structure and syntax without running the user's learning work.
 - The human writes RL and PPO with PyTorch operations, autograd, and optimizers. Do not prewrite algorithm solutions or substitute a ready-made trainer.
 - The agent owns setup and verification. The human owns hypotheses, observation and reward design, algorithm implementation, and interpretation.
 - Rebuild mathematics as needed. Use trace -> predict -> change -> diagnose as the readiness check for regular pairing.

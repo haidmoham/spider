@@ -4,8 +4,14 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 
 ## Resume here
 
-The refactor and notebook setup are verified. The first prediction exercise is
-still unanswered. No user-written RL or PPO algorithm has been implemented.
+The refactor and notebook setup are verified. No user-written RL or PPO
+algorithm has been implemented. Start from your next real attempt and review
+it with your pair programmer; there is no numbered prerequisite form.
+
+In the current discussion, the user described a policy as a parameterized
+treatment and identified that rewarding absolute velocity could produce a
+shuffle with no net travel. Use those conceptual attempts when discussing
+the objective. They do not establish policy implementation or rollout results.
 
 The next task is a rudimentary walking policy in `$practice` mode. Use
 `$study-mode` for codebase scaffolding. STAND is earned as recorded; disturbance
@@ -18,10 +24,10 @@ From this checkout, resume with the prepared environment:
 .venv/Scripts/python -m jupyter lab notebooks/01_control_step.ipynb
 ```
 
-Write which quantities change when one target is written, and which require a
-physics step. Leave `RUN_EXPERIMENT = False` until your prediction is recorded.
-Then inspect the result with your pair programmer. The next design discussion
-is observations, actions, reward terms, episode boundaries, and action timing.
+Discuss what you expect to change when one target is written and when physics
+steps. A conversational attempt is enough. Then choose the cells to run and
+inspect the result together. The next design discussion is observations,
+actions, reward terms, episode boundaries, and action timing.
 
 The test bench also contains an older Ant-v5 scaffold using Stable-Baselines3.
 Preserve it as prior work. It does not replace your own RL/PPO implementation.
@@ -36,7 +42,7 @@ py -3.12 -m venv .venv
 .venv/Scripts/python -m jupyter lab
 ```
 
-Select that environment's Python kernel. The first notebook works from the repo root or `notebooks/`. Its default Run All only prepares the exercise. Write `PREDICTION`, then set `RUN_EXPERIMENT = True` to inspect the result. Restart the kernel when you want a clean replay. Clear outputs and restore the gate before sharing an unanswered exercise.
+Select that environment's Python kernel. The first notebook works from the repo root or `notebooks/`. Its cells run normally, with no prediction variable or participation switch. Run All executes the experiment and plots. During preparation, the agent checks structure and syntax instead of running the learning experiment. Restart the kernel when you want a clean replay.
 
 ## Learning standard and ownership
 
@@ -63,11 +69,11 @@ Start with gravity, ground contact forces, joint torques, and the actuator respo
 | How does a controller choose targets? | `standing.py` and `runtime.py`: target selection and advance | Trace measurement to target without treating a diagnostic as a stability proof. |
 | How is evidence recorded? | `telemetry.py` and the existing STAND diagnostics notebook | Relate each recorded sample to stepping and applied forces. |
 
-The first notebook keeps both measurements and plots behind the prediction gate. The existing [STAND diagnostics notebook](notebooks/stand_rollout_diagnostics.ipynb) remains a trace reader. It is a later inspection tool, not the first lesson.
+The first notebook separates setup, measurement, and plotting cells. The agent keeps the first-attempt boundary in conversation. The existing [STAND diagnostics notebook](notebooks/stand_rollout_diagnostics.ipynb) remains a trace reader for later inspection.
 
 ## Route to your PPO implementation
 
-1. **Trace a simulation step.** Complete the first prediction exercise. Try a second joint or offset independently. Explain the mismatch between your prediction and the evidence.
+1. **Trace a simulation step.** Make an initial attempt in conversation or code, then inspect one step. Try a second joint or offset independently. Explain any mismatch between your expectation and the evidence.
 2. **Define the learning problem together.** Choose observations, named reward components, failure conditions, and action timing. Begin with joint-target offsets around the neutral stance through existing actuators. Record your reasons before running training.
 3. **Write RL.** You implement policy sampling, rollout storage, episode boundaries, returns, and a basic policy-gradient update. Use small numerical examples to check behavior. The agent must not supply completed algorithm scaffolding.
 4. **Write PPO.** You implement the actor and critic, stored action log probabilities, advantages, probability ratios, clipped objective, value loss, entropy term, and minibatch updates. Use PyTorch operations, autograd, and optimizers. Do not replace your implementation with a ready-made trainer.
@@ -81,4 +87,4 @@ The README records the existing STAND implementation checkpoint and its limits. 
 
 GitHub issue #25 previously routed toward established RL tooling and away from a scratch RL implementation. The explicit user instruction on 2026-09-04 supersedes that rule for this learning work: write RL and PPO with PyTorch. The bench queue now selects that route. This does not close historical issues or certify new robot capability.
 
-The initial refactor is complete when behavior is verified, this reading route is usable, and the first prediction exercise is ready. Learning and PPO completion remain collaborative work. Record a suspected behavior bug separately with a reproduction before changing physics or controller behavior.
+The initial refactor is complete. Learning and PPO completion remain collaborative work. Record a suspected behavior bug separately with a reproduction before changing physics or controller behavior.

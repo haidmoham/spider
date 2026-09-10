@@ -1,5 +1,10 @@
 # Notebook refactor verification
 
+Historical verification: the notebook execution gate described below was
+removed on 2026-09-10. The current conversational learning boundary is in
+`AGENTS.md` and `LEARNING.md`. Run All now executes the control-step experiment;
+do not reuse the old setup-only verification procedure.
+
 Checked on 2026-09-04 against pre-refactor commit `35514be`.
 This is software compatibility evidence. It does not establish a new robotics
 capability or human understanding. Related work: [C-1N #17](https://github.com/haidmoham/spider/issues/17)
