@@ -10,8 +10,13 @@ lesson use C-1N directly. The user wants to write the literal policy code,
 with agent-provided stubs and assignment-sized instructions. Give the objective,
 interfaces, implementation steps, and success checks together. Review the
 completed attempt at a meaningful checkpoint; do not gate individual lines.
-A draft policy is present in the notebook. It has not been reviewed or
-validated. No RL update or PPO algorithm has been implemented yet.
+A reviewed, incomplete feedback-policy draft is present in the notebook.
+At the user's request, the agent removed a duplicate empty definition and
+changed the allocation to 18 floating-point offsets. Those two changes passed
+focused checks. The earlier full-cell run returned None because the duplicate
+stub replaced the implementation; the isolated first definition failed on
+observation.shape. No physics steps ran. No RL update or PPO algorithm has
+been implemented yet.
 
 In the current discussion, the user described a policy as a parameterized
 treatment and identified that rewarding absolute velocity could produce a
@@ -29,11 +34,18 @@ From this checkout, resume with the prepared environment:
 .venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
 ```
 
-The current assignment is to implement and check a neutral policy that returns
-18 zero target offsets. The user writes the function and its checks. The agent
-supplies setup and reviews the complete attempt. Define observations,
-reward, episode boundaries, and action timing when the implementation reaches
-those choices.
+The next work package is to make the user's feedback policy callable with
+MeasuredState and return a valid 18-entry action. The user selects a named
+measurement, defines its desired value separately, and changes the same
+actuator's offset in both comparison branches. The draft still indexes
+observation as a sequence and commands different actuators in those branches;
+these remain unresolved. The user owns these decisions and the remaining
+implementation. The agent supplies setup, review, and explicitly requested runs.
+Keep an all-zero action as the neutral comparison baseline and explain its
+experimental purpose. After the action interface works, connect the policy to
+a short recorded rollout. Define reward, episode boundaries, and action timing
+when the implementation reaches those choices. Work as a research-lab PO;
+do not turn the baseline into a curriculum gate.
 
 The test bench also contains an older Ant-v5 scaffold using Stable-Baselines3.
 Preserve it as prior work. It does not replace your own RL/PPO implementation.
