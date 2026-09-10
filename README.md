@@ -4,7 +4,7 @@ C-1N is a six-legged MuJoCo robot simulation for locomotion, evaluation, and sim
 
 ## Start here
 
-- Start learning in [01_control_step.ipynb](notebooks/01_control_step.ipynb). Write a prediction before enabling its experiment.
+- Start learning in [01_control_step.ipynb](notebooks/01_control_step.ipynb). Discuss your first attempt before advancing to the measurements; its cells need no prediction form or code gate.
 - Follow [LEARNING.md](LEARNING.md) for notebook setup, code-to-math reading, and the user-written RL/PPO route. Jupyter is the primary learning surface.
 - Read the C-1N v0.2 - STAND checkpoint below for the supported baseline and its limits.
 - Run `python interact.py --headless --seconds 10 --experiment stand --trace telemetry/stand.npz` to produce the canonical trace.
