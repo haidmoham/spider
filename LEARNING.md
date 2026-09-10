@@ -7,11 +7,11 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 Continue in [02_first_policy.ipynb](notebooks/02_first_policy.ipynb). The user
 accepted the visible control treatment and requested that the beginner RL
 lesson use C-1N directly. The user wants to write the literal policy code,
-with agent-provided stubs and one small coding step at a time. Start at the
-`policy(observation)` stub. Do not advance into design questions or later
-algorithm stages before reviewing the current line.
-No user-written policy, RL update, or PPO algorithm has been implemented yet.
-The new notebook contains setup and a focused first task, not its solution.
+with agent-provided stubs and assignment-sized instructions. Give the objective,
+interfaces, implementation steps, and success checks together. Review the
+completed attempt at a meaningful checkpoint; do not gate individual lines.
+A draft policy is present in the notebook. It has not been reviewed or
+validated. No RL update or PPO algorithm has been implemented yet.
 
 In the current discussion, the user described a policy as a parameterized
 treatment and identified that rewarding absolute velocity could produce a
@@ -29,9 +29,9 @@ From this checkout, resume with the prepared environment:
 .venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
 ```
 
-The current coding step is to create an array of 18 zero target offsets inside
-the policy stub. The user writes that line. The agent supplies setup, then
-reviews the user's code before introducing the next step. Define observations,
+The current assignment is to implement and check a neutral policy that returns
+18 zero target offsets. The user writes the function and its checks. The agent
+supplies setup and reviews the complete attempt. Define observations,
 reward, episode boundaries, and action timing when the implementation reaches
 those choices.
 

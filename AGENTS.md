@@ -4,6 +4,7 @@
 <!-- Source: robotics-test-bench/guidance/practice.md. Refresh with scripts/sync_practice_contract.py from that repository. -->
 ## Shared practice rule
 
+- Give assignment-sized instructions with an objective, relevant interfaces, ordered implementation steps, and success checks. Supply stubs and setup; let the user write the target code. Review at meaningful checkpoints rather than after each line. Use smaller steps when the user requests them or needs focused help.
 - Before advancing a meaningful learning step, get one real attempt from the user: code, a prediction, an explanation, a diagnosis, or a proposed design with a reason. A conversational attempt counts. Reuse a relevant attempt already supplied; do not restart this check every turn. Acknowledgment alone does not count.
 - Keep this boundary in the conversation. If no attempt exists, pause the learning step and help the user make one. Do not supply the attempt yourself or move ahead to its solution, run, or interpretation.
 - Do not require an "Iteration 0" label, a written form, a prediction variable, or a code switch to enforce participation. Do not turn each explanation into a quiz. Answer direct conceptual questions and offer hints that help the user attempt the work.
