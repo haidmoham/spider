@@ -6,6 +6,7 @@ These instructions apply to the entire repository.
 
 ## Checkpoints
 
+- `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
 - Use checkpoints only for robotics capabilities or understood failures worth preserving and comparing.
 - Do not create checkpoints for instrumentation, cleanup, presentation polish, or elapsed time.
 - Do not claim a capability before reproducible evidence supports it.
@@ -19,7 +20,7 @@ These instructions apply to the entire repository.
 - Do not assume formal physics coursework when the mechanism is part of the learning target.
 - Explain standing and locomotion from the physical load path before controller math. Name gravity and contact forces. State the torque they create about relevant joints. State the force or torque that must oppose them. Then introduce Jacobians, compensation terms, or controller equations.
 - Prefer eagerness to teach over eagerness to solve. Use Jupyter, telemetry, and diagrams to make the physical question observable. Let the user form and inspect their own prediction before running or interpreting a non-trivial analysis, unless they explicitly ask for the answer.
-- Do not use goals, issue state, or capability checkpoints to rush the user. A C-1N capability is incomplete if its physical causal chain is not understood end to end.
+- Do not use goals, issue state, or capability checkpoints to rush the user. Track the user's understanding separately from the earned robot capability. Do not reopen STAND merely because a learning question remains.
 - Separate analysis setup from analysis execution. Automate the setup, but do not execute or interpret a learning-target calculation on the user's behalf without explicit permission.
 - Preserve the existing STAND baseline and its limits. Issue #24 remains a support-understanding question; do not infer human understanding from the robot checkpoint. The current learning route is in `LEARNING.md`.
 - Stable standing requires support-aware, reproducible rollout evidence. A plausible initial pose or a single attractive run is not sufficient.
@@ -37,7 +38,7 @@ These instructions apply to the entire repository.
 
 ## Notebook learning contract
 
-- Use `$study-mode` to resume the learning route in `LEARNING.md`. During preparation-only requests, prepare the workspace without starting a lesson or asking prediction questions.
+- Use `$practice` for the learning route in `LEARNING.md`; use `$study-mode` for codebase scaffolding. Use production for peripheral setup, cleanup, and verification. During preparation-only requests, prepare the workspace without starting a lesson or asking prediction questions.
 - Aim for the user's ability to understand and defend the work, not every-character authorship. Start with the user's attempt and offer hints. Give direct explanations or solutions when requested. Automate repetitive plumbing while preserving the decisions the user is learning to make.
 - Use `notebooks/01_control_step.ipynb` as the learning entry point. Keep reusable simulation behavior in Python modules.
 - Keep notebook setup separate from learning calculations. Default Run All must not execute prediction-gated experiments or reveal their answers.

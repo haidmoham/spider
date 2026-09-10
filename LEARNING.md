@@ -7,8 +7,10 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 The refactor and notebook setup are verified. The first prediction exercise is
 still unanswered. No user-written RL or PPO algorithm has been implemented.
 
-Study is deferred to the next session. Invoke `$study-mode` to resume here.
-Preparation does not start the lesson or answer the prediction.
+The next task is a rudimentary walking policy in `$practice` mode. Use
+`$study-mode` for codebase scaffolding. STAND is earned as recorded; disturbance
+recovery is not a prerequisite. Cleanup and setup are production work and do
+not complete a learning exercise or implement the policy.
 
 From this checkout, resume with the prepared environment:
 
@@ -46,7 +48,7 @@ Start from your attempt and use hints before a complete solution. Ask for a
 direct explanation or solution whenever you need one. The agent can automate
 plumbing while you retain ownership of the learning decisions.
 
-You own predictions, hypotheses, objectives, algorithm code, tradeoffs, and interpretation. The agent prepares imports, environment setup, plotting, and repetitive plumbing. Before conceptual help, the agent asks for your prediction or diagnosis. Review starts from your attempt. Use counterexamples and small independent implementation exercises to check transfer.
+You own predictions, hypotheses, objectives, algorithm code, tradeoffs, and interpretation. The agent prepares imports, environment setup, plotting, and repetitive plumbing. Use a prediction or diagnosis when it helps the learning target. Give requested explanations directly; do not impose a quiz before every explanation. Review starts from your attempt. Use counterexamples and small independent implementation exercises when they help check transfer.
 
 Start with gravity, ground contact forces, joint torques, and the actuator response. Introduce the required mathematics when the physical question needs it. Do not require a separate mechanics curriculum before RL.
 
