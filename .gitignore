@@ -4,3 +4,7 @@ __pycache__/
 venv/
 .pytest_cache/
 telemetry/
+.ipynb_checkpoints/
+# Local recorded traces; preserve them without mixing them with visual assets.
+artifacts/c1n_redesign/*.npz
+artifacts/c1n_redesign/shoves/**/*.npz
