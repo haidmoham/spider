@@ -4,9 +4,14 @@ Start with [01_control_step.ipynb](notebooks/01_control_step.ipynb). The noteboo
 
 ## Resume here
 
-The refactor and notebook setup are verified. No user-written RL or PPO
-algorithm has been implemented. Start from your next real attempt and review
-it with your pair programmer; there is no numbered prerequisite form.
+Continue in [02_first_policy.ipynb](notebooks/02_first_policy.ipynb). The user
+accepted the visible control treatment and requested that the beginner RL
+lesson use C-1N directly. The user wants to write the literal policy code,
+with agent-provided stubs and one small coding step at a time. Start at the
+`policy(observation)` stub. Do not advance into design questions or later
+algorithm stages before reviewing the current line.
+No user-written policy, RL update, or PPO algorithm has been implemented yet.
+The new notebook contains setup and a focused first task, not its solution.
 
 In the current discussion, the user described a policy as a parameterized
 treatment and identified that rewarding absolute velocity could produce a
@@ -21,13 +26,14 @@ not complete a learning exercise or implement the policy.
 From this checkout, resume with the prepared environment:
 
 ```powershell
-.venv/Scripts/python -m jupyter lab notebooks/01_control_step.ipynb
+.venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
 ```
 
-Discuss what you expect to change when one target is written and when physics
-steps. A conversational attempt is enough. Then choose the cells to run and
-inspect the result together. The next design discussion is observations,
-actions, reward terms, episode boundaries, and action timing.
+The current coding step is to create an array of 18 zero target offsets inside
+the policy stub. The user writes that line. The agent supplies setup, then
+reviews the user's code before introducing the next step. Define observations,
+reward, episode boundaries, and action timing when the implementation reaches
+those choices.
 
 The test bench also contains an older Ant-v5 scaffold using Stable-Baselines3.
 Preserve it as prior work. It does not replace your own RL/PPO implementation.
