@@ -49,14 +49,18 @@ The current implementation includes:
 
 ## Visual identity
 
-The `Googly Surveyor` presentation gives C-1N a clear +X face without changing
-his mechanics. Two mismatched googly pupils give the face a curious expression.
+The `Porcelain Surveyor` presentation gives C-1N a clear +X face without changing
+his mechanics. A warm pale shell sits above blue-plum mechanisms. Coral feet
+mark the contact locations. Fine cowl details and steady light keep the visual
+accents local, while the quiet stage leaves the legs and shadows readable.
+Two mismatched googly pupils give the face a curious expression.
 In live viewers, gravity pulls the pupils down in their sockets. Shoves and
 body acceleration make them lag, bounce at the socket rim, and wobble before
 their different spring rates settle each eye at a slightly different time.
 This response changes only render-site positions.
-Ceramic upper links, graphite lower links, and vermilion feet keep the load path
-and ground contacts readable.
+The darker lower links keep the load path distinct from the shell. Foot color
+identifies geometry; it does not indicate measured contact or force. Native
+telemetry uses a matching dark palette with named coral, cyan, and lilac lines.
 
 The added `*_visual` sites use MuJoCo visual group 2. Sites follow physical
 bodies, but they have no mass, inertia, or contact behavior. Existing physical
@@ -68,6 +72,11 @@ Render matched baseline and redesign views:
 ```bash
 python render_redesign.py
 ```
+
+The default comparison uses the frozen physics baseline. To compare with a
+previous visual design, preserve that render directory and pass
+`--before-directory <previous-render-directory> --output <new-directory>`.
+These images show the canonical reset pose, not a locomotion result.
 
 Verify compiled mechanics and deterministic behavior:
 
