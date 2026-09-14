@@ -3,6 +3,12 @@
 ## Resume
 
 Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
+Next: experiment 1 in [TODO.md](TODO.md), **Establish the task and a predictable
+action interface**. This is a proposed five-experiment route toward visible stride
+and explicit PPO. The user owns implementation and interpretation; preparing the
+route does not authorize running its experiments. Do not restart the completed
+single-sample/REINFORCE work as a prerequisite.
+
 The notebook now preserves one executed REINFORCE update, a corrected joint-to-foot
 finite-difference probe, a geometry-informed tripod shuffle, and a corrected
 gait-parameter feedback policy. The latest five-second comparison moves the fixed
@@ -14,8 +20,9 @@ explicit returns, one update, and three paired evaluation seeds with a zero cont
 The saved single-sample gradients establish autograd plumbing; that check used
 a reward from an older recording and did not establish action–reward alignment.
 Saved outputs report finite nonzero gradients and a weight change. These establish
-an optimizer update, not a learned locomotion capability. PPO remains a separate,
-deferred step while the gait reference is inspected.
+an optimizer update, not a learned locomotion capability. PPO follows the explicit
+advantage and probability-ratio steps in TODO.md; a hand-tuned walking solution is
+not a prerequisite for implementing those steps.
 The first update retains `next_x + 0.1 * next_z` to isolate the training change;
 this is a position-and-height reward, not a validated locomotion objective.
 The earlier untrained random policy and saved outputs remain in the notebook.
