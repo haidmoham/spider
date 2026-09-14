@@ -1,7 +1,10 @@
 # From shuffle to a legible PPO stride
 
 Updated 2026-09-14. Proposed work packages, not completed experiments.
-Start in [notebook 03](lab/notebooks/03_coordinated_baseline.ipynb).
+Start the next steps in a new notebook under `lab/notebooks/`.
+Keep [notebook 03](lab/notebooks/03_coordinated_baseline.ipynb) as the recorded
+baseline and reference. Bring only the required setup and baseline comparisons
+into the new notebook, then follow the experiments below.
 [LEARNING.md](LEARNING.md) selects the active step; this file owns its planned
 sequence. The archived test-bench queue does not select current work.
 
