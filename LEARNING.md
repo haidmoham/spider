@@ -3,16 +3,22 @@
 ## Resume
 
 Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
-Continue at **One rollout, one REINFORCE update**. The visible multi-step loop is
-prepared, not executed. Its cells collect aligned transitions, compute returns,
-apply one update, and compare three paired evaluation seeds with a zero control.
+The notebook now preserves one executed REINFORCE update, a corrected joint-to-foot
+finite-difference probe, and a geometry-informed tripod shuffle. The current
+inspection target is the shuffle at the end of the notebook. Compare its foot
+motion and measured forward displacement before choosing the next gait change.
+The REINFORCE cells remain the direct-joint reference: aligned transitions,
+explicit returns, one update, and three paired evaluation seeds with a zero control.
 The saved single-sample gradients establish autograd plumbing; that check used
 a reward from an older recording and did not establish action–reward alignment.
-Run the new cells in order when ready, then inspect the exact-state recordings
-and reward decomposition. PPO remains a separate step after that review.
+Saved outputs report finite nonzero gradients and a weight change. These establish
+an optimizer update, not a learned locomotion capability. PPO remains a separate,
+deferred step while the gait reference is inspected.
 The first update retains `next_x + 0.1 * next_z` to isolate the training change;
 this is a position-and-height reward, not a validated locomotion objective.
 The earlier untrained random policy and saved outputs remain in the notebook.
+See the [dated run and demo receipt](lab/notes/2026-09-14-policy-and-shuffle.md)
+for local artifacts, exact export settings, and the current evidence limits.
 The fixed coordinated baseline remains a non-executing reference in the notebook.
 Its earlier recorded comparison is preserved below.
 The eight-second coordinated trial repeated exactly, had valid timestamps and
