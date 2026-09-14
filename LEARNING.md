@@ -3,7 +3,10 @@
 ## Resume
 
 Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
-Read **How the fixed baseline works**, then its implementation and recorded comparison.
+The active experiment is an untrained random policy with small, bounded offsets.
+Inspect its implementation and saved rollout before defining the learning problem.
+The fixed coordinated baseline remains a non-executing reference in the notebook.
+Its earlier recorded comparison is preserved below.
 The eight-second coordinated trial repeated exactly, had valid timestamps and
 no clipped targets, and reached at most 0.218 degrees of body tilt. Sampled
 contact count ranged from three to six. This is a small motion reference, not
