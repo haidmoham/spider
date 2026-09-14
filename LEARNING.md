@@ -2,7 +2,12 @@
 
 ## Resume
 
-Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
+Open [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for
+[issue #33](https://github.com/haidmoham/spider/issues/33). It is a prepared scaffold
+that continues notebook 03's final fixed-shuffle versus feedback-policy comparison.
+It carries the existing gait code forward; new MDP choices and experiments are not executed.
+Keep [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb)
+as the prior REINFORCE and gait reference.
 Next: experiment 1 in [TODO.md](TODO.md), **Establish the task and a predictable
 action interface**. This is a proposed five-experiment route toward visible stride
 and explicit PPO. The user owns implementation and interpretation; preparing the
