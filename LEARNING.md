@@ -2,15 +2,27 @@
 
 ## Resume
 
-Open [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb).
-Run the setup cell, then edit the cell headed **Edit here: `policy(observation)`**.
-Your current draft is preserved. Its last fresh-kernel check failed because it
-indexes `MeasuredState` as a sequence. No policy rollout or RL update ran.
+Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
+Read **How the fixed baseline works**, then its implementation and recorded comparison.
+The eight-second coordinated trial repeated exactly, had valid timestamps and
+no clipped targets, and reached at most 0.218 degrees of body tilt. Sampled
+contact count ranged from three to six. This is a small motion reference, not
+a learned gait or disturbance-recovery result. The neutral control remains fixed.
+Run artifacts are in `telemetry/fixed-coordinated-baseline/`.
 
-The next task is to read a named measurement, define its desired value separately,
-and return 18 finite offsets. Choose the responding actuator and use it in both
-comparison branches. The notebook supplies recording, plots, and exact-state replay.
-Review your function before interpreting a rollout.
+The earlier [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb) retains
+the following comparison and its failure:
+The current comparison applies the front-left commands alone, copies them to the
+front-right leg, or reverses the copied offsets. The user authorized implementation
+and execution of these three two-second trials. No RL update ran.
+
+The same-sign trial became numerically unstable at 1.982 s and reset its clock.
+Do not treat its final displacement as a valid two-second result. The notebook
+labels this failure and preserves the plot and exact-state replay. The other
+two trials reached two seconds; this does not establish stable locomotion.
+The preceding user draft and run artifacts remain in
+`telemetry/paired-leg-comparison/`. Review the coordination and target-offset
+interface before deciding how to initialize a learned policy.
 
 ## Environment
 
