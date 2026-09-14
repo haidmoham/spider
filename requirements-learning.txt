@@ -6,4 +6,6 @@ ipykernel
 nbformat
 nbclient
 matplotlib
+pandas
+scipy
 # Add PyTorch when the user-written RL phase starts.

@@ -2,21 +2,25 @@
 
 A six-legged MuJoCo robot for learned locomotion and simulation experiments.
 
-Start in [02_first_policy.ipynb](notebooks/02_first_policy.ipynb) for the current
+Start in [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb) for the current
 policy work. [LEARNING.md](LEARNING.md) explains setup and ownership.
-[01_control_step.ipynb](notebooks/01_control_step.ipynb) is the earlier control-step exercise.
+[01_control_step.ipynb](lab/notebooks/01_control_step.ipynb) is the earlier control-step exercise.
+The [experiment index](lab/notebooks/README.md) maps each bounded notebook to its
+concept and the relevant robot implementation. This repository now owns the
+smaller experiments previously kept in robotics-test-bench.
 
 ## Structure
 
 | Location | Responsibility |
 | --- | --- |
-| `c1n/simulation.py` | Model loading, neutral reset, measurements, physics stepping |
-| `c1n/controllers.py` | Existing STAND controller and legacy SHUFFLE gait |
-| `c1n/runtime.py` | Controller execution, disturbances, live commands |
-| `c1n/learning.py` | Policy action adapter, short recordings, notebook plots |
-| `c1n/recording.py` | STAND telemetry and state capture for replay |
-| `c1n/viewing/` | Live display, replay, appearance, matched renders |
-| `notebooks/` | User policy, experiment settings, measurements, interpretation |
+| `spider/simulation.py` | Model loading, neutral reset, measurements, physics stepping |
+| `spider/controllers.py` | Existing STAND controller and legacy SHUFFLE gait |
+| `spider/runtime.py` | Controller execution, disturbances, live commands |
+| `spider/learning.py` | Policy action adapter, short recordings, notebook plots |
+| `spider/recording.py` | STAND telemetry and state capture for replay |
+| `spider/viewing/` | Live display, replay, appearance, matched renders |
+| `lab/notebooks/` | User policy, experiment settings, measurements, interpretation |
+| `lab/` | Isolated mechanics fixtures used by the notebooks |
 | `tests/` | Physics, adapter, recording, and visual regression checks |
 | `model/` | Robot XML and frozen physics reference |
 | `telemetry/` | Local traces and executed notebook archives; ignored by Git |
@@ -32,21 +36,21 @@ Use the same Python environment for notebooks and commands:
 
 ```powershell
 .venv/Scripts/python -m pip install -r requirements-learning.txt
-.venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
+.venv/Scripts/python -m jupyter lab lab/notebooks/02_first_policy.ipynb
 ```
 
 One command entry point serves all runtime operations:
 
 ```powershell
-python -m c1n run
-python -m c1n run --headless --experiment none --seconds 1
-python -m c1n run --headless --experiment stand --seconds 10 --trace telemetry/stand.npz
-python -m c1n run --experiment shuffle
-python -m c1n run --seconds 10 --shove-suite telemetry/shoves
-python -m c1n command state
-python -m c1n command perturb 1 0 0 --seconds 0.2
-python -m c1n replay telemetry/path-to-recording --speed 0.25
-python -m c1n render
+python -m spider run
+python -m spider run --headless --experiment none --seconds 1
+python -m spider run --headless --experiment stand --seconds 10 --trace telemetry/stand.npz
+python -m spider run --experiment shuffle
+python -m spider run --seconds 10 --shove-suite telemetry/shoves
+python -m spider command state
+python -m spider command perturb 1 0 0 --seconds 0.2
+python -m spider replay telemetry/path-to-recording --speed 0.25
+python -m spider render
 python -m unittest discover -s tests -v
 ```
 
@@ -57,8 +61,8 @@ The shove suite retains one control and eight directions for each nonzero force:
 counter-clockwise toward +Y. Its three live support plots and trace format are preserved.
 
 The old `simulate.py`, `interact.py`, `walk.py`, `view.py`, and `simctl.py` launchers
-are replaced by the commands above. Import from `c1n` modules, not CLI re-exports.
-`python -m c1n --help` lists commands; each command has `--help`.
+are replaced by the commands above. Import from `spider` modules, not CLI re-exports.
+`python -m spider --help` lists commands; each command has `--help`.
 
 CI uses Python 3.12 and the same `unittest` command. It checks physics, recording,
 the public CLI, and notebook structure/syntax. It does not run lesson cells or
@@ -70,7 +74,8 @@ is named **Headless C-1N simulation**.
 STAND is the earned six-contact baseline. Disturbance recovery is excluded.
 SPAWN and SHUFFLE remain historical comparisons; STRIDE is not earned.
 The next work is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17)
-and [test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25).
+with [test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25)
+retained as source provenance. `LEARNING.md` selects the current work.
 
 `C-1N v0.2 - STAND` is supported by a deterministic 10-second headless
 baseline: all six feet remained in contact, support margin stayed at or above

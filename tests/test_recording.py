@@ -7,10 +7,10 @@ from unittest.mock import patch
 import mujoco
 import numpy as np
 
-from c1n.learning import record_policy, plot_recordings
-from c1n.recording import STATE
-from c1n.runtime import advance, build_simulation
-from c1n.viewing.live import GaitPlots
+from spider.learning import record_policy, plot_recordings
+from spider.recording import STATE
+from spider.runtime import advance, build_simulation
+from spider.viewing.live import GaitPlots
 
 
 class RecordingTests(unittest.TestCase):
@@ -39,7 +39,7 @@ class RecordingTests(unittest.TestCase):
         np.testing.assert_allclose(np.diff(result.replay.times), 7 * model.opt.timestep)
 
     def test_invalid_timing_does_not_construct_a_simulation(self):
-        with patch("c1n.learning.LearningSimulation") as simulation:
+        with patch("spider.learning.LearningSimulation") as simulation:
             for value in (0, -1, True, 0.5, np.bool_(True)):
                 with self.assertRaises(ValueError):
                     record_policy(None, label="invalid", action_count=1, physics_steps=value)

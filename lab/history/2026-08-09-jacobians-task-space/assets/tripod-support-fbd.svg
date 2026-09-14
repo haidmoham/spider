@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Tripod support: forces on the robot, torques in one leg</title>
+  <desc id="desc">A quiet blue engineering diagram. The left side is the whole robot free-body diagram: gravity down and ground forces up. The right side isolates one leg: an assigned ground force maps through the Jacobian transpose to hip and knee torques.</desc>
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#b9cce0" stroke-opacity=".34"/></pattern>
+    <marker id="arrow-navy" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8Z" fill="#153350"/></marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8Z" fill="#3266d6"/></marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0L9 4L0 8Z" fill="#c46a30"/></marker>
+    <style>
+      .panel{fill:#f8fbfd;fill-opacity:.9;stroke:#9cb6ce;stroke-width:2}.ink{stroke:#153350}.robot{fill:#153350}.link{fill:none;stroke:#153350;stroke-width:14;stroke-linecap:round;stroke-linejoin:round}.ground{stroke:#6f8eaa;stroke-width:3}.label{font-family:'JetBrains Mono',monospace;fill:#153350;font-size:20px}.small{font-family:'JetBrains Mono',monospace;fill:#466583;font-size:16px}.heading{font-family:'JetBrains Mono',monospace;fill:#153350;font-size:23px;font-weight:600}.force{stroke:#3266d6;stroke-width:6;marker-end:url(#arrow-blue)}.weight{stroke:#153350;stroke-width:6;marker-end:url(#arrow-navy)}.moment{stroke:#c46a30;stroke-width:6;fill:none;marker-end:url(#arrow-orange)}.joint{fill:#e5f0f9;stroke:#153350;stroke-width:4}.force-label{font-family:'JetBrains Mono',monospace;fill:#3266d6;font-size:18px;font-weight:600}.moment-label{font-family:'JetBrains Mono',monospace;fill:#c46a30;font-size:18px;font-weight:600}.tag{fill:#eef5fb;stroke:#b4c9da;stroke-width:1.5}.force-tag{fill:#e9f0ff;stroke:#9bb9ef;stroke-width:1.5}.moment-tag{fill:#fff1e8;stroke:#e0ae8b;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect width="1200" height="680" fill="#edf4fa"/>
+  <rect width="1200" height="680" fill="url(#grid)"/>
+  <g id="whole-robot-fbd">
+  <rect class="panel" x="30" y="28" width="540" height="620" rx="14"/>
+  <text class="heading" x="56" y="70">WHOLE ROBOT · external forces</text>
+  <text class="small" x="56" y="100">Forces from the ground balance gravity.</text>
+  <line class="ground" x1="62" y1="510" x2="546" y2="510"/>
+  <rect class="robot" x="205" y="165" width="196" height="58" rx="9"/>
+  <text x="259" y="201" font-family="'JetBrains Mono',monospace" font-size="18" fill="#edf4fa">chassis</text>
+  <circle cx="303" cy="194" r="8" fill="#c46a30"/><rect class="moment-tag" x="318" y="130" width="74" height="32" rx="8"/><text class="moment-label" x="331" y="152">COM</text><line stroke="#c46a30" stroke-width="2" x1="337" y1="162" x2="307" y2="187"/>
+  <path class="link" d="M244 223L151 355L111 498"/><path class="link" d="M303 223L303 372L303 498"/><path class="link" d="M362 223L458 355L502 498"/>
+  <circle class="joint" cx="111" cy="498" r="7"/><circle class="joint" cx="303" cy="498" r="7"/><circle class="joint" cx="502" cy="498" r="7"/>
+  <line class="weight" x1="303" y1="205" x2="303" y2="328"/><rect class="tag" x="318" y="286" width="47" height="30" rx="8"/><text class="label" x="329" y="307">mg</text>
+  <line class="force" x1="111" y1="493" x2="111" y2="374"/><rect class="force-tag" x="67" y="329" width="50" height="31" rx="8"/><text class="force-label" x="80" y="351">f₁</text>
+  <line class="force" x1="303" y1="493" x2="303" y2="374"/><rect class="force-tag" x="259" y="329" width="50" height="31" rx="8"/><text class="force-label" x="272" y="351">f₂</text>
+  <line class="force" x1="502" y1="493" x2="502" y2="338"/><rect class="force-tag" x="458" y="293" width="50" height="31" rx="8"/><text class="force-label" x="471" y="315">f₃</text>
+  <rect class="tag" x="52" y="546" width="496" height="81" rx="10"/><text class="small" x="68" y="573">external balance</text><text class="label" x="68" y="603">Σf = 0   ·   Σmoment = 0</text>
+  </g>
+  <g id="isolated-leg-fbd">
+  <rect class="panel" x="630" y="28" width="540" height="620" rx="14"/>
+  <text class="heading" x="656" y="70">ONE LEG · actuator torques</text>
+  <text class="small" x="656" y="100">The assigned foot force becomes motor torque.</text>
+  <line class="ground" x1="654" y1="510" x2="1138" y2="510"/>
+  <rect class="robot" x="811" y="165" width="174" height="58" rx="9"/><text x="859" y="201" font-family="'JetBrains Mono',monospace" font-size="18" fill="#edf4fa">chassis</text>
+  <path class="link" d="M900 223L981 352L1030 498"/><circle class="joint" cx="900" cy="223" r="10"/><circle class="joint" cx="981" cy="352" r="10"/><circle class="joint" cx="1030" cy="498" r="7"/>
+  <rect class="tag" x="1000" y="232" width="62" height="31" rx="8"/><text class="label" x="1011" y="254">hip</text><rect class="tag" x="1060" y="408" width="88" height="31" rx="8"/><text class="label" x="1071" y="430">knee</text>
+  <line class="force" x1="1030" y1="493" x2="1030" y2="338"/><rect class="force-tag" x="1039" y="300" width="112" height="32" rx="8"/><text class="force-label" x="1050" y="323">assigned f</text>
+  <path class="moment" d="M875 274Q830 225 870 187"/><rect class="moment-tag" x="665" y="208" width="95" height="32" rx="8"/><text class="moment-label" x="678" y="231">τ hip</text>
+  <path class="moment" d="M957 408Q916 354 954 315"/><rect class="moment-tag" x="665" y="348" width="112" height="32" rx="8"/><text class="moment-label" x="678" y="371">τ knee</text>
+  <rect class="tag" x="652" y="546" width="496" height="81" rx="10"/><text class="small" x="668" y="573">current pose sets the lever geometry</text><text class="label" x="668" y="603">τ = J(q)ᵀ f</text>
+  </g>
+</svg>

@@ -1,0 +1,2 @@
+# Preserve the migrated historical bytes and their provenance hashes on every OS.
+lab/history/** -text whitespace=cr-at-eol

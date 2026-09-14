@@ -149,7 +149,7 @@ class TreatmentReplay:
         )
         with (run / "viewer.log").open("w", encoding="utf-8") as log:
             process = subprocess.Popen(
-                [sys.executable, "-m", "c1n", "replay", str(run.resolve()), "--speed", str(speed)],
+                [sys.executable, "-m", "spider", "replay", str(run.resolve()), "--speed", str(speed)],
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 cwd=ROOT,

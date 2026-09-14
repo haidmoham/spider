@@ -1,0 +1,289 @@
+{
+  "repository": "https://github.com/haidmoham/robotics-test-bench",
+  "commit": "9cdd22b377f17c65fc41a85ddbef19b2b9cbacc7",
+  "note": "Source hashes identify original bytes before notebook restructuring. Historical records retain original wording and links.",
+  "files": [
+    {
+      "source": ".gitignore",
+      "sha256": "7799a8e7c2a72ddd08418617fb1ff41a67ca1b084a2ca6f848d5d48c2c6ca229",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": ".ontology/commit-rules.md",
+      "sha256": "96fb3d2118b9701d71aee330c4edfe1d54c9af41565d67b6c176b5022be08586",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": ".vscode/settings.json",
+      "sha256": "e438df7bc090a5c7ecdc3deb799516e8048d9e02791e6825e99eeefe02f718bb",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": "AGENTS.md",
+      "sha256": "bfac4cdfc98037bdbe886fdcc108b2408c40fb346b25d62e93c8a736b3d94d41",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": "README.md",
+      "sha256": "2ec0474a72d2abd84b1c96fa0e37c8cac086cb1a6c5a9cd91233425db7787bc0",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": "TODO.md",
+      "sha256": "837fab70edaecb388d8848e29cd01043c23ca997dab7f080ea5f50dc5bd7a006",
+      "destination": "lab/history/TODO.md",
+      "disposition": "historical record; does not select current work"
+    },
+    {
+      "source": "docs/research-platform.md",
+      "sha256": "1fd25f1896a8051d35c16e06b5d0347e244d816a84cb5529ce64d29b99117dd7",
+      "destination": "lab/history/docs/research-platform.md",
+      "disposition": "historical record; does not select current work"
+    },
+    {
+      "source": "experiments/2026-08-08-pendulum-control/README.md",
+      "sha256": "93e0d5b593518774424926a07882a7dc9fb7eb26f2303d228a2a06de2456644c",
+      "destination": "lab/history/2026-08-08-pendulum-control/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-08-pendulum-control/agent-log.md",
+      "sha256": "b2b5286a5031990dbadd449a23932c4e34ab16d5896aae5bc4e3bc29e01aeb4d",
+      "destination": "lab/history/2026-08-08-pendulum-control/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-08-pendulum-control/pendulum.py",
+      "sha256": "dbbfbc0628fa2ba5b4bbe30661914adc587d4325d0b71c15ffd264e9e6c59861",
+      "destination": "lab/pendulum.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/README.md",
+      "sha256": "282cc67c7dd4063cd6bfd51e74a7f888dabeed325b6a1673a7bf738661470a5f",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/agent-log.md",
+      "sha256": "0a95e238bfaf71f1f3e21474e5f80f1277c60fc87151007c26b05306a1de522e",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/assets/tripod-support-fbd.png",
+      "sha256": "4767150340f9ab3b402c1179731b173d968d6bee726f9fd44780e3beb3845dde",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/assets/tripod-support-fbd.png",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/assets/tripod-support-fbd.svg",
+      "sha256": "f07b5784b884b1d37aafb813a91e9a827b3ac6ac8baa00d4f1b1b264ec7c9c04",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/assets/tripod-support-fbd.svg",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/assets/tripod-support-leg-fbd.png",
+      "sha256": "ed8986218eab7cc795ffb1d924980487ce2ce4c6cec3b692f626855d05b6f8b9",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/assets/tripod-support-leg-fbd.png",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/assets/tripod-support-whole-fbd.png",
+      "sha256": "a4f8d939395285011cca642fc9112b4bcf428a8c488c0e0b3b4c72823cc4e261",
+      "destination": "lab/history/2026-08-09-jacobians-task-space/assets/tripod-support-whole-fbd.png",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/jacobians_task_space.py",
+      "sha256": "0e018cd69b3f1f72022625f1060b93ecf1c167035dfdfd15e049aa72b8995f4e",
+      "destination": "lab/jacobians_task_space.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/tripod_static_support.py",
+      "sha256": "3d7e807252df3bf76a3d5418527ac4c6cc90a0f593b02a7b4304ad37f0a0657f",
+      "destination": "lab/tripod_static_support.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-jacobians-task-space/two_joint_planar_leg.py",
+      "sha256": "3a771e629a620ae950aa2c5d8dfc75d6874137969f7e1674aabfe1a2d9bc49bb",
+      "destination": "lab/two_joint_planar_leg.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-model-based-control/README.md",
+      "sha256": "cf70f5c3d0cde6cfe3a075f1dfa3e4721a3624ba303d96cde6f44443473fdaf6",
+      "destination": "lab/history/2026-08-09-model-based-control/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-model-based-control/agent-log.md",
+      "sha256": "25f34f44a44e692ff956165497d7324bfc2e2b08f57c8f887f414d9138c8aa6d",
+      "destination": "lab/history/2026-08-09-model-based-control/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-model-based-control/model_based_control.py",
+      "sha256": "00372b708202777950ead4f1b5f743dae61dd8b190d12c3b90ae28da5c67b8a6",
+      "destination": "lab/model_based_control.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-two-link-coupling/README.md",
+      "sha256": "79c0cf6d09a1ec3147818e9f9788cad53ec688fe82d48008260e911bd434811d",
+      "destination": "lab/history/2026-08-09-two-link-coupling/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-two-link-coupling/agent-log.md",
+      "sha256": "99242be0b968e58a8a020c48f5a0531b42e3a9e809eac92db9f6a1c4b64e3940",
+      "destination": "lab/history/2026-08-09-two-link-coupling/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-09-two-link-coupling/two_link_coupling.py",
+      "sha256": "cdf654e4cc3891e728ac9d45af68bb8de9c696d91932d76af2131ebacfe55614",
+      "destination": "lab/two_link_coupling.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-c1n-leg-workspace/README.md",
+      "sha256": "0478f296544eb9491a7a8a6835f06e2659c037188da7faf0900b2b9a7c6b16f5",
+      "destination": "lab/history/2026-08-13-c1n-leg-workspace/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-c1n-leg-workspace/agent-log.md",
+      "sha256": "5e82035944d230950ab3776b61672e164d1b326b6ba37cd1f40314c255e6c61e",
+      "destination": "lab/history/2026-08-13-c1n-leg-workspace/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-c1n-leg-workspace/c1n_leg_workspace.ipynb",
+      "sha256": "ef02a9825f3ea2f7c20b8c5c63b6ab43519ab77b3554dc7e426a0fd38b632d12",
+      "destination": "lab/notebooks/c1n_leg_workspace.ipynb",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-c1n-leg-workspace/c1n_leg_workspace.py",
+      "sha256": "5b0ec37ac0c999ab1ab4c889e110965a40668dcf138a9722e333e96873c4db41",
+      "destination": "lab/c1n_leg_workspace.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-static-support-boundary/README.md",
+      "sha256": "bbf43e67ba968f5a17f7ea7e18eee69db3542e7b33e09aba5b8f7627c83b2705",
+      "destination": "lab/history/2026-08-13-static-support-boundary/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-static-support-boundary/agent-log.md",
+      "sha256": "3bc504166b6fdc80b675cc6e372e17cf692be55dcd09d6eb32bdbc69bd869dee",
+      "destination": "lab/history/2026-08-13-static-support-boundary/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-static-support-boundary/static_support_boundary.ipynb",
+      "sha256": "94492c3d39c87c073a59809df20b2ac131131dad82c1e2682a68166953b12480",
+      "destination": "lab/notebooks/static_support_boundary.ipynb",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-13-static-support-boundary/static_support_boundary.py",
+      "sha256": "4792525fb52aca962982dcd5f00a7c0cb96252f3a0550dad9d0439b05c106efe",
+      "destination": "lab/static_support_boundary.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-27-ant-policy-learning/README.md",
+      "sha256": "645c1f0f7341e45d935d0cadf613759af9f8e6fd920da0d7d3be5087ca69c59c",
+      "destination": "lab/history/2026-08-27-ant-policy-learning/README.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-27-ant-policy-learning/agent-log.md",
+      "sha256": "e6de00c2a9c2388be20b9f1430b5c64537f3b9921e92f26c5f0c8e91ae3de65b",
+      "destination": "lab/history/2026-08-27-ant-policy-learning/agent-log.md",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/2026-08-27-ant-policy-learning/ant_policy_learning.ipynb",
+      "sha256": "dd5656b2745a90dbafe4756faf64fc97afe3eb2d6a33624357bd4665f0553450",
+      "destination": "lab/notebooks/ant_policy_learning.ipynb",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/fbd_overlay.py",
+      "sha256": "07193d8d31f59abe4c95c7e17a406033a52785b5f40d433606dc237f30e29501",
+      "destination": null,
+      "disposition": "retired unused helper; original preserved in source Git history"
+    },
+    {
+      "source": "experiments/telemetry.py",
+      "sha256": "0553874f7c33200d8ab4b97c9f677c9a378ab1d8caf9adea5b4013ad72071745",
+      "destination": "lab/telemetry.py",
+      "disposition": "migrated"
+    },
+    {
+      "source": "experiments/viewer_controls.py",
+      "sha256": "801afe84ebe003d64c3a47246d8151adb4ba14b11ff55ec5492875073708b2c6",
+      "destination": null,
+      "disposition": "retired unused helper; original preserved in source Git history"
+    },
+    {
+      "source": "experiments/viewer_runtime.py",
+      "sha256": "7139520e711d552029e049fe539c02ce1d278e87592e0894de7973ec72a5ce91",
+      "destination": null,
+      "disposition": "retired unused helper; original preserved in source Git history"
+    },
+    {
+      "source": "guidance/practice.md",
+      "sha256": "6cce8765b1d9c7b667fc245812c4c4d8bff43fb2e748d502ae8786945ab5c0fb",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": "integrations/c1n.md",
+      "sha256": "65526f35ce3b092bb6b948dd54b9e8aeaeb452e4b942cb080ecfbf7534e6e894",
+      "destination": "lab/history/integrations/c1n.md",
+      "disposition": "historical record; does not select current work"
+    },
+    {
+      "source": "integrations/requirements.md",
+      "sha256": "bccd2af3d6680df5ab3aed617278e497b6a1a827058cd6b409ec3eec2627ce7b",
+      "destination": "lab/history/integrations/requirements.md",
+      "disposition": "historical record; does not select current work"
+    },
+    {
+      "source": "integrations/spider.md",
+      "sha256": "79d0d974501323351f641ceeff1a03fcf0fc764138ae66bc405ba8562ea92d93",
+      "destination": "lab/history/integrations/spider.md",
+      "disposition": "historical record; does not select current work"
+    },
+    {
+      "source": "requirements-policy.txt",
+      "sha256": "ce46c95dc23d0f86a8920569c963cfc7580da0df95c2a2aa592ee79bb73329d4",
+      "destination": "requirements-ant.txt",
+      "disposition": "separate legacy Ant environment"
+    },
+    {
+      "source": "scripts/sync_practice_contract.py",
+      "sha256": "e3ca1d0cc28ee8963cb270a985908c1528ba887d85d4cc07d6d1507b4139f658",
+      "destination": null,
+      "disposition": "retired; original remains in source Git history"
+    },
+    {
+      "source": "templates/agent-interaction.md",
+      "sha256": "8f38f6abffb74aaa4c70656e31c89f804a1f286acd016a7a089bd587b7e0c742",
+      "destination": "lab/history/templates/agent-interaction.md",
+      "disposition": "historical record; does not select current work"
+    }
+  ]
+}

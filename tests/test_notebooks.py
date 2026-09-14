@@ -5,7 +5,7 @@ import unittest
 
 import nbformat
 
-NOTEBOOKS = Path(__file__).resolve().parents[1] / "notebooks"
+NOTEBOOKS = Path(__file__).resolve().parents[1] / "lab" / "notebooks"
 
 
 class NotebookSourceTests(unittest.TestCase):

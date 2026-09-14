@@ -17,7 +17,7 @@ class CommandLineTests(unittest.TestCase):
                     [
                         sys.executable,
                         "-m",
-                        "c1n",
+                        "spider",
                         "run",
                         "--headless",
                         "--experiment",
@@ -38,7 +38,7 @@ class CommandLineTests(unittest.TestCase):
 
     def test_help_does_not_start_a_viewer(self):
         process = subprocess.run(
-            [sys.executable, "-m", "c1n", "--help"],
+            [sys.executable, "-m", "spider", "--help"],
             cwd=ROOT,
             capture_output=True,
             text=True,
