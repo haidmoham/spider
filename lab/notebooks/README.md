@@ -5,7 +5,7 @@ policy notebook; the mechanics experiments are references, not prerequisites.
 
 | Notebook | Bounded question | Robot connection |
 | --- | --- | --- |
-| [Fixed coordinated baseline](03_coordinated_baseline.ipynb) | Can small shared-phase motions remain repeatable and numerically stable? | `spider/learning.py`: neutral-plus-offset targets; no learned update |
+| [Untrained random policy](03_coordinated_baseline.ipynb) | What does small, bounded exploration produce before learning? | `spider/learning.py`: recorded random-policy rollout; old coordinated motion is a non-executing reference |
 | [First policy](02_first_policy.ipynb) | Can the current policy produce valid target offsets and an inspectable rollout? | `spider/learning.py`: action interface, recording and measurements |
 | [Control step](01_control_step.ipynb) | What changes between a command and the measured next state? | `spider/simulation.py`: targets, stepping and measurement |
 | [Feedback and dynamics](feedback_and_dynamics.ipynb) | What do damping, coupling and a dynamics model change? | `model/spider.xml`: position actuators; `spider/controllers.py`: existing stance treatment. The notebook torque controllers are not integrated. |
@@ -35,3 +35,17 @@ Executed notebooks and traces are evidence. The 2026-09-10 diagnostics archive i
 `telemetry/local-archive/2026-09-10-stand/`; its manifest covers the saved notebook
 and 34 traces. The pre-trim 2026-09-14 notebooks are in `telemetry/architecture-before/`.
 Both archives are local and ignored by Git. Existing trace paths are preserved.
+
+## Editing an open notebook together
+
+The workspace saves edits when you switch windows. Before an agent changes an
+open notebook on disk, save its current editor buffer and read that saved version.
+Preserve any conflicting disk version before saving. After the change, verify the
+new cell and outputs in the open editor; a successful disk write is not that check.
+A clean notebook refreshed in place in our 2026-09-14 session. Do not force a
+reload over unsaved work. If refresh fails, reconcile both versions before using
+File: Revert File to reload the saved version in place.
+
+Displayed outputs do not imply that the current IDE kernel has those variables.
+After external execution, run the setup and policy cells in the IDE before using
+their variables interactively. Auto Save synchronizes files, not kernel state.
