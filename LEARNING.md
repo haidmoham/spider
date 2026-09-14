@@ -3,8 +3,16 @@
 ## Resume
 
 Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
-The active experiment is an untrained random policy with small, bounded offsets.
-Inspect its implementation and saved rollout before defining the learning problem.
+Continue at **One rollout, one REINFORCE update**. The visible multi-step loop is
+prepared, not executed. Its cells collect aligned transitions, compute returns,
+apply one update, and compare three paired evaluation seeds with a zero control.
+The saved single-sample gradients establish autograd plumbing; that check used
+a reward from an older recording and did not establish action–reward alignment.
+Run the new cells in order when ready, then inspect the exact-state recordings
+and reward decomposition. PPO remains a separate step after that review.
+The first update retains `next_x + 0.1 * next_z` to isolate the training change;
+this is a position-and-height reward, not a validated locomotion objective.
+The earlier untrained random policy and saved outputs remain in the notebook.
 The fixed coordinated baseline remains a non-executing reference in the notebook.
 Its earlier recorded comparison is preserved below.
 The eight-second coordinated trial repeated exactly, had valid timestamps and
