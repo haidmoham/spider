@@ -6,7 +6,7 @@ The mechanics experiments are references, not prerequisites.
 
 | Notebook | Bounded question | Robot connection |
 | --- | --- | --- |
-| [Explicit MDP contract](04_mdp_contract.ipynb) | What should one observation, action, reward, and episode mean? | Issue #33 scaffold using `LearningSimulation`; no experiment executed |
+| [REINFORCE robot debugging lab and MDP contract](04_mdp_contract.ipynb) | Can an inspectable policy-gradient loop learn useful forward steps? | Deliberately flawed learning code; real-robot collector, logs, checkpoints, paired evaluation and replays; no training executed during preparation |
 | [Policy sampling and first REINFORCE update](03_coordinated_baseline.ipynb) | Can aligned transitions and returns drive one inspectable policy update? | Visible PyTorch math with `spider/learning.py`; prepared training cells and zero-policy comparison; earlier outputs preserved |
 | [First policy](02_first_policy.ipynb) | Can the current policy produce valid target offsets and an inspectable rollout? | `spider/learning.py`: action interface, recording and measurements |
 | [Control step](01_control_step.ipynb) | What changes between a command and the measured next state? | `spider/simulation.py`: targets, stepping and measurement |

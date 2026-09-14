@@ -8,4 +8,5 @@ nbclient
 matplotlib
 pandas
 scipy
-# Add PyTorch when the user-written RL phase starts.
+# Explicit user-written policy gradients in notebooks 03 and 04.
+torch
