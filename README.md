@@ -60,6 +60,11 @@ The old `simulate.py`, `interact.py`, `walk.py`, `view.py`, and `simctl.py` laun
 are replaced by the commands above. Import from `c1n` modules, not CLI re-exports.
 `python -m c1n --help` lists commands; each command has `--help`.
 
+CI uses Python 3.12 and the same `unittest` command. It checks physics, recording,
+the public CLI, and notebook structure/syntax. It does not run lesson cells or
+graphical viewers. Native display checks remain local. The required GitHub check
+is named **Headless C-1N simulation**.
+
 ## Preserved capability and evidence
 
 STAND is the earned six-contact baseline. Disturbance recovery is excluded.
