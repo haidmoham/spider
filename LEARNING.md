@@ -2,7 +2,16 @@
 
 ## Resume
 
-Open [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb).
+Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
+Read **How the fixed baseline works**, then its implementation and recorded comparison.
+The eight-second coordinated trial repeated exactly, had valid timestamps and
+no clipped targets, and reached at most 0.218 degrees of body tilt. Sampled
+contact count ranged from three to six. This is a small motion reference, not
+a learned gait or disturbance-recovery result. The neutral control remains fixed.
+Run artifacts are in `telemetry/fixed-coordinated-baseline/`.
+
+The earlier [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb) retains
+the following comparison and its failure:
 The current comparison applies the front-left commands alone, copies them to the
 front-right leg, or reverses the copied offsets. The user authorized implementation
 and execution of these three two-second trials. No RL update ran.

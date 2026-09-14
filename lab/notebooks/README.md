@@ -5,6 +5,7 @@ policy notebook; the mechanics experiments are references, not prerequisites.
 
 | Notebook | Bounded question | Robot connection |
 | --- | --- | --- |
+| [Fixed coordinated baseline](03_coordinated_baseline.ipynb) | Can small shared-phase motions remain repeatable and numerically stable? | `spider/learning.py`: neutral-plus-offset targets; no learned update |
 | [First policy](02_first_policy.ipynb) | Can the current policy produce valid target offsets and an inspectable rollout? | `spider/learning.py`: action interface, recording and measurements |
 | [Control step](01_control_step.ipynb) | What changes between a command and the measured next state? | `spider/simulation.py`: targets, stepping and measurement |
 | [Feedback and dynamics](feedback_and_dynamics.ipynb) | What do damping, coupling and a dynamics model change? | `model/spider.xml`: position actuators; `spider/controllers.py`: existing stance treatment. The notebook torque controllers are not integrated. |
