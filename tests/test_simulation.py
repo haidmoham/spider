@@ -10,11 +10,20 @@ from tempfile import TemporaryDirectory
 import mujoco
 import numpy as np
 
-from interact import build_simulation, execute, run_headless, shove_cases
-from simulate import run
-from simulation import FOOT_NAMES, JOINTS_PER_LEG, load_model, measured_state, neutral_foot_positions, neutral_targets, reset, set_targets, step
-from standing import SupportAwareStanceController
-from walk import GaitCoordinator, apply_gait_control
+from c1n.runtime import build_simulation, execute, run_headless, shove_cases
+from c1n.simulation import (
+    FOOT_NAMES,
+    JOINTS_PER_LEG,
+    load_model,
+    measured_state,
+    neutral_foot_positions,
+    neutral_targets,
+    reset,
+    set_targets,
+    step,
+)
+from c1n.controllers import SupportAwareStanceController
+from c1n.controllers import GaitCoordinator, apply_gait_control
 
 
 class SimulationCoreTests(unittest.TestCase):
@@ -70,13 +79,26 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertAlmostEqual(self.data.qpos[2], 0.5765503932250885, places=10)
 
     def test_static_and_live_surfaces_share_the_neutral_reset(self) -> None:
-        static_model, _ = run(0.002)
-        live_model, live_data, power, coordinator, controller, perturbation = build_simulation("none")
+        static_model = load_model()
+        live_model, live_data, power, coordinator, controller, perturbation = build_simulation(
+            "none"
+        )
         static_initial = mujoco.MjData(static_model)
         reset(static_model, static_initial)
-        self.assertEqual(measured_state(static_model, static_initial), measured_state(live_model, live_data))
+        self.assertEqual(
+            measured_state(static_model, static_initial), measured_state(live_model, live_data)
+        )
 
-        response = execute({"command": "reset"}, live_model, live_data, power, "none", coordinator, controller, perturbation)
+        response = execute(
+            {"command": "reset"},
+            live_model,
+            live_data,
+            power,
+            "none",
+            coordinator,
+            controller,
+            perturbation,
+        )
         self.assertEqual(response["torso_position"], [0.0, 0.0, 0.45])
         self.assertEqual(response["torso_orientation"], [1.0, 0.0, 0.0, 0.0])
         self.assertEqual(response["torso_angular_velocity"], [0.0, 0.0, 0.0])
@@ -87,7 +109,9 @@ class SimulationCoreTests(unittest.TestCase):
     def test_interact_state_reports_live_measured_telemetry(self) -> None:
         model, data, power, coordinator, controller, perturbation = build_simulation("none")
 
-        initial = execute({"command": "state"}, model, data, power, "none", coordinator, controller, perturbation)
+        initial = execute(
+            {"command": "state"}, model, data, power, "none", coordinator, controller, perturbation
+        )
         observed_initial = measured_state(model, data)
         self.assertEqual(initial["joint_positions"], list(observed_initial.joint_positions))
         self.assertEqual(initial["joint_velocities"], list(observed_initial.joint_velocities))
@@ -96,22 +120,48 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(initial["controls"], data.ctrl.tolist())
         self.assertEqual(set(initial["legs"]), set(FOOT_NAMES))
 
-        stepped = execute({"command": "step", "n": 2}, model, data, power, "none", coordinator, controller, perturbation)
+        stepped = execute(
+            {"command": "step", "n": 2},
+            model,
+            data,
+            power,
+            "none",
+            coordinator,
+            controller,
+            perturbation,
+        )
         observed_stepped = measured_state(model, data)
         self.assertEqual(stepped["time"], observed_stepped.time)
         self.assertEqual(stepped["torso_position"], list(observed_stepped.torso_position))
         self.assertEqual(stepped["torso_orientation"], list(observed_stepped.torso_orientation))
         self.assertEqual(stepped["torso_velocity"], list(observed_stepped.torso_velocity))
-        self.assertEqual(stepped["torso_angular_velocity"], list(observed_stepped.torso_angular_velocity))
+        self.assertEqual(
+            stepped["torso_angular_velocity"], list(observed_stepped.torso_angular_velocity)
+        )
         self.assertEqual(stepped["joint_positions"], list(observed_stepped.joint_positions))
         self.assertEqual(stepped["joint_velocities"], list(observed_stepped.joint_velocities))
         self.assertEqual(stepped["actuator_forces"], list(observed_stepped.actuator_forces))
-        self.assertEqual(stepped["foot_positions"], {name: list(position) for name, position in observed_stepped.foot_positions.items()})
+        self.assertEqual(
+            stepped["foot_positions"],
+            {name: list(position) for name, position in observed_stepped.foot_positions.items()},
+        )
         self.assertEqual(stepped["foot_contacts"], list(observed_stepped.foot_contacts))
-        self.assertEqual(stepped["whole_stance_kinematics"]["foot_position_residual"], list(observed_stepped.foot_position_residual))
-        self.assertEqual(stepped["whole_stance_kinematics"]["foot_position_residual_norm_m"], observed_stepped.foot_position_residual_norm)
-        self.assertEqual(stepped["whole_stance_kinematics"]["joint_space_update_direction"], list(observed_stepped.joint_space_update_direction))
-        self.assertEqual(stepped["whole_stance_kinematics"]["joint_space_update_direction_norm"], observed_stepped.joint_space_update_direction_norm)
+        self.assertEqual(
+            stepped["whole_stance_kinematics"]["foot_position_residual"],
+            list(observed_stepped.foot_position_residual),
+        )
+        self.assertEqual(
+            stepped["whole_stance_kinematics"]["foot_position_residual_norm_m"],
+            observed_stepped.foot_position_residual_norm,
+        )
+        self.assertEqual(
+            stepped["whole_stance_kinematics"]["joint_space_update_direction"],
+            list(observed_stepped.joint_space_update_direction),
+        )
+        self.assertEqual(
+            stepped["whole_stance_kinematics"]["joint_space_update_direction_norm"],
+            observed_stepped.joint_space_update_direction_norm,
+        )
         self.assertEqual(stepped["controls"], data.ctrl.tolist())
         self.assertTrue(any(value != 0.0 for value in stepped["joint_velocities"]))
         self.assertTrue(any(value != 0.0 for value in stepped["actuator_forces"]))
@@ -123,9 +173,15 @@ class SimulationCoreTests(unittest.TestCase):
                 joint_state = leg["joints"][joint]
                 actuator = index * JOINTS_PER_LEG + offset
                 self.assertEqual(joint_state["target"], data.ctrl[actuator])
-                self.assertEqual(joint_state["position"], observed_stepped.joint_positions[actuator])
-                self.assertEqual(joint_state["velocity"], observed_stepped.joint_velocities[actuator])
-                self.assertEqual(joint_state["actuator_force"], observed_stepped.actuator_forces[actuator])
+                self.assertEqual(
+                    joint_state["position"], observed_stepped.joint_positions[actuator]
+                )
+                self.assertEqual(
+                    joint_state["velocity"], observed_stepped.joint_velocities[actuator]
+                )
+                self.assertEqual(
+                    joint_state["actuator_force"], observed_stepped.actuator_forces[actuator]
+                )
 
     def test_live_surface_schedules_and_clears_a_torso_force_pulse(self) -> None:
         model, data, power, coordinator, controller, perturbation = build_simulation("none")
@@ -142,7 +198,9 @@ class SimulationCoreTests(unittest.TestCase):
         self.assertEqual(scheduled["perturbation"]["force_n"], [1.0, 0.0, 0.0])
         self.assertEqual(scheduled["perturbation"]["remaining_steps"], 5)
 
-        reset_state = execute({"command": "reset"}, model, data, power, "none", coordinator, controller, perturbation)
+        reset_state = execute(
+            {"command": "reset"}, model, data, power, "none", coordinator, controller, perturbation
+        )
         self.assertEqual(reset_state["perturbation"]["force_n"], [0.0, 0.0, 0.0])
         self.assertEqual(reset_state["perturbation"]["remaining_steps"], 0)
 
@@ -186,11 +244,20 @@ class SimulationCoreTests(unittest.TestCase):
         cases = shove_cases(self.model)
 
         self.assertEqual(len(cases), 33)
-        self.assertEqual({metadata["direction_label"] for _, _, metadata in cases}, {f"{angle:03d}deg" for angle in range(0, 360, 45)})
-        self.assertEqual({metadata["label"] for _, _, metadata in cases}, {"0mg", "0.25mg", "0.5mg", "0.75mg", "1mg"})
+        self.assertEqual(
+            {metadata["direction_label"] for _, _, metadata in cases},
+            {f"{angle:03d}deg" for angle in range(0, 360, 45)},
+        )
+        self.assertEqual(
+            {metadata["label"] for _, _, metadata in cases},
+            {"0mg", "0.25mg", "0.5mg", "0.75mg", "1mg"},
+        )
         self.assertEqual(sum(metadata["case_role"] == "control" for _, _, metadata in cases), 1)
         self.assertEqual(sum(metadata["case_role"] == "treatment" for _, _, metadata in cases), 32)
-        self.assertEqual([metadata["label"] for _, _, metadata in cases], ["0mg"] + [f"{multiple:g}mg" for multiple in (0.25, 0.5, 0.75, 1.0) for _ in range(8)])
+        self.assertEqual(
+            [metadata["label"] for _, _, metadata in cases],
+            ["0mg"] + [f"{multiple:g}mg" for multiple in (0.25, 0.5, 0.75, 1.0) for _ in range(8)],
+        )
 
 
 if __name__ == "__main__":

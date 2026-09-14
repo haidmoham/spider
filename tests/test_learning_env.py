@@ -5,8 +5,8 @@ import unittest
 import mujoco
 import numpy as np
 
-import simulation
-from learning_env import LearningSimulation
+from c1n import simulation
+from c1n.learning import LearningSimulation
 
 
 class LearningSimulationTests(unittest.TestCase):
@@ -46,13 +46,18 @@ class LearningSimulationTests(unittest.TestCase):
         env.step([0.1] * 18, physics_steps=4)
         before = simulation.measured_state(env.model, env.data)
         controls = env.data.ctrl.copy()
-        cases = [
-            ([0.0] * 18, count) for count in (0, -1, 1.5, True, np.bool_(True), "2", None)
+        cases = [([0.0] * 18, count) for count in (0, -1, 1.5, True, np.bool_(True), "2", None)]
+        cases += [
+            (offsets, 1)
+            for offsets in (
+                [0.0] * 17,
+                np.zeros((6, 3)),
+                np.zeros((18, 1)),
+                [float("nan")] * 18,
+                [float("inf")] * 18,
+                ["invalid"] * 18,
+            )
         ]
-        cases += [(offsets, 1) for offsets in (
-            [0.0] * 17, np.zeros((6, 3)), np.zeros((18, 1)),
-            [float("nan")] * 18, [float("inf")] * 18, ["invalid"] * 18,
-        )]
         for offsets, count in cases:
             with self.subTest(offsets=offsets, physics_steps=count):
                 with self.assertRaises(ValueError):

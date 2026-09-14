@@ -17,7 +17,7 @@ import mujoco
 import numpy as np
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 MODEL_PATH = ROOT / "model" / "spider.xml"
 FOOT_NAMES = (
     "front_left",
@@ -94,8 +94,12 @@ def _convex_hull(points: list[tuple[float, float]]) -> tuple[tuple[float, float]
     if len(ordered) <= 1:
         return tuple(ordered)
 
-    def cross(origin: tuple[float, float], first: tuple[float, float], second: tuple[float, float]) -> float:
-        return (first[0] - origin[0]) * (second[1] - origin[1]) - (first[1] - origin[1]) * (second[0] - origin[0])
+    def cross(
+        origin: tuple[float, float], first: tuple[float, float], second: tuple[float, float]
+    ) -> float:
+        return (first[0] - origin[0]) * (second[1] - origin[1]) - (first[1] - origin[1]) * (
+            second[0] - origin[0]
+        )
 
     lower: list[tuple[float, float]] = []
     for point in ordered:
@@ -110,7 +114,9 @@ def _convex_hull(points: list[tuple[float, float]]) -> tuple[tuple[float, float]
     return tuple(lower[:-1] + upper[:-1])
 
 
-def _support_margin(point: tuple[float, float], polygon: tuple[tuple[float, float], ...]) -> float | None:
+def _support_margin(
+    point: tuple[float, float], polygon: tuple[tuple[float, float], ...]
+) -> float | None:
     """Return signed planar distance to a convex support boundary in metres."""
     if len(polygon) < 3:
         return None
@@ -140,14 +146,23 @@ def set_targets(data: mujoco.MjData, targets: tuple[float, ...] | list[float]) -
     data.ctrl[:] = targets
 
 
-def step(model: mujoco.MjModel, data: mujoco.MjData, targets: tuple[float, ...] | list[float] | None = None) -> None:
+def step(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    targets: tuple[float, ...] | list[float] | None = None,
+) -> None:
     """Optionally apply desired targets, then take exactly one MuJoCo step."""
     if targets is not None:
         set_targets(data, targets)
     mujoco.mj_step(model, data)
 
 
-def run(model: mujoco.MjModel, data: mujoco.MjData, seconds: float, targets: tuple[float, ...] | list[float] | None = None) -> None:
+def run(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    seconds: float,
+    targets: tuple[float, ...] | list[float] | None = None,
+) -> None:
     """Advance a fixed-duration open-loop rollout using one explicit target vector."""
     if seconds <= 0:
         raise ValueError("seconds must be greater than zero")
@@ -167,7 +182,9 @@ class SupportMeasurements:
     support_margin: float | None
 
 
-def foot_positions_world(model: mujoco.MjModel, data: mujoco.MjData) -> dict[str, tuple[float, float, float]]:
+def foot_positions_world(
+    model: mujoco.MjModel, data: mujoco.MjData
+) -> dict[str, tuple[float, float, float]]:
     """Read each foot geom centre in world XYZ metres without advancing physics."""
     foot_positions = {
         name: tuple(float(value) for value in data.geom_xpos[model.geom(f"{name}_foot").id])
@@ -194,7 +211,13 @@ def measure_support(
     normal_loads = {name: 0.0 for name in FOOT_NAMES}
     for index in range(data.ncon):
         contact = data.contact[index]
-        other = contact.geom2 if contact.geom1 == ground_id else contact.geom1 if contact.geom2 == ground_id else None
+        other = (
+            contact.geom2
+            if contact.geom1 == ground_id
+            else contact.geom1
+            if contact.geom2 == ground_id
+            else None
+        )
         if other in feet:
             name = feet[other]
             contacts.add(name)
@@ -206,7 +229,11 @@ def measure_support(
     support_polygon = _convex_hull([foot_positions[name][:2] for name in contacts])
     margin = _support_margin(com_projection, support_polygon)
     return SupportMeasurements(
-        tuple(sorted(contacts)), normal_loads, com_projection, support_polygon, margin,
+        tuple(sorted(contacts)),
+        normal_loads,
+        com_projection,
+        support_polygon,
+        margin,
     )
 
 

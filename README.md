@@ -1,36 +1,71 @@
 # C-1N
 
-C-1N is a six-legged MuJoCo robot simulation for locomotion, evaluation, and simulation experiments.
+A six-legged MuJoCo robot for learned locomotion and simulation experiments.
 
-## Start here
+Start in [02_first_policy.ipynb](notebooks/02_first_policy.ipynb) for the current
+policy work. [LEARNING.md](LEARNING.md) explains setup and ownership.
+[01_control_step.ipynb](notebooks/01_control_step.ipynb) is the earlier control-step exercise.
 
-- Start learning in [01_control_step.ipynb](notebooks/01_control_step.ipynb). Discuss your first attempt before advancing to the measurements; its cells need no prediction form or code gate.
-- Follow [LEARNING.md](LEARNING.md) for notebook setup, code-to-math reading, and the user-written RL/PPO route. Jupyter is the primary learning surface.
-- Read the C-1N v0.2 - STAND checkpoint below for the supported baseline and its limits.
-- Run `python interact.py --headless --seconds 10 --experiment stand --trace telemetry/stand.npz` to produce the canonical trace.
-- Inspect `notebooks/stand_rollout_diagnostics.ipynb` for contacts, support margin, torso motion, and controller activity.
-- Use [robotics-test-bench](https://github.com/haidmoham/robotics-test-bench) for the small physical and numerical experiments that inform this model.
-- Browse [spider-web](https://github.com/haidmoham/spider-web) for the WebAssembly playback surface.
+## Structure
 
-The STAND checkpoint is a six-contact support baseline, not disturbance recovery or sustained walking.
+| Location | Responsibility |
+| --- | --- |
+| `c1n/simulation.py` | Model loading, neutral reset, measurements, physics stepping |
+| `c1n/controllers.py` | Existing STAND controller and legacy SHUFFLE gait |
+| `c1n/runtime.py` | Controller execution, disturbances, live commands |
+| `c1n/learning.py` | Policy action adapter, short recordings, notebook plots |
+| `c1n/recording.py` | STAND telemetry and state capture for replay |
+| `c1n/viewing/` | Live display, replay, appearance, matched renders |
+| `notebooks/` | User policy, experiment settings, measurements, interpretation |
+| `tests/` | Physics, adapter, recording, and visual regression checks |
+| `model/` | Robot XML and frozen physics reference |
+| `telemetry/` | Local traces and executed notebook archives; ignored by Git |
 
-Checkpoint lineage:
+Follow **notebook → learning → simulation** when writing a policy.
+Controllers use simulation measurements to choose targets. The runtime advances
+those controllers through the same physics step. Viewing code does not own reset
+or a second physics loop. Replay restores recorded states without integrating.
 
-- `C-1N v0.0 - SPAWN`: deterministic six-foot spawn baseline.
-- `C-1N v0.1 - SHUFFLE`: legacy, explicit gait experiment.
-- `C-1N v0.2 - STAND`: reproducible six-contact support baseline.
-- `C-1N v0.3 - STRIDE`: next capability target; not yet earned.
+## Run
 
-## Current frontier
+Use the same Python environment for notebooks and commands:
 
-`C-1N // 02 · STAND` is earned. The next planned capability is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17) and [robotics-test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25).
+```powershell
+.venv/Scripts/python -m pip install -r requirements-learning.txt
+.venv/Scripts/python -m jupyter lab notebooks/02_first_policy.ipynb
+```
 
-ROBUST_STAND is not a blocking checkpoint. Preserve the current standing baseline and its known disturbance failures as evidence. Revisit standing robustness, contact mechanics, actuator limits, estimation, or morphology only when a concrete locomotion failure makes one of those mechanisms necessary.
+One command entry point serves all runtime operations:
 
-Do not claim `C-1N // 03 · STRIDE` from one attractive rollout. STRIDE requires materially better sustained locomotion than the preserved SHUFFLE failure under fixed, reproducible evaluation.
+```powershell
+python -m c1n run
+python -m c1n run --headless --experiment none --seconds 1
+python -m c1n run --headless --experiment stand --seconds 10 --trace telemetry/stand.npz
+python -m c1n run --experiment shuffle
+python -m c1n run --seconds 10 --shove-suite telemetry/shoves
+python -m c1n command state
+python -m c1n command perturb 1 0 0 --seconds 0.2
+python -m c1n replay telemetry/path-to-recording --speed 0.25
+python -m c1n render
+python -m unittest discover -s tests -v
+```
 
-Current instrumentation: `C-1N v0.11` uses `Telemetry v1` for STAND
-experiments. It is not a standing capability claim.
+`run` defaults to STAND. `none` holds neutral targets. `shuffle` runs the preserved
+legacy gait and its six joint/torque plots. Add `--headless` for repeatable recordings.
+The shove suite retains one control and eight directions for each nonzero force:
+0, 0.25, 0.5, 0.75, and 1 mg, held for 200 ms. Angles start at world +X and increase
+counter-clockwise toward +Y. Its three live support plots and trace format are preserved.
+
+The old `simulate.py`, `interact.py`, `walk.py`, `view.py`, and `simctl.py` launchers
+are replaced by the commands above. Import from `c1n` modules, not CLI re-exports.
+`python -m c1n --help` lists commands; each command has `--help`.
+
+## Preserved capability and evidence
+
+STAND is the earned six-contact baseline. Disturbance recovery is excluded.
+SPAWN and SHUFFLE remain historical comparisons; STRIDE is not earned.
+The next work is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17)
+and [test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25).
 
 `C-1N v0.2 - STAND` is supported by a deterministic 10-second headless
 baseline: all six feet remained in contact, support margin stayed at or above
@@ -38,141 +73,18 @@ baseline: all six feet remained in contact, support margin stayed at or above
 remained numerically zero. The declared `1 mg` shove is retained as a failed
 recovery case; disturbance recovery is not part of this checkpoint.
 
-The current implementation includes:
+Neutral reset uses torso height 0.45 m and joint targets `(0, -0.2, 1.1)` radians
+per leg. `simulation.py` alone owns that reset. The stance controller applies a
+bounded all-foot correction only with six declared contacts and adequate support margin.
+It is not an attitude-recovery controller. Telemetry v1 remains instrumentation,
+not an additional capability claim.
 
-- eighteen actuated hinge joints across six legs;
-- the `v0.0 - SPAWN` static baseline;
-- a support-aware, stance-only equilibrium loop;
-- the `v0.1 - SHUFFLE` phase-shifted tripod gait;
-- torso-orientation and foot-contact telemetry;
-- deterministic headless and live simulation modes.
+The Porcelain Surveyor appearance preserves mechanics. Extra visual sites have no
+mass or contact behavior. Responsive pupils modify render-site positions only.
+The frozen reference is `model/spider_physics_baseline.xml`. `render` compares matched
+cameras; its `--before-directory` option accepts earlier render output.
 
-## Visual identity
-
-The `Porcelain Surveyor` presentation gives C-1N a clear +X face without changing
-his mechanics. A warm pale shell sits above blue-plum mechanisms. Coral feet
-mark the contact locations. Fine cowl details and steady light keep the visual
-accents local, while the quiet stage leaves the legs and shadows readable.
-Two mismatched googly pupils give the face a curious expression.
-In live viewers, gravity pulls the pupils down in their sockets. Shoves and
-body acceleration make them lag, bounce at the socket rim, and wobble before
-their different spring rates settle each eye at a slightly different time.
-This response changes only render-site positions.
-The darker lower links keep the load path distinct from the shell. Foot color
-identifies geometry; it does not indicate measured contact or force. Native
-telemetry uses a matching dark palette with named coral, cyan, and lilac lines.
-
-The added `*_visual` sites use MuJoCo visual group 2. Sites follow physical
-bodies, but they have no mass, inertia, or contact behavior. Existing physical
-geoms keep their original shapes and contact properties. The frozen source
-model is preserved in `model/spider_physics_baseline.xml`.
-
-Render matched baseline and redesign views:
-
-```bash
-python render_redesign.py
-```
-
-The default comparison uses the frozen physics baseline. To compare with a
-previous visual design, preserve that render directory and pass
-`--before-directory <previous-render-directory> --output <new-directory>`.
-These images show the canonical reset pose, not a locomotion result.
-
-Verify compiled mechanics and deterministic behavior:
-
-```bash
-python -m unittest -v test_visual_invariants.py test_simulation.py
-```
-
-## Canonical simulation path
-
-`simulation.py` is the only owner of model loading, deterministic neutral reset,
-measured MuJoCo state, desired targets, and stepping. The neutral baseline is a
-compact symmetric stance: torso centre height `0.45 m`, coxa target `0 rad`, hip
-target `-0.2 rad`, and knee target `+1.1 rad`. Its six foot positions are
-computed from `model/spider.xml` at reset; no viewer or experiment can define a
-competing reset state.
-
-`simulate.py` is the static baseline surface. `interact.py` starts the live
-support-aware stance loop by default. Its `stand` mode measures declared foot
-contacts, normal loads, the COM projection, and support margin at every step.
-It applies a bounded all-feet `J^T r` target correction only while all six feet
-declare contact and the COM is inside the support polygon. It is not yet an
-attitude-recovery controller. `walk.py` and `interact.py --experiment shuffle`
-run the legacy SHUFFLE target generator explicitly; gait is never generated by
-default.
-
-The former live-only squat (`z=0.245 m`, `-1.0 rad` knees) is intentionally no
-longer a reset path. It conflicted with the historical static baseline; this is
-a removal of duplicated software semantics, not a gait or physics tune.
-
-The current gait is intentionally limited and does not yet produce sustained walking.
-
-## Run
-
-Install the pinned simulation environment:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Run the static pose baseline:
-
-```bash
-python simulate.py
-```
-
-Run the interactive viewer:
-
-```bash
-python view.py
-```
-
-Run the canonical live path without a viewer:
-
-```bash
-python interact.py --headless --seconds 1
-```
-
-Save a compact `Telemetry v1` STAND trace for notebook inspection:
-
-```bash
-python interact.py --headless --seconds 10 --experiment stand --trace telemetry/stand.npz
-```
-
-Open `notebooks/stand_rollout_diagnostics.ipynb` to inspect the resulting
-support margin, contact loads, torso motion, and controller activity.
-
-Run the STAND shove grid. Each case starts at reset and uses a 200 ms
-world-frame force. The eight directions are spaced by 45 degrees from world
-`+X`, counter-clockwise toward world `+Y`:
-
-```bash
-python interact.py --seconds 10 --shove-suite telemetry/shoves
-```
-
-The force magnitudes are `0`, `0.25 mg`, `0.5 mg`, `0.75 mg`, and `1.0 mg`.
-The viewer shows the single `0 mg` baseline first. It then shows all eight
-directions for each nonzero magnitude in increasing order, for 33 cases total.
-Its three live plots
-show the applied force and motion, support state, and pair loads. It writes the
-same 50 Hz compact `Telemetry v1` records that the notebook compares. Use
-`--headless` to run the same suite without the viewer.
-
-Run a headless locomotion check:
-
-```bash
-python walk.py --headless --duration 20
-```
-
-Run the same legacy experiment through the live surface:
-
-```bash
-python interact.py --headless --experiment shuffle --seconds 20
-```
-
-Verify the deterministic core:
-
-```bash
-python -m unittest -v test_simulation.py
-```
+Existing recordings remain under `telemetry/` and `artifacts/c1n_redesign/`.
+Historical verification is in [docs/history](docs/history/).
+The 2026-09-14 pre-trim source and executed notebooks are also preserved locally
+under `telemetry/architecture-before/`.
