@@ -26,6 +26,16 @@ These local telemetry paths are ignored by Git. The short shuffle is a motion
 study, not population-level validation, learned walking, or a new checkpoint.
 STAND and its limits remain unchanged. No experiment ran during wrapup.
 
+### Later feedback comparison
+
+The user corrected forward-axis selection, error sign, and sweep clipping in
+`gait_parameter_policy`. The saved five-second comparison reports forward/sideways
+displacements of `+0.140608 / +0.003545 m` for the fixed shuffle and
+`-0.037958 / +0.150726 m` for feedback. Several early commands reach the `0` or
+`0.08 rad` sweep bound. This is an observed failure, not a causal diagnosis.
+Exact replays remain under `telemetry/gait-policy-iterations/` as
+`treatment-cp863h3r` (control) and `treatment-09ndxul6` (feedback).
+
 ## Shareable demo
 
 `telemetry/exports/c1n-shuffle-social.mp4` is five seconds, 1080 square, 30 fps,

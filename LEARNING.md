@@ -4,9 +4,11 @@
 
 Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
 The notebook now preserves one executed REINFORCE update, a corrected joint-to-foot
-finite-difference probe, and a geometry-informed tripod shuffle. The current
-inspection target is the shuffle at the end of the notebook. Compare its foot
-motion and measured forward displacement before choosing the next gait change.
+finite-difference probe, a geometry-informed tripod shuffle, and a corrected
+gait-parameter feedback policy. The latest five-second comparison moves the fixed
+shuffle forward about 0.1406 m; feedback moves backward about 0.0380 m and sideways
+about 0.1507 m. Preserve that failure. The logged sweep reaches both bounds;
+the cause and a useful next change remain questions for the user to investigate.
 The REINFORCE cells remain the direct-joint reference: aligned transitions,
 explicit returns, one update, and three paired evaluation seeds with a zero control.
 The saved single-sample gradients establish autograd plumbing; that check used
