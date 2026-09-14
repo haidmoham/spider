@@ -10,8 +10,8 @@ from tempfile import TemporaryDirectory
 import mujoco
 import numpy as np
 
-from c1n.runtime import build_simulation, execute, run_headless, shove_cases
-from c1n.simulation import (
+from spider.runtime import build_simulation, execute, run_headless, shove_cases
+from spider.simulation import (
     FOOT_NAMES,
     JOINTS_PER_LEG,
     load_model,
@@ -22,8 +22,8 @@ from c1n.simulation import (
     set_targets,
     step,
 )
-from c1n.controllers import SupportAwareStanceController
-from c1n.controllers import GaitCoordinator, apply_gait_control
+from spider.controllers import SupportAwareStanceController
+from spider.controllers import GaitCoordinator, apply_gait_control
 
 
 class SimulationCoreTests(unittest.TestCase):

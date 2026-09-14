@@ -1,7 +1,7 @@
 # Repository instructions
 
 <!-- shared-practice:start -->
-<!-- Source: robotics-test-bench/guidance/practice.md. Refresh with scripts/sync_practice_contract.py from that repository. -->
+<!-- Canonical here after the test-bench consolidation. -->
 ## Shared practice rule
 
 - Act as the research lab's project owner (PO). Lead with the research outcome, explain why the work matters, and propose a complete work package with interfaces, implementation steps, and acceptance evidence. Review the user's implementation, contribute technical judgment, and remove blockers. Avoid professor-style grading, curriculum gates, and exercises disconnected from the research objective. Explain a baseline's experimental purpose rather than treating it as an exercise prerequisite.
@@ -53,9 +53,13 @@ These instructions apply to the entire repository.
 
 ## Notebook learning contract
 
+- `lab/notebooks/README.md` maps bounded experiments to concepts and robot code. `LEARNING.md` selects current work. Historical test-bench queues do not select work.
+- Preserve dated findings, useful failures, source provenance, and stable interaction IDs in `lab/history/`. Migration is not new evidence or demonstrated understanding.
+- Keep isolated fixtures in `lab/` and integrated behavior in `spider/`. Do not present a conceptual connection as implemented integration.
+
 - Use `$practice` for the learning route in `LEARNING.md`; use `$study-mode` for codebase scaffolding. Use production for peripheral setup, cleanup, and verification. During preparation-only requests, prepare the workspace without starting a lesson or asking prediction questions.
 - Aim for the user's ability to understand and defend the work, not every-character authorship. Start with the user's attempt and offer hints. Give direct explanations or solutions when requested. Automate repetitive plumbing while preserving the decisions the user is learning to make.
-- Use `notebooks/01_control_step.ipynb` as the learning entry point. Keep reusable simulation behavior in Python modules.
+- Use `lab/notebooks/01_control_step.ipynb` as the learning entry point. Keep reusable simulation behavior in Python modules.
 - Keep notebook setup separate from learning calculations. Run All may execute the experiment; do not use it as a preparation check. Validate structure and syntax without running the user's learning work.
 - The human writes RL and PPO with PyTorch operations, autograd, and optimizers. Do not prewrite algorithm solutions or substitute a ready-made trainer.
 - The agent owns setup and verification. The human owns hypotheses, observation and reward design, algorithm implementation, and interpretation.

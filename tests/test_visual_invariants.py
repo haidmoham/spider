@@ -8,8 +8,8 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from c1n.simulation import FOOT_NAMES, MODEL_PATH, reset, step
-from c1n.viewing.appearance import ResponsivePupils
+from spider.simulation import FOOT_NAMES, MODEL_PATH, reset, step
+from spider.viewing.appearance import ResponsivePupils
 
 
 BASELINE_PATH = Path(__file__).resolve().parent.parent / "model" / "spider_physics_baseline.xml"

@@ -5,8 +5,8 @@ import unittest
 import mujoco
 import numpy as np
 
-from c1n import simulation
-from c1n.learning import LearningSimulation
+from spider import simulation
+from spider.learning import LearningSimulation
 
 
 class LearningSimulationTests(unittest.TestCase):

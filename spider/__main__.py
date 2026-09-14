@@ -63,7 +63,7 @@ def main():
                 with connection.makefile("rb") as response:
                     result = json.loads(response.readline())
         except OSError as error:
-            parser.exit(1, f"Cannot reach the viewer: {error}\nStart it with python -m c1n run\n")
+            parser.exit(1, f"Cannot reach the viewer: {error}\nStart it with python -m spider run\n")
         print(json.dumps(result, indent=2))
         if "error" in result:
             raise SystemExit(1)
