@@ -205,6 +205,37 @@ and critic should transfer exactly; new action parameters need fresh optimizer
 state. Cadence/phase traces, zero-adjustment parity, and shared training/evaluation
 timing are required before running it. Each ablation gets a separate experiment ID.
 
+### Policy-controlled cadence experiment
+
+`spider/cadence_action_training.py` adds a separate cadence output to the existing
+18 joint-residual actions. It retains the original actor tensors and their Adam
+history, the critic and its Adam history, and the optimizer RNG. New cadence
+parameters have fresh Adam state. The locked parent hash is checked on transfer.
+
+The cadence action maps through tanh to 0.8–1.8 Hz around 1.1 Hz, then passes a
+0.15-second smoothing filter. The controller integrates the held cadence offset:
+`phase = elapsed_seconds * 1.1 + integrated_frequency_offset`. The startup ramp
+uses real elapsed time. Changing cadence cannot instantaneously jump phase.
+Observation phase and speed follow current cadence; the reference geometry stays
+fixed. The reward and PPO settings are unchanged for this ablation.
+
+Training and evaluation use the same controller. A separate action-noise generator
+for cadence preserves the legacy 18-action sampling stream. Snapshot schema
+`cadence_action_v1` records parent, cadence bounds/filter, networks, both optimizers,
+RNG, model XML and sources. Evaluation records command cadence/phase/latent along
+with posture, contact, slip and joint motion. Command diagnostics refer to the
+held command for that interval; training phase diagnostics are recorded after it.
+
+Preparation verification reproduced every state and timestamp of the locked
+five-second mean replay exactly (maximum state error zero). The complete local
+suite passed 102 tests. The authorized experiment is
+`telemetry/tuning/20260915-policy-cadence-action-round-01`, with 100 additional
+updates and evaluations at n=150 and n=200. No additional rounds are implicit.
+
+```powershell
+.venv/Scripts/python -m spider.cadence_action_training --from-stable artifacts/walk_stable_100/walk_stable_100.pt --updates 100 --output telemetry/tuning/policy-cadence-action-new
+```
+
 Acceptance remains a user-approved normal-speed learned stride, a full five-second
 mean-action run, and twelve fixed five-second sampled runs with zero falls and
 average speed at least **0.37882745 m/s**. A design animation, an untrained controller,

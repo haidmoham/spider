@@ -34,7 +34,11 @@ under ignored `telemetry/`. Do not label a cadence-only probe as further trainin
   0.518150 m/s mean, 0.516098 m/s sampled average, zero falls in 24 evaluations.
   This is an experiment, not `walk_fast_200`. It must not be relabelled as n=200.
 - Next requested approach: return to `walk_stable_100` and let the policy adjust
-  gait generation, initially cadence with continuous phase. Not yet implemented.
+  gait generation, initially cadence with continuous phase. Implemented in
+  `spider/cadence_action_training.py`; experiment `policy-cadence-action-round-01`
+  is a separate n=100→200 continuation. Its initial five-second mean replay was
+  byte-for-byte equal in state arrays to the locked baseline. No fast-walk
+  checkpoint is accepted merely because this training finishes.
 
 The original chassis, crude PPO-100 and Notebook 4 remain controls. The original
 speed threshold is 0.37882745 m/s. User approval of the stable walking baseline
