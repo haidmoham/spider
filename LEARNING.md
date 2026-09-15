@@ -2,6 +2,12 @@
 
 ## Resume
 
+Latest diagnostic: [Ant prior and control quantities](lab/notes/2026-09-14-ant-control-cost.md).
+The user's hypothesis concerns unpenalized actuator movement in the "little box
+step". Saved commands and reconstructed endpoint torque/power have been measured;
+no reward coefficient or retraining has been chosen. Resume with the user's choice
+of the behavior to suppress, not a new reward implementation supplied by the agent.
+
 Current revision (2026-09-14): the user has corrected REINFORCE sampling,
 score-function/log-probability handling, signed velocity reward, episodic returns,
 boundary credit, and loss/update diagnostics. Do not restart those exercises.
