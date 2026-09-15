@@ -40,6 +40,28 @@ def _font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
     return ImageFont.load_default(size=size)
 
 
+def _fit_label(draw: ImageDraw.ImageDraw, label: str, max_width: int):
+    """Fit at most two label lines inside one pane's reserved header area."""
+    words = label.replace(" | ", " / ").split()
+    for size in range(22, 13, -1):
+        font = _font(size)
+        lines = [""]
+        for word in words:
+            candidate = f"{lines[-1]} {word}".strip()
+            if draw.textbbox((0, 0), candidate, font=font)[2] <= max_width:
+                lines[-1] = candidate
+            elif len(lines) == 1:
+                lines.append(word)
+            else:
+                lines[-1] = f"{lines[-1]}…"
+                break
+        if len(lines) <= 2 and all(
+            draw.textbbox((0, 0), line, font=font)[2] <= max_width for line in lines
+        ):
+            return lines, font
+    return [label[:34] + "…"], _font(14)
+
+
 def render_comparison(
     directories: list[str | Path],
     labels: list[str],
@@ -63,6 +85,7 @@ def render_comparison(
     models: list[mujoco.MjModel] = []
     data: list[mujoco.MjData] = []
     states: list[np.ndarray] = []
+    googly_tracks: list[np.ndarray | None] = []
     expected_times = np.arange(frame_count, dtype=np.float64) / fps
     for raw_directory in directories:
         directory = Path(raw_directory)
@@ -73,6 +96,8 @@ def render_comparison(
         with np.load(directory / "states.npz", allow_pickle=False) as archive:
             recorded_states = archive["states"].copy()
             recorded_times = archive["times"].copy()
+        from .googly import build_googly_track
+        full_googly_track = build_googly_track(model, recorded_states, recorded_times)
         try:
             indices = _matching_indices(recorded_times, expected_times)
         except ValueError as error:
@@ -81,6 +106,7 @@ def render_comparison(
             ) from error
         # Select recorded poses at shared timestamps. Never interpolate or hold a final frame.
         states.append(recorded_states[indices])
+        googly_tracks.append(None if full_googly_track is None else full_googly_track[indices])
 
     destination = Path(output).resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -117,7 +143,6 @@ def render_comparison(
         str(destination),
     ]
 
-    label_font = _font(22)
     time_font = _font(16)
     process = subprocess.Popen(command, stdin=subprocess.PIPE)
     try:
@@ -128,10 +153,13 @@ def render_comparison(
             ]
             for frame_index in range(frame_count):
                 canvas = Image.new("RGB", size, "#11141a")
-                for pane, (model, datum, renderer, treatment_states, label) in enumerate(
-                    zip(models, data, renderers, states, labels, strict=True)
+                for pane, (model, datum, renderer, treatment_states, label, googly_track) in enumerate(
+                    zip(models, data, renderers, states, labels, googly_tracks, strict=True)
                 ):
                     mujoco.mj_setState(model, datum, treatment_states[frame_index], STATE)
+                    from .googly import apply_googly_frame, apply_life_lights
+                    apply_googly_frame(model, googly_track, frame_index)
+                    apply_life_lights(model, datum.time)
                     # Rebuild display transforms only. The recorded trajectory is never advanced.
                     mujoco.mj_forward(model, datum)
                     renderer.update_scene(datum, camera=stalk_camera(model, datum))
@@ -140,8 +168,15 @@ def render_comparison(
                     top = (pane // 2) * pane_height
                     canvas.paste(image, (left, top))
                     draw = ImageDraw.Draw(canvas, "RGBA")
-                    draw.rectangle((left, top, left + pane_width, top + 40), fill=(8, 10, 14, 205))
-                    draw.text((left + 16, top + 8), label, font=label_font, fill=(240, 235, 225, 255))
+                    draw.rectangle((left, top, left + pane_width, top + 58), fill=(8, 10, 14, 205))
+                    lines, label_font = _fit_label(draw, label, pane_width - 112)
+                    for line_index, line in enumerate(lines):
+                        draw.text(
+                            (left + 12, top + 5 + line_index * 24),
+                            line,
+                            font=label_font,
+                            fill=(240, 235, 225, 255),
+                        )
                     draw.text(
                         (left + pane_width - 72, top + 11),
                         f"{expected_times[frame_index]:.2f}s",

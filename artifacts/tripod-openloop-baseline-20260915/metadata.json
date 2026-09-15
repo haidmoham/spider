@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "UNTRAINED OPEN-LOOP feasibility",
+  "render_duration_s": 4.999999999999671,
+  "render_note": "full 5 second replay",
+  "gait_config": {
+    "frequency_hz": 1.1,
+    "stance_fraction": 0.65,
+    "offsets": [
+      0,
+      0.5,
+      0.5,
+      0,
+      0,
+      0.5
+    ],
+    "height_m": 0.37,
+    "stride_length_m": 0.18,
+    "clearance_m": 0.04,
+    "radial_spread_m": 0.17,
+    "evidence_kind": "untrained_kinematic_reference"
+  },
+  "reference_speed_mps": 0.3046153846153846,
+  "reference_height_m": 0.37,
+  "physics_timestep_s": 0.002,
+  "control_interval_s": 0.02,
+  "ramp_duration_s": 0.8,
+  "summary": {
+    "gait": "tripod",
+    "status": "UNTRAINED OPEN-LOOP feasibility",
+    "requested_duration_s": 5.0,
+    "survival_s": 4.999999999999671,
+    "completed_full_duration": true,
+    "termination_reason": null,
+    "dx_m": 1.5308095007596547,
+    "actual_speed_mps": 0.30616190015195105,
+    "final_height_m": 0.36699193872918434,
+    "minimum_height_m": 0.36147302368108236,
+    "maximum_tilt_deg": 7.712785825231883,
+    "foot_slip_m": 0.25397998501114566,
+    "target_tracking_rmse_rad": 0.019976341864099252
+  },
+  "model_sha256": "fc5d1f1832c02627907a0a0359f5666428d3d3ec9839e162cfb601ed8475f94e",
+  "source_sha256": {
+    "gait_feasibility.py": "154b0131bcd1b3b9d1a3997b01c9bc8ff5da3413a77681caee85208a1be3c7af",
+    "gait_reference.py": "6692fbe195b78006ee3bb92b29c5ee1f198014a9559d36a0fcf0e571adf874a3",
+    "simulation.py": "598bba36b2b7ba63ceeae4d6a144f03a95196d5c9b65af1bed116d73bdaee881",
+    "spider.xml": "fc5d1f1832c02627907a0a0359f5666428d3d3ec9839e162cfb601ed8475f94e"
+  },
+  "versions": {
+    "mujoco": "3.11.0",
+    "numpy": "2.2.4"
+  },
+  "non_finite_failure_diagnostic": null
+}

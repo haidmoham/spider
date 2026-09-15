@@ -1,0 +1,31 @@
+{
+  "checkpoint": "TRIPOD-OPENLOOP-20260915",
+  "user_approval": "this tripod walk is a great baseline btw, consider it approved",
+  "kind": "approved untrained trajectory gait baseline",
+  "source_recording": "telemetry\\tuning\\20260915-gait-feasibility-01\\tripod",
+  "scope": "One five-second canonical-reset rollout and user visual approval; not a learned policy or population stability claim. PPO-100 remains the learned speed comparator.",
+  "summary": {
+    "gait": "tripod",
+    "status": "UNTRAINED OPEN-LOOP feasibility",
+    "requested_duration_s": 5.0,
+    "survival_s": 4.999999999999671,
+    "completed_full_duration": true,
+    "termination_reason": null,
+    "dx_m": 1.5308095007596547,
+    "actual_speed_mps": 0.30616190015195105,
+    "final_height_m": 0.36699193872918434,
+    "minimum_height_m": 0.36147302368108236,
+    "maximum_tilt_deg": 7.712785825231883,
+    "foot_slip_m": 0.25397998501114566,
+    "target_tracking_rmse_rad": 0.019976341864099252
+  },
+  "files": {
+    "metadata.json": "9aa6a3a16fb23ef68bd31d61c14bf94dda80ed1f073b2eb6a753e83c1657bda3",
+    "replay.zip": "e3d03324545881f1c1da675a395951e9fe0775eb6435bd414ada7ef9923ec6a8",
+    "trace.csv": "9bcf5ba15665e5180090f7e1f48e121ad2b36cfa7b2b876fa1fb57eaf1e48d7e",
+    "sources\\gait_feasibility.py": "154b0131bcd1b3b9d1a3997b01c9bc8ff5da3413a77681caee85208a1be3c7af",
+    "sources\\gait_reference.py": "6692fbe195b78006ee3bb92b29c5ee1f198014a9559d36a0fcf0e571adf874a3",
+    "sources\\simulation.py": "598bba36b2b7ba63ceeae4d6a144f03a95196d5c9b65af1bed116d73bdaee881",
+    "sources\\spider.xml": "fc5d1f1832c02627907a0a0359f5666428d3d3ec9839e162cfb601ed8475f94e"
+  }
+}

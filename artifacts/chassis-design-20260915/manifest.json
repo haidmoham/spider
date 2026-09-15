@@ -1,0 +1,81 @@
+{
+  "kind": "user-approved design direction; no robotics capability checkpoint",
+  "approval": "whatever is going on in the bottom half of the player you showed is fucking perfect, lock that design direction in and prepare for policy training aftewrards",
+  "invariants": [
+    "exactly six legs, three per side",
+    "metallic black chassis",
+    "red lights and accents",
+    "white googly eyes with gravity-driven pupils"
+  ],
+  "mechanical_candidate": {
+    "source": "C:\\Users\\haidm\\Desktop\\robotics\\spider\\model\\spider.xml",
+    "isolation": "generated in memory; canonical model/spider.xml is never written",
+    "physical_edits": {
+      "leg_root_euler_deg": {
+        "front_left": [
+          38,
+          0,
+          0
+        ],
+        "front_right": [
+          -38,
+          0,
+          0
+        ],
+        "middle_left": [
+          90,
+          0,
+          0
+        ],
+        "middle_right": [
+          -90,
+          0,
+          0
+        ],
+        "rear_left": [
+          142,
+          0,
+          0
+        ],
+        "rear_right": [
+          -142,
+          0,
+          0
+        ]
+      },
+      "hip_joint_range_deg": [
+        -45,
+        100
+      ],
+      "knee_joint_range_deg": [
+        -80,
+        140
+      ],
+      "hip_actuator_ctrlrange_rad": [
+        -0.7854,
+        1.7453
+      ],
+      "knee_actuator_ctrlrange_rad": [
+        -1.3963,
+        2.4435
+      ],
+      "reset_hip_offset_deg": 55.0
+    },
+    "preserved": [
+      "masses and density",
+      "friction and contacts",
+      "link lengths and physical geom sizes",
+      "actuator gains"
+    ],
+    "visual_edits": "render-only graphite abdomen, dorsal armor, spikes, and leg shrouds; ruby accents; canonical googly eyes retained"
+  },
+  "measured_reference": "telemetry/tuning/20260915-candidate-feasibility-01/tripod",
+  "final_review": "telemetry/tuning/20260915-chassis-review-02/comparison.mp4",
+  "visual_refinement": "Gravity pupils and breathing red lights were added after silhouette approval, by explicit user request. Recorded locomotion states are unchanged; physical array equality checked before appearance refresh.",
+  "files": {
+    "candidate.xml": "7d62c4ba877704d0cab6dad36a2ec6e54dd295fce21bc3d108de6a5724228e1b",
+    "chassis_candidate.py": "9e25d99e6434d8078969c2ad9960f060a9bd5bc893c4ef767e84105caac7b668",
+    "googly.py": "eeb4853e18fd6e86dd9a94e8badcefa0801e39432adae7f0e26ebcbccf4fea5d",
+    "preview.png": "444532f6e1f9e0d7d84a61a4b3b224b7fe42d77307a6717d782a96ba06c66bad"
+  }
+}

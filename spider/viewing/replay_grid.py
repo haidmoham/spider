@@ -14,6 +14,16 @@ from ..recording import STATE
 def pane_heading(label, training_updates=None):
     """Identify the saved treatment, independent of its quadrant position."""
     name = label.lower()
+    if 'kinematic' in name and 'untrained' in name:
+        gait = label.split('/', 1)[0].strip()
+        return (f'{gait} / KINEMATIC / UNTRAINED',
+                'Prescribed pose preview; no dynamics claim', (.28, .12, .12))
+    if 'open-loop' in name and 'feasibility' in name:
+        return ('OPEN-LOOP FEASIBILITY / MEASURED',
+                'Recorded dynamics; no learned-policy claim', (.14, .20, .16))
+    if name.startswith('recorded accepted ppo-100'):
+        return ('ACCEPTED PPO-100 / MEASURED',
+                'Recorded dynamics comparator', (.13, .17, .20))
     if name.startswith('ppo n='):
         fields = [part.strip() for part in label.split('|')]
         treatment = fields[1].lower() if len(fields) > 1 else ''
@@ -101,11 +111,13 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                 not np.isfinite(times).all() or np.any(np.diff(times) <= 0)):
             raise ValueError(f'Invalid recorded states/times: {directory}')
         data = mujoco.MjData(model)
+        from .googly import build_googly_track
+        googly_track = build_googly_track(model, states, times)
         mujoco.mj_setState(model, data, states[0], STATE)
         mujoco.mj_forward(model, data)
         panes.append(dict(model=model, data=data, states=states, times=times,
                           label=label, training_updates=recorded_training_updates(directory),
-                          origin=data.qpos[:3].copy()))
+                          origin=data.qpos[:3].copy(), googly_track=googly_track))
     if not glfw.init():
         raise RuntimeError('GLFW could not initialize a display')
     window = None
@@ -173,6 +185,9 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                 index = frame_index(pane['times'], playback['elapsed'])
                 model, data = pane['model'], pane['data']
                 mujoco.mj_setState(model, data, pane['states'][index], STATE)
+                from .googly import apply_googly_frame, apply_life_lights
+                apply_googly_frame(model, pane['googly_track'], index)
+                apply_life_lights(model, data.time)
                 mujoco.mj_forward(model, data)
                 if presentation == 'stalk':
                     # Camera-only follow preserves the recorded trajectory.

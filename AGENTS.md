@@ -23,6 +23,7 @@ These instructions apply to the entire repository.
 
 - `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
 - `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). The 50/100 comparison uses fixed flat-ground development scenarios; STRIDE remains unearned.
+- `TRIPOD-OPENLOOP-20260915` is the user-approved untrained trajectory gait baseline on the original chassis. Preserve its [controller, measured replay, and evidence limits](artifacts/tripod-openloop-baseline-20260915/README.md). Approval covers the stride pattern and one five-second rollout, not population stability, a learned policy, or the experimental chassis redesign.
 - Use checkpoints only for robotics capabilities or understood failures worth preserving and comparing.
 - Do not create checkpoints for instrumentation, cleanup, presentation polish, or elapsed time.
 - Do not claim a capability before reproducible evidence supports it.
@@ -30,6 +31,7 @@ These instructions apply to the entire repository.
 
 ## Working agreements
 
+- C-1N has exactly six legs, three per side. This is invariant during chassis, joint, visual, and policy redesign.
 - Keep changes small and easy to review.
 - Read relevant files before editing them.
 - Prefer clear, direct documentation.
