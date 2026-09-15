@@ -132,14 +132,18 @@ def run_stride_round(directory: Path) -> Path:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
+    from .policy_acceptance import assess_round
+    acceptance = assess_round(directory)
     receipt = {
-        "status": "awaiting-user-review",
+        "status": "awaiting-user-review" if acceptance["numerical_pass"] else "failed-acceptance",
         "elapsed_seconds": time.monotonic() - started,
         "training_seeds": TRAINING_SEEDS,
         "updates_per_seed": UPDATES_PER_SEED,
         "total_updates": len(TRAINING_SEEDS) * UPDATES_PER_SEED,
         "evaluation_episodes": len(results),
         "interpretation": "No gait, fall-rate, or speed claim is made by this runner.",
+        "acceptance_report": "acceptance.json",
+        "numerical_pass": acceptance["numerical_pass"],
     }
     (directory / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(rows, indent=2), flush=True)

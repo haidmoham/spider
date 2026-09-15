@@ -53,6 +53,8 @@ def main():
     render = actions.add_parser("render", help="render matched model views")
     render.add_argument("--output", type=Path, default=Path("artifacts/c1n_redesign"))
     render.add_argument("--before-directory", type=Path)
+    check_policy = actions.add_parser("check-policy", help="check recorded policy acceptance; no simulation or training")
+    check_policy.add_argument("--round", type=Path, required=True, dest="round_directory")
     args = parser.parse_args()
     if args.action == "run":
         from .runtime import run_headless, run_shove_suite
@@ -132,9 +134,22 @@ def main():
     elif args.action == "tune-rate":
         from .tuning_round import run_rate_round
         run_rate_round(args.output)
+        report = json.loads((args.output / "acceptance.json").read_text(encoding="utf-8"))
+        if not report["numerical_pass"]:
+            raise SystemExit(1)
     elif args.action == "train-stride":
         from .stride_round import run_stride_round
         run_stride_round(args.output)
+        report = json.loads((args.output / "acceptance.json").read_text(encoding="utf-8"))
+        if not report["numerical_pass"]:
+            raise SystemExit(1)
+    elif args.action == "check-policy":
+        from .policy_acceptance import assess_round
+
+        report = assess_round(args.round_directory)
+        print(json.dumps(report, indent=2))
+        if not report["numerical_pass"]:
+            raise SystemExit(1)
     else:
         from .viewing.render import main as render_main
 

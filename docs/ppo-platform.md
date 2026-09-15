@@ -99,6 +99,54 @@ walk baseline. The full speed and stability goal remains unmet. A proposed next
 comparison raises the speed command to 0.4 m/s and the forward tracking weight;
 it requires approval before execution. No further updates ran in this round.
 
+## Empirical acceptance gate
+
+Notebook 04 checks PPO mechanics: saved log probabilities, GAE, loss gradients,
+finite updates, weight changes, and checkpoint consistency. Its
+`ppo-evaluation` and `ppo-checkpoint-run` cells report policy measurements but
+do not assert a policy-quality threshold. The following **new** gate derives
+from the accepted PPO-100 measurements and the user's zero-fall requirement.
+It is implemented in `spider/policy_acceptance.py`; it does not execute cells.
+The source checks live in the frozen cells `ppo-collect-function`,
+`ppo-gae-diagnostic`, `ppo-loss-check`, and `ppo-schedule`. These test algorithm
+correctness; passing them cannot establish locomotion quality.
+
+```powershell
+.venv/Scripts/python -m spider check-policy --round telemetry/tuning/20260915-fresh-stride-round-01
+```
+
+The command inspects existing recordings and writes `acceptance.json`. A failed
+gate returns exit code 1. Future `train-stride` and `tune-rate` rounds run the same gate and
+return failure when the recorded candidates fail, even when optimization itself
+completed successfully.
+
+Each policy must provide one mean-action recording and all twelve distinct
+sampled seeds 201 through 212. The gate requires:
+
+- Zero falls and a complete five seconds in every episode.
+- Finite recorded states and measurements, valid target bounds, and consistent
+  model/checkpoint provenance.
+- Mean-action speed at least the accepted PPO-100 mean-action speed,
+  approximately 0.378827 m/s.
+- Sampled mean speed at least the accepted PPO-100 sampled mean speed,
+  approximately 0.274276 m/s.
+
+Missing, duplicate, or invalid evidence fails the gate. Speed references come
+from the preserved baseline CSV. Rewards are not compared across different
+objective definitions. Passing numerical checks still requires the user's gait
+review; the gate never promotes a policy or earns STRIDE automatically.
+
+The twelve sampled seeds vary action noise from the same reset. They do not test
+terrain, pushes, or distinct initial postures. Zero observed falls in twelve
+episodes is a finite test result, not a guarantee of zero fall probability.
+The frozen notebook and its historical findings remain unchanged.
+
+On the saved first fresh round, the accepted baseline passes the numerical gate.
+All three fresh candidates fail for sampled falls, incomplete episodes, and
+forward speed below the reference. The round is marked `failed-acceptance`.
+The user's later review explicitly rejects the 75% sampled fall rate despite
+the calmer mean-action appearance.
+
 ## Run the prepared comparison
 
 Use the existing C-1N environment. A new runtime-only environment can install

@@ -69,7 +69,11 @@ def run_rate_round(directory: Path) -> Path:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    (directory / "receipt.json").write_text(json.dumps(dict(status="awaiting-user-review",
+    from .policy_acceptance import assess_round
+    acceptance = assess_round(directory)
+    (directory / "receipt.json").write_text(json.dumps(dict(
+        status="awaiting-user-review" if acceptance["numerical_pass"] else "failed-acceptance",
+        numerical_pass=acceptance["numerical_pass"], acceptance_report="acceptance.json",
         elapsed_seconds=time.monotonic() - started, total_updates=30, evaluation_episodes=len(results)), indent=2) + "\n")
     print(json.dumps(rows, indent=2), flush=True)
     print(f"Round complete; review before further training: {directory}", flush=True)
