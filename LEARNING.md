@@ -2,32 +2,30 @@
 
 ## Resume
 
-Current path: notebook 04 now implements the standard PPO sequence cell by cell.
-GAE (section 3) is user-implemented and verified on 1,000 saved transitions across
-four episodes: TD identity, episodic-return identity, boundary isolation, detached
-targets and actor-only normalization pass. Section 4 actor/value losses are now
-user-implemented and pass sign, clipping-gradient, zero-advantage and critic-gradient
-checks. Section 5 is user-implemented: isolated synthetic checks confirm separate
-actor/critic updates, finite reports, frozen inputs and fresh backward graphs.
-Its old scratch calls made two live optimizer steps. Start a fresh section-1 run
-before the recorded two-update smoke test; run definitions through section 6, then
-section 7 and held-out evaluation. No PPO robot training is claimed by these checks. Collection, tensor records,
-diagnostics, checkpointing and replay are
-provided. Run the analytic checks, then a two-update smoke test and held-out review.
-The final cell continues the same run to 100 total PPO updates. Training readiness
-is not a claim that PPO already walks. STRIDE remains unearned, target 48/50.
+Production training and tuning is active at the user's request (2026-09-15).
+The user implemented GAE, PPO losses and minibatch updates. Their analytic and
+update checks pass. If a PPO implementation defect becomes the next task, switch
+back to practice with the user. Do not infer mastery from agent-run experiments.
 
-The user requested direct instruction in the established algorithm, not repeated
-hypothesis gates or inventing a locomotion objective. Keep the inherited observation,
-action and reward fixed for this transition. The control-cost diagnostic remains a
-reference; no coefficient was selected. User owns the learning operations.
+Notebook 04 is the visible working surface. Put each proposed training/tuning
+change there before execution and return outputs to the same notebook. Preserve
+its open editor buffer. External outputs do not restore IDE kernel variables.
 
-The full prior notebook is preserved byte-for-byte in
-[the REINFORCE archive](lab/history/notebooks/04_reinforce_before_ppo_20260914.ipynb).
-Its SHA256 is `850be75c6642fc9ab89a5550294e425cfa6efe12113d6977fc8da95fcaa1ac12`.
-Original executed REINFORCE cells also remain in notebook 04's reference section.
-No PPO training ran during this refactor. Begin with a fresh kernel; do not execute
-the reference section during the PPO path because it resets shared names.
+Completed: fresh PPO through 10 updates, then an unchanged continuation through
+30 with actor, critic and optimizer states restored. Section 9 contains that
+continuation and its evaluation. The 10-update outputs remain in sections 7–8.
+See [the run receipt](lab/notes/2026-09-15-ppo-30.md) for artifacts and measurements.
+
+Sampled forward travel improved from 60.27 to 162.88 mm over 5 seconds on the
+same 12 evaluation seeds. Mean-action travel is only 5.65 mm at update 30.
+STRIDE remains unearned; target 48/50. No reward, observation, action-interface
+or PPO hyperparameter tuning has run yet. Next: inspect the 30-update replay,
+then declare the next bounded training or tuning comparison in notebook 04.
+
+The preserved REINFORCE archive is
+[here](lab/history/notebooks/04_reinforce_before_ppo_20260914.ipynb), SHA256
+`850be75c6642fc9ab89a5550294e425cfa6efe12113d6977fc8da95fcaa1ac12`.
+The reference appendix is historical: do not execute it during the PPO path.
 
 ### Earlier route and evidence (preserved context)
 
