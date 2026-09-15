@@ -14,6 +14,14 @@ from .policy_run import DEFAULT_CHECKPOINT, run_policy
 TRAINING_SEEDS = (11, 22, 33)
 EVALUATION_SEEDS = tuple(range(201, 213))
 UPDATES_PER_SEED = 50
+FORWARD_EXPLORATION = {
+    "lower_exploration": dict(noise_scale=0.4, entropy_coefficient=0.0,
+                              target_speed_mps=0.25, velocity_weight=1.5),
+    "stronger_forward": dict(noise_scale=1.0, entropy_coefficient=0.003,
+                             target_speed_mps=0.4, velocity_weight=4.0),
+    "combined": dict(noise_scale=0.4, entropy_coefficient=0.0,
+                     target_speed_mps=0.4, velocity_weight=4.0),
+}
 
 
 def _mean(values):
@@ -21,8 +29,13 @@ def _mean(values):
     return statistics.mean(finite) if finite else None
 
 
-def run_stride_round(directory: Path) -> Path:
+def run_stride_round(directory: Path, *, comparison: str = "fresh-seeds") -> Path:
     """Train three fresh policies and evaluate once; never auto-extend."""
+    if comparison not in {"fresh-seeds", "forward-exploration"}:
+        raise ValueError("unknown stride comparison")
+    trials = ([(name, 11, config) for name, config in FORWARD_EXPLORATION.items()]
+              if comparison == "forward-exploration" else
+              [(f"stride_seed_{seed}", seed, {}) for seed in TRAINING_SEEDS])
     directory = Path(directory).resolve()
     directory.mkdir(parents=True, exist_ok=False)
     plan = {
@@ -45,6 +58,13 @@ def run_stride_round(directory: Path) -> Path:
             "Mean replays are not independent-seed evidence.",
         ],
     }
+    if comparison == "forward-exploration":
+        plan.pop("training_seeds")
+        plan.pop("target_speed_m_s")
+        plan.update(comparison=comparison, initialization_seed=11,
+                    treatments=FORWARD_EXPLORATION,
+                    expected_policies=["accepted_baseline", *FORWARD_EXPLORATION],
+                    approval="User approved lower exploration, stronger forward incentive, and combined; 50 updates each.")
     # Archive the complete fixed plan before importing or starting the trainer.
     (directory / "plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
 
@@ -55,10 +75,9 @@ def run_stride_round(directory: Path) -> Path:
 
     started = time.monotonic()
     checkpoints = {"accepted_baseline": DEFAULT_CHECKPOINT.resolve()}
-    for seed in TRAINING_SEEDS:
-        name = f"stride_seed_{seed}"
+    for name, seed, configuration in trials:
         print(f"TRAIN {name}: fresh initialization; {UPDATES_PER_SEED} updates", flush=True)
-        session = FreshTrainingSession(directory / name / "training", seed)
+        session = FreshTrainingSession(directory / name / "training", seed, **configuration)
         checkpoints[name] = Path(session.train(updates=UPDATES_PER_SEED)).resolve()
         (directory / "checkpoints.json").write_text(
             json.dumps({key: str(value) for key, value in checkpoints.items()}, indent=2) + "\n",
@@ -137,9 +156,10 @@ def run_stride_round(directory: Path) -> Path:
     receipt = {
         "status": "awaiting-user-review" if acceptance["numerical_pass"] else "failed-acceptance",
         "elapsed_seconds": time.monotonic() - started,
-        "training_seeds": TRAINING_SEEDS,
+        "comparison": comparison,
+        "trials": [{"name": name, "seed": seed, **configuration} for name, seed, configuration in trials],
         "updates_per_seed": UPDATES_PER_SEED,
-        "total_updates": len(TRAINING_SEEDS) * UPDATES_PER_SEED,
+        "total_updates": len(trials) * UPDATES_PER_SEED,
         "evaluation_episodes": len(results),
         "interpretation": "No gait, fall-rate, or speed claim is made by this runner.",
         "acceptance_report": "acceptance.json",

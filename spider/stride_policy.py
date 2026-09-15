@@ -111,7 +111,12 @@ class StridePolicy:
         self.actor.load_state_dict(payload["actor"], strict=True)
         self.actor.eval()
         self.settings = dict(payload["settings"])
-        if self.settings != SETTINGS:
+        fixed = {key: value for key, value in self.settings.items() if key != "target_speed_mps"}
+        expected = {key: value for key, value in SETTINGS.items() if key != "target_speed_mps"}
+        target_speed = self.settings.get("target_speed_mps")
+        if fixed != expected or not isinstance(target_speed, (int, float)) or isinstance(
+            target_speed, bool
+        ) or not math.isfinite(target_speed) or target_speed <= 0:
             raise ValueError("checkpoint settings do not match the stride policy contract")
         self.updates = int(payload["updates"])
         self.sampled = bool(sampled)
@@ -133,6 +138,7 @@ class StridePolicy:
             "joint_high_rad": JOINT_HIGH.tolist(),
             "target_speed_mps": self.settings["target_speed_mps"],
             "phase_hz": self.settings["phase_hz"],
+            "training_tuning": payload.get("tuning", {}),
             "sampled": self.sampled,
             "seed": self.seed,
             "checkpoint_sha256": self.checkpoint_sha256,

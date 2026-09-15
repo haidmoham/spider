@@ -50,6 +50,7 @@ def main():
     tune.add_argument("--output", type=Path, required=True)
     train_stride = actions.add_parser("train-stride", help="run the approved three-seed, 50-update stride round")
     train_stride.add_argument("--output", type=Path, required=True)
+    train_stride.add_argument("--comparison", choices=("fresh-seeds", "forward-exploration"), default="fresh-seeds")
     render = actions.add_parser("render", help="render matched model views")
     render.add_argument("--output", type=Path, default=Path("artifacts/c1n_redesign"))
     render.add_argument("--before-directory", type=Path)
@@ -139,7 +140,7 @@ def main():
             raise SystemExit(1)
     elif args.action == "train-stride":
         from .stride_round import run_stride_round
-        run_stride_round(args.output)
+        run_stride_round(args.output, comparison=args.comparison)
         report = json.loads((args.output / "acceptance.json").read_text(encoding="utf-8"))
         if not report["numerical_pass"]:
             raise SystemExit(1)

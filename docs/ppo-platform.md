@@ -147,6 +147,32 @@ forward speed below the reference. The round is marked `failed-acceptance`.
 The user's later review explicitly rejects the 75% sampled fall rate despite
 the calmer mean-action appearance.
 
+## Forward incentive and exploration comparison
+
+The user approved this next round after reviewing the recordings. Three fresh
+policies share initialization seed 11 and the same sampling-seed schedule. Each
+trains for exactly 50 updates. The accepted PPO-100 is the fourth replay pane.
+
+| Treatment | Initial noise multiplier | Entropy coefficient | Speed command (m/s) | Forward reward weight |
+| --- | ---: | ---: | ---: | ---: |
+| Lower exploration | 0.4 | 0 | 0.25 | 1.5 |
+| Stronger forward | 1.0 | 0.003 | 0.4 | 4.0 |
+| Combined | 0.4 | 0 | 0.4 | 4.0 |
+
+Noise scaling changes the initial latent distribution's standard deviation.
+The mean network weights, broad action bounds, phase clock, and physics stay
+fixed. Exploration remains learnable. Each checkpoint stores its own speed
+command and objective; replay uses that saved command. The previous round's
+checkpoints remain loadable with their original settings.
+
+```powershell
+.venv/Scripts/python -m spider train-stride --comparison forward-exploration --output telemetry/tuning/20260915-forward-exploration-round-01
+```
+
+This command runs training and evaluation. It saves the complete plan before
+training, then runs the empirical acceptance gate. It does not extend a failed
+trial or promote a successful numerical result without visual review.
+
 ## Run the prepared comparison
 
 Use the existing C-1N environment. A new runtime-only environment can install

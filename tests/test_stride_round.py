@@ -14,6 +14,19 @@ from spider.stride_round import run_stride_round
 
 class StrideRoundTests(unittest.TestCase):
     def test_fixed_budget_and_failed_gate_are_saved(self):
+        self.check_round("fresh-seeds", [11, 22, 33])
+
+    def test_approved_comparison_uses_paired_initialization_and_exact_knobs(self):
+        calls, plan = self.check_round("forward-exploration", [11, 11, 11])
+        self.assertEqual([call.kwargs for call in calls], [
+            dict(noise_scale=.4, entropy_coefficient=0., target_speed_mps=.25, velocity_weight=1.5),
+            dict(noise_scale=1., entropy_coefficient=.003, target_speed_mps=.4, velocity_weight=4.),
+            dict(noise_scale=.4, entropy_coefficient=0., target_speed_mps=.4, velocity_weight=4.),
+        ])
+        self.assertEqual(plan["expected_policies"],
+                         ["accepted_baseline", "lower_exploration", "stronger_forward", "combined"])
+
+    def check_round(self, comparison, seeds):
         trainer = Mock()
         trainer.return_value.train.return_value = Path("checkpoint.pt")
         assess = Mock(return_value={"numerical_pass": False})
@@ -29,10 +42,11 @@ class StrideRoundTests(unittest.TestCase):
                 "spider.policy_acceptance": SimpleNamespace(assess_round=assess)}), \
                 patch("spider.stride_round.run_policy", side_effect=evaluate) as run, \
                 redirect_stdout(io.StringIO()):
-            output = run_stride_round(Path(directory) / "round")
+            output = run_stride_round(Path(directory) / "round", comparison=comparison)
             receipt = json.loads((output / "receipt.json").read_text())
+            plan = json.loads((output / "plan.json").read_text())
         self.assertEqual(trainer.call_count, 3)
-        self.assertEqual([call.args[1] for call in trainer.call_args_list], [11, 22, 33])
+        self.assertEqual([call.args[1] for call in trainer.call_args_list], seeds)
         self.assertEqual(trainer.return_value.train.call_count, 3)
         for call in trainer.return_value.train.call_args_list:
             self.assertEqual(call.kwargs, {"updates": 50})
@@ -40,3 +54,4 @@ class StrideRoundTests(unittest.TestCase):
         assess.assert_called_once_with(output)
         self.assertEqual(receipt["status"], "failed-acceptance")
         self.assertFalse(receipt["numerical_pass"])
+        return trainer.call_args_list, plan

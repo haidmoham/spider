@@ -239,6 +239,7 @@ def assess_round(directory: Path) -> dict:
         expected_groups |= set(json.loads(checkpoints_path.read_text(encoding="utf-8")))
     if plan_path.is_file():
         plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        expected_groups |= set(plan.get("expected_policies", []))
         if "action_rate_weights" in plan:
             expected_groups |= set(plan["action_rate_weights"])
             if "parent_checkpoint" in plan:

@@ -50,7 +50,9 @@ def phase_stance(phase: float) -> np.ndarray:
 
 
 def reward_terms(observed, target, previous_target, phase, foot_heights,
-                 contact, stance_slip_speed) -> dict[str, float]:
+                 contact, stance_slip_speed, settings=None, reward=None) -> dict[str, float]:
+    settings = SETTINGS if settings is None else settings
+    reward = REWARD if reward is None else reward
     stance = phase_stance(phase)
     swing = ~stance
     local_phase = np.asarray([(phase + (0.0 if leg in TRIPOD_A else 0.5)) % 1.0
@@ -58,7 +60,7 @@ def reward_terms(observed, target, previous_target, phase, foot_heights,
     swing_progress = ((local_phase[swing] - SETTINGS["stance_fraction"]) /
                       (1.0 - SETTINGS["stance_fraction"]))
     desired_clearance = 0.045 + 0.065 * np.sin(np.pi * swing_progress)
-    speed_error = (observed.torso_velocity[0] - SETTINGS["target_speed_mps"]) / 0.20
+    speed_error = (observed.torso_velocity[0] - settings["target_speed_mps"]) / 0.20
     target_normalized = (target - JOINT_CENTER) / JOINT_HALF_RANGE
     raw = {
         "velocity": math.exp(-(speed_error * speed_error)),
@@ -82,7 +84,7 @@ def reward_terms(observed, target, previous_target, phase, foot_heights,
     result = {}
     for name, value in raw.items():
         result[f"{name}_raw"] = value
-        result[f"{name}_weighted"] = REWARD[name] * value
+        result[f"{name}_weighted"] = reward[name] * value
     return result
 
 
@@ -97,14 +99,30 @@ def gae_episode(rewards, values, next_values, bootstrap, gamma, lam):
 
 
 class FreshTrainingSession:
-    def __init__(self, output_directory: str | Path, seed: int) -> None:
+    def __init__(self, output_directory: str | Path, seed: int, noise_scale: float = 1.0,
+                 entropy_coefficient: float = 0.003, target_speed_mps: float = 0.25,
+                 velocity_weight: float = 1.5) -> None:
+        values = {"noise_scale": noise_scale, "entropy_coefficient": entropy_coefficient,
+                  "target_speed_mps": target_speed_mps, "velocity_weight": velocity_weight}
+        if any(isinstance(value, bool) or not isinstance(value, (int, float)) or
+               not math.isfinite(value) for value in values.values()):
+            raise ValueError("tuning parameters must be finite numbers")
+        if (noise_scale <= 0 or entropy_coefficient < 0 or target_speed_mps <= 0 or
+                velocity_weight <= 0):
+            raise ValueError("noise, speed, and velocity weight must be positive; entropy may be zero")
         self.output_directory = Path(output_directory)
         self.seed = int(seed)
+        self.noise_scale = float(noise_scale)
+        self.settings = {**SETTINGS, "target_speed_mps": float(target_speed_mps)}
+        self.ppo = {**PPO, "entropy_coefficient": float(entropy_coefficient)}
+        self.reward = {**REWARD, "velocity": float(velocity_weight)}
         self.model = simulation.load_model()
         self.actor: StrideActor = build_actor(self.seed)
+        with torch.no_grad():
+            self.actor.log_std.add_(math.log(self.noise_scale))
         self.critic = build_critic(self.seed + 1)
-        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=PPO["actor_lr"])
-        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=PPO["critic_lr"])
+        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=self.ppo["actor_lr"])
+        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=self.ppo["critic_lr"])
         self.updates = 0
         self.rows = []
         self.update_rows = []
@@ -129,9 +147,10 @@ class FreshTrainingSession:
         previous_target = np.asarray(simulation.neutral_targets(), dtype=float)
         generator = torch.Generator().manual_seed(episode_seed)
         records = []
-        for step in range(SETTINGS["horizon"]):
-            phase = (observed.time * SETTINGS["phase_hz"]) % 1.0
-            obs = observation_from(observed, previous_target, SETTINGS["target_speed_mps"], phase)
+        for step in range(self.settings["horizon"]):
+            phase = (observed.time * self.settings["phase_hz"]) % 1.0
+            obs = observation_from(
+                observed, previous_target, self.settings["target_speed_mps"], phase)
             with torch.no_grad():
                 mean = self.actor(obs)
                 std = self.actor.log_std.clamp(-3.5, -0.3).exp()
@@ -142,7 +161,7 @@ class FreshTrainingSession:
             slip_sum = np.zeros(6)
             slip_count = np.zeros(6)
             positions = data.geom_xpos[self.foot_ids, :2].copy()
-            for _ in range(SETTINGS["physics_steps"]):
+            for _ in range(self.settings["physics_steps"]):
                 simulation.step(self.model, data, target)
                 current = data.geom_xpos[self.foot_ids, :2].copy()
                 contacts = self._contacts(data)
@@ -158,18 +177,19 @@ class FreshTrainingSession:
                 raise RuntimeError("non-finite physics state; abort this branch")
             contact = self._contacts(data)
             slip = np.divide(slip_sum, slip_count, out=np.zeros(6), where=slip_count > 0)
-            after_phase = (observed.time * SETTINGS["phase_hz"]) % 1.0
+            after_phase = (observed.time * self.settings["phase_hz"]) % 1.0
             terms = reward_terms(observed, target, previous_target, after_phase,
-                                 data.geom_xpos[self.foot_ids, 2], contact, slip)
-            fell = observed.torso_position[2] < SETTINGS["fall_height_m"]
+                                 data.geom_xpos[self.foot_ids, 2], contact, slip,
+                                 settings=self.settings, reward=self.reward)
+            fell = observed.torso_position[2] < self.settings["fall_height_m"]
             total = sum(value for name, value in terms.items() if name.endswith("_weighted"))
-            total -= REWARD["fall"] if fell else 0.0
+            total -= self.reward["fall"] if fell else 0.0
             if not math.isfinite(total) or not all(math.isfinite(value) for value in terms.values()):
                 raise RuntimeError("non-finite stride reward; discard this training run")
             with torch.no_grad():
                 next_value = self.critic(observation_from(
-                    observed, target, SETTINGS["target_speed_mps"], after_phase)).squeeze(-1)
-            timeout = step == SETTINGS["horizon"] - 1
+                    observed, target, self.settings["target_speed_mps"], after_phase)).squeeze(-1)
+            timeout = step == self.settings["horizon"] - 1
             records.append((obs, latent, old_logp, torch.tensor(total, dtype=torch.float32),
                             value, next_value, torch.tensor(0.0 if fell else 1.0)))
             self.rows.append({"update": self.updates + 1, "episode_seed": episode_seed,
@@ -182,7 +202,7 @@ class FreshTrainingSession:
         episode = {name: torch.stack(values) for name, values in zip(names, columns)}
         episode["advantages"], episode["targets"] = gae_episode(
             episode["rewards"], episode["values"], episode["next_values"],
-            episode["bootstrap"], PPO["gamma"], PPO["gae_lambda"])
+            episode["bootstrap"], self.ppo["gamma"], self.ppo["gae_lambda"])
         return episode
 
     def _update(self, batch, indexes):
@@ -192,12 +212,12 @@ class FreshTrainingSession:
         ratio = torch.exp(new_logp - batch["old_logp"][indexes])
         advantages = batch["advantages"][indexes]
         actor_loss = -torch.min(ratio * advantages, torch.clamp(
-            ratio, 1-PPO["clip_ratio"], 1+PPO["clip_ratio"]) * advantages).mean()
+            ratio, 1-self.ppo["clip_ratio"], 1+self.ppo["clip_ratio"]) * advantages).mean()
         entropy = Normal(self.actor(batch["obs"][indexes]), std).entropy().sum(-1).mean()
-        actor_loss = actor_loss - PPO["entropy_coefficient"] * entropy
+        actor_loss = actor_loss - self.ppo["entropy_coefficient"] * entropy
         self.actor_optimizer.zero_grad(set_to_none=True)
         actor_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), PPO["max_grad_norm"])
+        torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.ppo["max_grad_norm"])
         self.actor_optimizer.step()
         with torch.no_grad():
             self.actor.log_std.clamp_(-3.5, -0.3)
@@ -205,7 +225,7 @@ class FreshTrainingSession:
                                   batch["targets"][indexes]) ** 2)
         self.critic_optimizer.zero_grad(set_to_none=True)
         critic_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), PPO["max_grad_norm"])
+        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), self.ppo["max_grad_norm"])
         self.critic_optimizer.step()
         return actor_loss.item(), critic_loss.item(), entropy.item()
 
@@ -215,8 +235,12 @@ class FreshTrainingSession:
         torch.save({"actor": self.actor.state_dict(), "critic": self.critic.state_dict(),
                     "actor_optimizer": self.actor_optimizer.state_dict(),
                     "critic_optimizer": self.critic_optimizer.state_dict(),
-                    "updates": self.updates, "settings": SETTINGS, "ppo": PPO,
-                    "reward": REWARD, "seed": self.seed}, temporary)
+                    "updates": self.updates, "settings": self.settings, "ppo": self.ppo,
+                    "reward": self.reward, "seed": self.seed,
+                    "tuning": {"noise_scale": self.noise_scale,
+                               "entropy_coefficient": self.ppo["entropy_coefficient"],
+                               "target_speed_mps": self.settings["target_speed_mps"],
+                               "velocity_weight": self.reward["velocity"]}}, temporary)
         temporary.replace(path)
         return path
 
@@ -234,7 +258,12 @@ class FreshTrainingSession:
         self.output_directory.mkdir(parents=True, exist_ok=False)
         sources = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                    for name in ("stride_policy.py", "stride_training.py", "simulation.py")}
-        config = {"seed": self.seed, "settings": SETTINGS, "ppo": PPO, "reward": REWARD,
+        config = {"seed": self.seed, "settings": self.settings, "ppo": self.ppo,
+                  "reward": self.reward,
+                  "tuning": {"noise_scale": self.noise_scale,
+                             "entropy_coefficient": self.ppo["entropy_coefficient"],
+                             "target_speed_mps": self.settings["target_speed_mps"],
+                             "velocity_weight": self.reward["velocity"]},
                   "source_sha256": sources,
                   "model_sha256": hashlib.sha256(simulation.MODEL_PATH.read_bytes()).hexdigest(),
                   "versions": {name: version(name) for name in ("torch", "numpy", "mujoco")}}
@@ -256,9 +285,9 @@ class FreshTrainingSession:
             generator = torch.Generator().manual_seed(self.seed * 1_000_000 + self.updates)
             actor_losses, critic_losses, entropies = [], [], []
             epochs = 0
-            for epoch in range(PPO["epochs"]):
+            for epoch in range(self.ppo["epochs"]):
                 order = torch.randperm(len(advantages), generator=generator)
-                for indexes in order.split(PPO["minibatch_size"]):
+                for indexes in order.split(self.ppo["minibatch_size"]):
                     actor_loss, value_loss, entropy = self._update(batch, indexes)
                     if not all(math.isfinite(value) for value in (actor_loss, value_loss, entropy)):
                         raise RuntimeError("non-finite optimizer result; abort this branch")
@@ -272,7 +301,7 @@ class FreshTrainingSession:
                     kl = ((torch.exp(log_ratio) - 1.0) - log_ratio).mean().item()
                 if not math.isfinite(kl):
                     raise RuntimeError("non-finite KL diagnostic; abort this branch")
-                if kl > PPO["target_kl"]:
+                if kl > self.ppo["target_kl"]:
                     break
             self.updates += 1
             if not all(torch.isfinite(parameter).all() for network in (self.actor, self.critic)
