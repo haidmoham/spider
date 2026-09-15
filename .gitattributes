@@ -1,2 +1,4 @@
 # Preserve the migrated historical bytes and their provenance hashes on every OS.
 lab/history/** -text whitespace=cr-at-eol
+# Keep accepted PPO artifacts byte-identical to their recorded SHA256 hashes.
+artifacts/ppo-crude-baseline-20260915/** -text whitespace=cr-at-eol
