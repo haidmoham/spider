@@ -129,10 +129,20 @@ stronger forward also failed stability. The baseline passed.
 The four-pane viewer and `comparison.mp4` replay the recorded mean policies at
 normal speed. The verified film is five seconds, 1280 by 720, H.264 at 25 fps,
 using exact shared timestamps without interpolation. This
-view does not show sampled failures. User gait review remains pending. No
+view does not show sampled failures. User gait review rejected these policies:
+"bro does not fucking move", followed by "at all". No
 candidate is promoted, STRIDE remains unearned, and training stopped at the
 approved budget. These results motivate inspecting why sampled forward travel
 does not become a deliberate mean-policy stride before another training round.
+
+The user's subsequent instruction is: "do not propose any policy unless it
+improves upon the baseline". Failed trials are diagnostic evidence, not proposed
+replacements. Before presenting a replacement, verify the full numerical goal
+and inspect recorded real-time motion for a legible stride improvement. Final
+visual acceptance belongs to the user. A quieter stationary policy does not
+qualify. The default runtime checkpoint remains the accepted PPO-100. This
+presentation requirement does not authorize new training; each experimental
+round still needs prior approval.
 
 ### Post-round optimizer audit and proposed comparison
 
@@ -158,7 +168,9 @@ updates to 0.9785 in the last ten. Clearance stayed near 0.12 and contact near
 Action-rate cost was only about 0.0006 per decision, so it is not the largest
 recorded penalty. Reward magnitude alone does not measure its gradient effect.
 
-Proposed next round, **not approved or executed**:
+Historical optimizer proposal, **not approved or executed**, retained for
+provenance. It is not a recommendation of a replacement policy and is on hold
+after the user's rejection of stationary results:
 
 - Reuse the recorded combined trial and accepted PPO-100 as controls.
 - Train two fresh seed-11 candidates for 50 updates each, 8 episodes per update,
