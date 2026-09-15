@@ -1,0 +1,54 @@
+{
+  "training": "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03",
+  "checkpoints": [
+    400
+  ],
+  "protocol": "Notebook 4: seeds 201..212, sampled and mean, five seconds",
+  "comparison_scope": "Candidate versus accepted PPO-100 and selected measured control",
+  "selected_control": "C:\\Users\\haidm\\Desktop\\robotics\\spider\\artifacts\\walk_stable_100\\replay",
+  "accepted": false,
+  "evaluations": [
+    {
+      "update": 400,
+      "checkpoint_sha256": "2e4bb21fcbdf15900a9ce66def595e4d66c08f6aeb01090efd6b463a717dd8e3",
+      "goal_numerical_pass": true,
+      "failures": [],
+      "accepted": false,
+      "visual_review_required": true,
+      "threshold_m_s": 0.37882745001803586,
+      "sampled_mean_speed_m_s": 0.7676505925603022,
+      "limitation": "Action-noise seeds at fixed initial state; not terrain or push robustness",
+      "notebook_seeds": true
+    }
+  ],
+  "windows": [
+    {
+      "update": 400,
+      "recordings": [
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-forward-exploration-round-01\\accepted_baseline\\evaluation\\mean-201",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\artifacts\\walk_stable_100\\replay",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\sampled-201",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\mean-201"
+      ],
+      "command": [
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\.venv\\Scripts\\python.exe",
+        "-m",
+        "spider",
+        "replay-grid",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-forward-exploration-round-01\\accepted_baseline\\evaluation\\mean-201",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\artifacts\\walk_stable_100\\replay",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\sampled-201",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\mean-201",
+        "--speed",
+        "1",
+        "--presentation",
+        "stalk",
+        "--ready",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\viewer.ready",
+        "--screenshot",
+        "C:\\Users\\haidm\\Desktop\\robotics\\spider\\telemetry\\tuning\\20260915-policy-cadence-continuation-round-03\\comparison-n00400\\n00400\\preview.png"
+      ],
+      "pid": 39160
+    }
+  ]
+}

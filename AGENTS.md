@@ -25,9 +25,10 @@ These instructions apply to the entire repository.
   user-selected n=200 speed checkpoint; use `CHECKPOINTS.md` and its manifest.
   Preserve both. The fast checkpoint retains documented contact fragmentation;
   do not equate its selection with completion of the deliberate-stride goal.
-- `walk_fast_300` is preserved at the user's request. The continuation to
-  `walk_fast_500` is bounded to 200 more updates with evaluations at 400 and 500.
+- `walk_fast_300` and `walk_fast_500` are preserved at the user's request.
+  Training stopped at 500; the user requested goal closure at that point.
   Names preserve measured checkpoints; they do not imply unmeasured gait quality.
+  Keep recorded contact-fragmentation and slip limitations with the evidence.
 
 - `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
 - `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). The 50/100 comparison uses fixed flat-ground development scenarios; STRIDE remains unearned.
