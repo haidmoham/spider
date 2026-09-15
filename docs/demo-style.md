@@ -21,6 +21,11 @@ The `walk_stable_100` example is reproducible with:
 .venv\Scripts\python scripts\render_walk_demo.py
 ```
 
+For speed comparisons, use synchronized split-screen panels. Use the same
+camera scale, clock, and 1× playback in both panels. Show measured speed and
+live displacement beside each replay. Repeat both recordings from the second
+camera after five seconds. See `scripts/render_walk_speed_demo.py`.
+
 Generated videos belong outside Git. Verify the final duration, dimensions,
 frame rate, video codec, pixel format, representative frames, transition, and
 audio stream. Preserve silence when the reference has no audio.
