@@ -1,0 +1,4 @@
+-r requirements.txt
+# Headless CI tools; no trainer or notebook execution.
+matplotlib==3.11.1
+nbformat==5.11.1

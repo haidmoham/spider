@@ -2,10 +2,17 @@
 import unittest
 import numpy as np
 
-from spider.viewing.replay_grid import frame_index, quadrants
+from spider.viewing.replay_grid import frame_index, pane_heading, quadrants
 
 
 class ReplayGridTests(unittest.TestCase):
+    def test_heading_identifies_treatment_from_label(self):
+        self.assertEqual(pane_heading('after stochastic seed 101')[0], 'YOUR CODE: AFTER TRAINING')
+        self.assertEqual(pane_heading('before stochastic seed 101')[0], 'BEFORE TRAINING')
+        self.assertEqual(pane_heading('neutral control | seed=101')[0], 'NEUTRAL CONTROL')
+        self.assertEqual(pane_heading('fixed shuffle | seed=101')[0], 'FIXED SHUFFLE')
+        self.assertEqual(pane_heading('unfamiliar treatment')[0], 'RECORDED TREATMENT')
+
     def test_shared_time_and_short_episode_hold(self):
         long = np.array([10., 10.02, 10.04, 10.06])
         short = np.array([0., .02])

@@ -2,7 +2,7 @@
 
 A six-legged MuJoCo robot for learned locomotion and simulation experiments.
 
-Start in [02_first_policy.ipynb](lab/notebooks/02_first_policy.ipynb) for the current
+Start in [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for the current
 policy work. [LEARNING.md](LEARNING.md) explains setup and ownership.
 [01_control_step.ipynb](lab/notebooks/01_control_step.ipynb) is the earlier control-step exercise.
 The [experiment index](lab/notebooks/README.md) maps each bounded notebook to its
@@ -35,9 +35,16 @@ or a second physics loop. Replay restores recorded states without integrating.
 Use the same Python environment for notebooks and commands:
 
 ```powershell
+py -3.12 -m venv .venv
+.venv/Scripts/python -m pip install --upgrade -r requirements-bootstrap.txt
 .venv/Scripts/python -m pip install -r requirements-learning.txt
-.venv/Scripts/python -m jupyter lab lab/notebooks/02_first_policy.ipynb
+.venv/Scripts/python -m jupyter lab lab/notebooks/04_mdp_contract.ipynb
 ```
+
+`requirements.txt` pins the runtime; `requirements-test.txt` adds headless test tools;
+`requirements-learning.txt` adds the notebook/PyTorch stack. Use Python 3.12 and the
+**C-1N pairing** kernel. The legacy Ant notebook uses a separate `.venv-ant` and
+**C-1N Ant** kernel; see [LEARNING.md](LEARNING.md#environment).
 
 One command entry point serves all runtime operations:
 
