@@ -1,5 +1,9 @@
 # PPO in the C-1N platform
 
+**Current status:** the user accepted `walk_fast_500` as completed STRIDE.
+See the [capability record](checkpoints/stride.md). Statements below about
+unearned STRIDE describe earlier trials, not the current checkpoint state.
+
 The latest user-approved direction is the [six-leg chassis and tripod work](gait-chassis.md).
 The historical rounds below remain preserved. Candidate chassis redesign is now
 authorized; the original model and notebook remain frozen controls.

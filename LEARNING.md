@@ -2,6 +2,14 @@
 
 ## Resume
 
+2026-09-15: the user marked **C-1N v0.3 STRIDE complete with `walk_fast_500`**.
+The [STRIDE record](docs/checkpoints/stride.md) owns the accepted capability
+scope and links the model, weights, fixed-seed evaluations, and remaining limits.
+Training stopped at 500 updates. Notebook 04 remains frozen. This robot
+capability does not by itself establish further human learning or mastery.
+
+### Earlier baseline and integration handoff (historical)
+
 2026-09-15: the user ran the 50/100-update comparison and accepted it as a crude
 learned baseline. [PPO-100-CRUDE-20260915](artifacts/ppo-crude-baseline-20260915/README.md)
 owns the preserved weights, settings, measurements, and viewed replays. Notebook 04

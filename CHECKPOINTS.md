@@ -1,5 +1,8 @@
 # Named walking checkpoints
 
+**C-1N v0.3 STRIDE: complete with `walk_fast_500`, accepted by the user.**
+See [scope, evidence, and limitations](docs/checkpoints/stride.md).
+
 Start here for the demo skill. Render saved measured states at 1x. These names
 identify exact assets and their approval status, not whichever training file is newest.
 
@@ -8,7 +11,7 @@ identify exact assets and their approval status, not whichever training file is 
 | `walk_stable_100` | Locked; user-approved walking baseline | [Manifest](artifacts/walk_stable_100/manifest.json) | 1.1 Hz; 100 PPO updates; 0/24 falls; mean 0.317506 m/s |
 | `walk_fast_200` | User-selected speed checkpoint; stride-quality limits remain | [Manifest](artifacts/walk_fast_200/manifest.json) | n=200; mean 0.597616 m/s; 0/24 falls; preserved before continuation |
 | `walk_fast_300` | User-requested named checkpoint; stride-quality limits remain | [Manifest](artifacts/walk_fast_300/manifest.json) | n=300; mean 0.758568 m/s; 0/24 falls |
-| `walk_fast_500` | User-requested named checkpoint; training stopped at 500 | [Manifest](artifacts/walk_fast_500/manifest.json) | Mean 0.887987 m/s; sampled average 0.821139 m/s; 0/24 falls |
+| `walk_fast_500` | User-accepted STRIDE checkpoint; training stopped at 500 | [Manifest](artifacts/walk_fast_500/manifest.json) | Mean 0.887987 m/s; sampled average 0.821139 m/s; 0/24 falls |
 
 `walk_stable_100` has the approved metallic-black chassis, red lighting, six legs
 and gravity-responsive googly eyes. Its mean replay is in

@@ -1,5 +1,8 @@
 # walk_fast_500
 
+**C-1N v0.3 STRIDE: complete by the user's explicit acceptance of this checkpoint.**
+See the [capability record](../../docs/checkpoints/stride.md) for the accepted scope.
+
 User-requested checkpoint after 500 total PPO updates, continued from
 `walk_fast_300`. Mean speed: 0.887987 m/s; sampled average: 0.821139 m/s;
 zero falls in 24 five-second evaluations and zero joint-limit violations.
