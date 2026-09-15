@@ -122,6 +122,15 @@ the checkpoint. Results include per-seed CSV, acceptance JSON, model/state/trace
 recordings, viewer logs, and a first-frame screenshot. Failed numerical gates
 do not suppress the comparison or promote the candidate.
 
+The completed run produced 800 full training episodes and 200,000 control steps.
+At 50 updates, mean speed was **0.299001 m/s** and sampled average was
+**0.288070 m/s**. At 100 updates, those speeds were **0.317506 m/s** and
+**0.321624 m/s**. Both checkpoints completed all 24 evaluation runs without falls
+or joint-limit violations. Both failed the accepted baseline speed gate.
+Neither is promoted. Both labelled windows opened at 1x without viewer errors.
+[Weights, all 48 recordings, metrics, and source evidence](../artifacts/reference-ppo-evaluation-20260915/README.md)
+are preserved independently of the frozen baselines.
+
 Acceptance remains a user-approved normal-speed learned stride, a full five-second
 mean-action run, and twelve fixed five-second sampled runs with zero falls and
 average speed at least **0.37882745 m/s**. A design animation, an untrained controller,
