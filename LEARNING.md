@@ -3,8 +3,11 @@
 ## Resume
 
 Current path: notebook 04 now implements the standard PPO sequence cell by cell.
-Run setup; implement GAE (section 3), actor/value losses (4), and one minibatch
-update (5). Collection, tensor records, diagnostics, checkpointing and replay are
+GAE (section 3) is user-implemented and verified on 1,000 saved transitions across
+four episodes: TD identity, episodic-return identity, boundary isolation, detached
+targets and actor-only normalization pass. Next: implement actor/value losses in
+section 4, then one minibatch update in section 5. Collection, tensor records,
+diagnostics, checkpointing and replay are
 provided. Run the analytic checks, then a two-update smoke test and held-out review.
 The final cell continues the same run to 100 total PPO updates. Training readiness
 is not a claim that PPO already walks. STRIDE remains unearned, target 48/50.
