@@ -5,5 +5,8 @@ artifacts/ppo-crude-baseline-20260915/** -text whitespace=cr-at-eol
 artifacts/tripod-openloop-baseline-20260915/** -text whitespace=cr-at-eol
 artifacts/chassis-design-20260915/** -text whitespace=-blank-at-eol,cr-at-eol
 artifacts/walk_stable_100/** -text whitespace=cr-at-eol
+artifacts/walk_fast_200/** -text whitespace=cr-at-eol
+artifacts/walk_fast_300/** -text whitespace=cr-at-eol
+artifacts/walk_fast_500/** -text whitespace=cr-at-eol
 # The canonical control model is byte-hashed against the accepted baseline.
 model/spider.xml -text whitespace=cr-at-eol

@@ -21,16 +21,39 @@ These instructions apply to the entire repository.
 
 ## Checkpoints
 
+- `C-1N v0.3 - STRIDE` is complete by the user's explicit acceptance of
+  `walk_fast_500`. See [the STRIDE record](docs/checkpoints/stride.md): 24 fixed
+  five-second flat-ground evaluations, zero falls or joint-limit violations,
+  0.887987 m/s mean-policy speed and 0.821139 m/s sampled average. Preserve
+  weights, model, objective, provenance, and measured replays. Contact
+  fragmentation and slip remain limitations; terrain and push robustness are excluded.
+
+- `walk_stable_100` remains the locked walking control. `walk_fast_200` is the
+  user-selected n=200 speed checkpoint; use `CHECKPOINTS.md` and its manifest.
+  Preserve both. The fast checkpoint retains documented contact fragmentation;
+  do not equate its selection with completion of the deliberate-stride goal.
+- `walk_fast_300` and `walk_fast_500` are preserved at the user's request.
+  Training stopped at 500; the user requested goal closure at that point.
+  Names preserve measured checkpoints; they do not imply unmeasured gait quality.
+  Keep recorded contact-fragmentation and slip limitations with the evidence.
+
 - `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
-- `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). The 50/100 comparison uses fixed flat-ground development scenarios; STRIDE remains unearned.
+- `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). That earlier 50/100 comparison did not earn STRIDE; `walk_fast_500` now owns the completed capability.
 - `TRIPOD-OPENLOOP-20260915` is the user-approved untrained trajectory gait baseline on the original chassis. Preserve its [controller, measured replay, and evidence limits](artifacts/tripod-openloop-baseline-20260915/README.md). Approval covers the stride pattern and one five-second rollout, not population stability, a learned policy, or the experimental chassis redesign.
-- `walk_stable_100` is the locked user-approved learned walking baseline on the six-leg candidate chassis at 1.1 Hz. Preserve its [weights, replay, hashes and scope](artifacts/walk_stable_100/README.md). It completed 24 fixed flat-ground evaluations without falls, but remains slower than the original PPO-100 speed threshold. Do not overwrite it. `walk_fast_200` is an unapproved development target; keep ablations under separate experiment IDs until the user accepts a result. [Checkpoint catalog](CHECKPOINTS.md) is the demo entry point.
+- `walk_stable_100` is the locked user-approved learned walking baseline on the six-leg candidate chassis at 1.1 Hz. Preserve its [weights, replay, hashes and scope](artifacts/walk_stable_100/README.md). It completed 24 fixed flat-ground evaluations without falls, but remains slower than the original PPO-100 speed threshold. Do not overwrite it. Keep ablations under separate experiment IDs. [Checkpoint catalog](CHECKPOINTS.md) is the demo entry point.
 - Use checkpoints only for robotics capabilities or understood failures worth preserving and comparing.
 - Do not create checkpoints for instrumentation, cleanup, presentation polish, or elapsed time.
 - Do not claim a capability before reproducible evidence supports it.
 - Before landing a commit that changes checkpoint state, capability claims, or test-bench provenance, use the installed `commit-boundary` skill with `.ontology/commit-rules.md`.
 
 ## Working agreements
+
+- Use the available GPU for PPO neural-network optimization. Check the selected
+  PyTorch device and CUDA backend before training, and record them with the run.
+  Do not silently fall back to CPU after an explicit GPU request. MuJoCo rollout
+  physics and small per-step inference may remain on CPU; report that split and
+  measure performance before claiming a speedup. Preserve checkpoints before
+  changing the training device or environment.
 
 - C-1N has exactly six legs, three per side. This is invariant during chassis, joint, visual, and policy redesign.
 - Keep changes small and easy to review.
@@ -68,3 +91,9 @@ These instructions apply to the entire repository.
 - The human writes RL and PPO with PyTorch operations, autograd, and optimizers. Do not prewrite algorithm solutions or substitute a ready-made trainer.
 - The agent owns setup and verification. The human owns hypotheses, observation and reward design, algorithm implementation, and interpretation.
 - Rebuild mathematics as needed. Use trace -> predict -> change -> diagnose as the readiness check for regular pairing.
+
+## Demo style
+
+- Use [docs/demo-style.md](docs/demo-style.md) for short C-1N checkpoint films.
+- Match the established 1080 × 1350, 50 fps, ten-second two-view format, purple stage, thin world grid, and gradient overlays unless the user requests another format.
+- Render saved measured states at 1× with the repository renderer. Keep dynamic pupils and life lights active. State replay provenance and checkpoint evidence accurately.

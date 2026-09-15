@@ -59,7 +59,14 @@ def summarize(records: list[dict], threshold: float, *, notebook_seeds: bool = F
 def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
     payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
     model = mujoco.MjModel.from_xml_string(payload["model_xml"])
-    policy = ReferenceResidualPolicy(checkpoint, model, seed=seed, sampled=sampled)
+    kind = payload.get("policy_kind", "reference_residual")
+    if kind == "cadence_action_v1":
+        from .cadence_action_training import CadenceResidualPolicy
+        policy = CadenceResidualPolicy(checkpoint, model, seed=seed, sampled=sampled)
+    elif kind == "reference_residual":
+        policy = ReferenceResidualPolicy(checkpoint, model, seed=seed, sampled=sampled)
+    else:
+        raise ValueError(f"unknown policy kind: {kind}")
     output.mkdir(parents=True, exist_ok=False)
     data = mujoco.MjData(model)
     simulation.reset(model, data)
@@ -70,8 +77,9 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
     origin = np.asarray(observed.torso_position)
     previous_target = policy.neutral.copy()
     mode = "sampled" if sampled else "mean"
-    label = f"REFERENCE PPO n={payload['updates']} | CANDIDATE | {mode} | seed={seed}"
-    if payload.get("treatment_changes"):
+    treatment = "LEARNED CADENCE" if kind == "cadence_action_v1" else "CANDIDATE"
+    label = f"REFERENCE PPO n={payload['updates']} | {treatment} | {mode} | seed={seed}"
+    if kind == "reference_residual" and payload.get("treatment_changes"):
         label += f" | cadence={policy.reference.config['frequency_hz']:g} Hz | cadence treatment"
     replay = TreatmentReplay(model, label)
     replay.capture(data)
@@ -83,6 +91,9 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
     for _ in range(decisions):
         before = observed
         target = policy.targets(observed)
+        # Diagnostics describe the command held during the following interval.
+        command_diagnostics = {f"command_{key}": value
+                               for key, value in getattr(policy, "diagnostics", {}).items()}
         if not np.isfinite(target).all() or np.any(target < policy.bounds[:, 0]) or np.any(target > policy.bounds[:, 1]):
             raise ValueError("nonfinite or invalid actuator target")
         for _ in range(policy.settings["physics_steps"]):
@@ -103,6 +114,7 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
                                               observed.time-before.time),
                          **{f"joint_{i}_rad": float(q) for i, q in enumerate(observed.joint_positions)},
                          **{f"target_{i}_rad": float(q) for i, q in enumerate(target)}))
+        rows[-1].update(command_diagnostics)
         previous_target = target
         if terminated:
             break
@@ -117,6 +129,11 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
                   updates=payload["updates"], label=label)
     result["reference_config"] = policy.reference.config
     result["treatment_changes"] = payload.get("treatment_changes", {})
+    result["policy_kind"] = kind
+    if kind == "cadence_action_v1":
+        frequencies = [r["command_current_cadence_hz"] for r in rows]
+        result["cadence_hz"] = dict(minimum=min(frequencies), maximum=max(frequencies),
+                                    mean=float(np.mean(frequencies)))
     (output / "metadata.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     return result
 
@@ -126,6 +143,9 @@ def evaluate(checkpoint: Path, output: Path, *, notebook_seeds: bool = False) ->
     sources = output / "sources"; sources.mkdir()
     for name in ("reference_evaluation.py", "reference_training.py", "policy_metrics.py", "simulation.py"):
         shutil.copy2(Path(__file__).with_name(name), sources / name)
+    candidate_source = Path(__file__).with_name("cadence_action_training.py")
+    if candidate_source.exists():
+        shutil.copy2(candidate_source, sources / candidate_source.name)
     records = [record(checkpoint, output / "mean-201", seed=201, sampled=False)]
     if notebook_seeds:
         for seed in range(202, 213):

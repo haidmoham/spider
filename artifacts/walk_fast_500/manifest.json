@@ -1,0 +1,35 @@
+{
+  "name": "walk_fast_500",
+  "status": "user_accepted_stride_checkpoint",
+  "approval": "checkpoint walk_fast_300 when you get there and then continue the training run to walk_fast_500; use my gpu for training",
+  "closure_instruction": "once the 500 run is complete you can mark the goal closed",
+  "updates": 500,
+  "checkpoint": "walk_fast_500.pt",
+  "policy_class": "spider.cadence_action_training.CadenceResidualPolicy",
+  "source_experiment": "experiments/cuda-continuation-20260915",
+  "parent": "walk_fast_300",
+  "parent_sha256": "81fa8843b2d0ce5825cd3a653ea1cb71f39dc071b8bd907f0afad6d176f4431f",
+  "execution_device": {
+    "optimization": "cuda:0",
+    "gpu_name": "NVIDIA GeForce RTX 3080",
+    "torch_cuda_build": "12.6",
+    "rollout_physics": "cpu",
+    "rollout_inference": "cpu"
+  },
+  "mean_speed_m_s": 0.8879874507126051,
+  "sampled_mean_speed_m_s": 0.8211391845151228,
+  "falls": 0,
+  "evaluation_count": 24,
+  "maximum_joint_limit_violation_rad": 0.0,
+  "scope": "Recorded speed checkpoint. Deliberate stride quality and terrain/push robustness remain unproven.",
+  "sha256": {
+    "walk_fast_500.pt": "e411e89f8cb90058d06442211ee94ede9a6bff050a9c059ed0bce06db966b856"
+  },
+  "capability": {
+    "name": "C-1N v0.3 - STRIDE",
+    "status": "complete",
+    "accepted_date": "2026-09-15",
+    "approval": "mark STRIDE as completed by walk_fast_500",
+    "record": "../../docs/checkpoints/stride.md"
+  }
+}

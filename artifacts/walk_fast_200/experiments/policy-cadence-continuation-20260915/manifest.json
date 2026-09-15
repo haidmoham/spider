@@ -1,0 +1,8 @@
+{
+  "checkpoint-00250.pt": "4ad1175db878960d183b2c19bb88c48882bbc146eb08769705505e98ff711137",
+  "checkpoint-00300.pt": "81fa8843b2d0ce5825cd3a653ea1cb71f39dc071b8bd907f0afad6d176f4431f",
+  "evaluation-250.json": "1f71fcbddb5442803b3d4a536aa46cf02e00d0151e43ac4f86b5c5bcec83ad93",
+  "evaluation-300.json": "49c80a0c53bca98977b5fedbb4c23d7cb55e0c0b44f35c473f09cf26ed063a26",
+  "evidence.zip": "9885c74be8648e7a6a3f5fd93c3ca1822dcaca29a37ce60a2fda7362a10a112a",
+  "README.md": "82d5de71dfda20547771b76b508ba63dab4e7da0b215d49cf385305a664a6c05"
+}

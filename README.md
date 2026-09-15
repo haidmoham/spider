@@ -4,8 +4,13 @@ A six-legged MuJoCo robot for learned locomotion and simulation experiments.
 
 For integrated walking demos and auditable weights, use the [named checkpoint catalog](CHECKPOINTS.md).
 
-Start in [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for the current
-policy work. [LEARNING.md](LEARNING.md) explains setup and ownership.
+**C-1N v0.3 STRIDE is complete with `walk_fast_500`.** It reached 0.888 m/s
+mean-policy speed with zero falls in 24 five-second evaluations. See the
+[capability record and evidence limits](docs/checkpoints/stride.md).
+
+[04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) preserves the frozen
+learning baseline. Integrated policy work lives in Python under `spider/`.
+[LEARNING.md](LEARNING.md) explains setup and ownership.
 [01_control_step.ipynb](lab/notebooks/01_control_step.ipynb) is the earlier control-step exercise.
 The [experiment index](lab/notebooks/README.md) maps each bounded notebook to its
 concept and the relevant robot implementation. This repository now owns the
@@ -95,11 +100,12 @@ for exact changes, inference-only dependencies, recordings, and review criteria.
 ## Preserved capability and evidence
 
 STAND is the earned six-contact baseline. Disturbance recovery is excluded.
-SPAWN and SHUFFLE remain historical comparisons; STRIDE is not earned.
+SPAWN and SHUFFLE remain historical comparisons. STRIDE is complete through
+the user-accepted [walk_fast_500](artifacts/walk_fast_500/README.md).
 The [crude PPO baseline](artifacts/ppo-crude-baseline-20260915/README.md) preserves
 the user-accepted 50/100-update comparison, both model checkpoints, and four recorded
 replays. It records learned forward travel on the fixed task, not a reliable crawl.
-The next work is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17)
+The completed learned-locomotion work is tracked by [spider #17](https://github.com/haidmoham/spider/issues/17)
 with [test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25)
 retained as source provenance. `LEARNING.md` selects the current work.
 

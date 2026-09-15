@@ -14,8 +14,13 @@ from ..recording import STATE
 def pane_heading(label, training_updates=None):
     """Identify the saved treatment, independent of its quadrant position."""
     name = label.lower()
+    if 'walk_stable_100' in name:
+        return ('walk_stable_100 / LOCKED', 'Approved 1.1 Hz walking baseline', (.14, .20, .16))
     if name.startswith('reference ppo n='):
         fields = [part.strip() for part in label.split('|')]
+        if fields[1] == 'LEARNED CADENCE':
+            return (f'{fields[0].replace("REFERENCE ", "GAIT ")} / {fields[2].upper()}',
+                    'Policy chooses cadence and joint corrections', (.20, .10, .12))
         cadence = re.search(r'cadence=([\d.]+) Hz', label)
         if cadence:
             return (f'{fields[0].replace("REFERENCE ", "")} / {cadence.group(1)} Hz / {fields[2].upper()}',
@@ -114,6 +119,8 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
         with np.load(directory / 'states.npz', allow_pickle=False) as archive:
             states, times = archive['states'], archive['times']
             label = str(archive['label'])
+        if 'walk_stable_100' in directory.parts:
+            label = 'REFERENCE PPO n=100 | walk_stable_100 | mean | seed=201'
         if (states.shape != (len(times), mujoco.mj_stateSize(model, STATE)) or
                 len(times) == 0 or not np.isfinite(states).all() or
                 not np.isfinite(times).all() or np.any(np.diff(times) <= 0)):
