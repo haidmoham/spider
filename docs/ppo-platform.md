@@ -73,6 +73,32 @@ The new modules are `spider/stride_policy.py` and `spider/stride_training.py`.
 available to reproduce the rejected experiment. All training belongs to the
 Python platform; the notebook and accepted checkpoint stay frozen.
 
+### First fresh round result
+
+`telemetry/tuning/20260915-fresh-stride-round-01/` contains the completed round:
+150 total updates, 52 evaluation episodes, configurations, source copies and
+hashes, checkpoints 0 through 50 for each seed, raw reward traces, and the
+five-second `comparison.mp4`. Execution took 363.5 seconds. The film uses exact
+recorded timestamps at 25 fps to align the two control cadences.
+
+| Policy | Mean-action speed (m/s) | Mean-action travel in 5 s (m) | Sampled falls / 12 |
+| --- | ---: | ---: | ---: |
+| Accepted PPO-100 | 0.37883 | 1.89414 | 0 |
+| Fresh seed 11, update 50 | 0.00313 | 0.01564 | 10 |
+| Fresh seed 22, update 50 | -0.00020 | -0.00101 | 9 |
+| Fresh seed 33, update 50 | -0.00611 | -0.03056 | 8 |
+
+All four mean-action episodes stayed above the fall threshold. The fresh mean
+policies barely travel; 27 of their 36 sampled episodes fell. A calmer mean
+policy is not evidence of a reliable learned stride. Larger sampled joint motion
+and foot heights include falls and must not be presented as useful gait amplitude.
+
+User review: "this looks better but doesn't reward forward motion enough".
+Preserve the improved visual direction, but no fresh policy is accepted as the
+walk baseline. The full speed and stability goal remains unmet. A proposed next
+comparison raises the speed command to 0.4 m/s and the forward tracking weight;
+it requires approval before execution. No further updates ran in this round.
+
 ## Run the prepared comparison
 
 Use the existing C-1N environment. A new runtime-only environment can install
