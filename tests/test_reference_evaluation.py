@@ -21,6 +21,14 @@ class ReferenceEvaluationTests(unittest.TestCase):
         self.assertFalse(result["accepted"])
         self.assertTrue(result["visual_review_required"])
 
+    def test_notebook_protocol_requires_all_mean_seeds(self):
+        rows = self.records()
+        self.assertFalse(summarize(rows, .37882745, notebook_seeds=True)["goal_numerical_pass"])
+        rows += [dict(rows[0], seed=seed) for seed in range(202, 213)]
+        self.assertTrue(summarize(rows, .37882745, notebook_seeds=True)["goal_numerical_pass"])
+        rows[-1]["terminated"] = True
+        self.assertFalse(summarize(rows, .37882745, notebook_seeds=True)["goal_numerical_pass"])
+
     def test_rejects_missing_duplicate_slow_fallen_invalid_records(self):
         original = self.records()
         candidates = [original[:-1]]

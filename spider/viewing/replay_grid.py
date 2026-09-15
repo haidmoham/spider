@@ -14,6 +14,10 @@ from ..recording import STATE
 def pane_heading(label, training_updates=None):
     """Identify the saved treatment, independent of its quadrant position."""
     name = label.lower()
+    if name.startswith('reference ppo n='):
+        fields = [part.strip() for part in label.split('|')]
+        return (f'{fields[0]} / {fields[2].upper()}',
+                'Candidate chassis; measured evaluation; not promoted', (.20, .10, .12))
     if 'kinematic' in name and 'untrained' in name:
         gait = label.split('/', 1)[0].strip()
         return (f'{gait} / KINEMATIC / UNTRAINED',
@@ -124,7 +128,10 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
     contexts = []
     try:
         glfw.window_hint(glfw.VISIBLE, glfw.TRUE)
-        window = glfw.create_window(1440, 960, 'C-1N | four recorded treatments', None, None)
+        checkpoints = sorted({p['label'].split('|')[0].strip() for p in panes
+                              if p['label'].lower().startswith('reference ppo n=')})
+        window_title = 'C-1N | ' + (' + '.join(checkpoints) if checkpoints else 'four recorded treatments')
+        window = glfw.create_window(1440, 960, window_title, None, None)
         if not window:
             raise RuntimeError('Could not create the replay window')
         glfw.make_context_current(window)

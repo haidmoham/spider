@@ -94,8 +94,33 @@ model/state/trace evidence and tests full duration, falls, finite states, joint
 limits (1 milliradian numeric tolerance), and both speed thresholds. Foot-slip
 diagnostics use contact endpoints at the control cadence and can miss within-step
 sliding. The numeric gate still requires visual acceptance. The new evaluation
-command was prepared and its rejection logic tested; no 13-episode learned-policy
-evaluation has been run in this pass.
+command also supports `--notebook-seeds`: all twelve seeds in both sampled and
+mean modes, as in Notebook 4. Mean-action seeds use the same initial condition;
+they check consistency rather than distinct robustness scenarios.
+
+### Checkpoint comparison
+
+The user authorized one continuous run to Notebook 4's **50 and 100 updates** on
+2026-09-15. The run uses seed 11, eight episodes per update, and a maximum of five
+seconds per episode. It retains the approved candidate model and prepared reward.
+Notebook 4 supplies the evaluation schedule and seeds; its pedagogical action
+mapping and chassis are not substituted into the candidate controller.
+
+The local run directory is `telemetry/tuning/20260915-reference-ppo-round-01`.
+It retains authorization, frozen sources, model, optimizer states, and every
+checkpoint. Use this command on saved checkpoints to reproduce the comparison:
+
+```powershell
+.venv/Scripts/python -m spider.reference_comparison --training telemetry/tuning/20260915-reference-ppo-round-01 --output telemetry/tuning/reference-comparison-new
+```
+
+This evaluates 24 episodes per checkpoint and opens one window per checkpoint.
+Top left is frozen PPO-100. Top right is the approved original untrained tripod.
+Bottom left is the candidate sampled policy. Bottom right is its mean policy.
+Both candidate panes replay measured seed 201 at 1x. The window title identifies
+the checkpoint. Results include per-seed CSV, acceptance JSON, model/state/trace
+recordings, viewer logs, and a first-frame screenshot. Failed numerical gates
+do not suppress the comparison or promote the candidate.
 
 Acceptance remains a user-approved normal-speed learned stride, a full five-second
 mean-action run, and twelve fixed five-second sampled runs with zero falls and

@@ -1,7 +1,8 @@
-"""Fixed 13-episode evaluation for explicitly selected residual checkpoints.
+"""Fixed-seed evaluation for explicitly selected residual checkpoints.
 
 This command never trains or promotes a policy. A numeric pass still requires
 user review of the real-time gait. Model changes are separate from policy gains.
+Use --notebook-seeds for Notebook 4's 24-run sampled/mean protocol.
 """
 
 from __future__ import annotations
@@ -25,12 +26,13 @@ from .recording import TreatmentReplay
 from .reference_training import ReferenceResidualPolicy
 
 
-def summarize(records: list[dict], threshold: float) -> dict:
+def summarize(records: list[dict], threshold: float, *, notebook_seeds: bool = False) -> dict:
     mean = [r for r in records if r["mode"] == "mean"]
     sampled = [r for r in records if r["mode"] == "sampled"]
     failures = []
-    if len(mean) != 1 or mean[0]["seed"] != 201:
-        failures.append("requires exactly mean seed 201")
+    expected_mean = set(range(201, 213)) if notebook_seeds else {201}
+    if len(mean) != len(expected_mean) or {r["seed"] for r in mean} != expected_mean:
+        failures.append("requires each expected mean seed exactly once")
     if len(sampled) != 12 or {r["seed"] for r in sampled} != set(range(201, 213)):
         failures.append("requires sampled seeds 201..212 exactly once")
     for r in records:
@@ -44,7 +46,7 @@ def summarize(records: list[dict], threshold: float) -> dict:
         if not np.isfinite(r["speed_m_s"]):
             failures.append("nonfinite speed")
     sample_speed = float(np.mean([r["speed_m_s"] for r in sampled])) if sampled else None
-    if not mean or mean[0]["speed_m_s"] < threshold:
+    if not mean or any(r["speed_m_s"] < threshold for r in mean):
         failures.append("mean policy below accepted PPO-100 mean speed")
     if sample_speed is None or sample_speed < threshold:
         failures.append("sampled average below accepted PPO-100 mean speed")
@@ -115,15 +117,19 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
     return result
 
 
-def evaluate(checkpoint: Path, output: Path) -> dict:
+def evaluate(checkpoint: Path, output: Path, *, notebook_seeds: bool = False) -> dict:
     output.mkdir(parents=True, exist_ok=False)
     sources = output / "sources"; sources.mkdir()
     for name in ("reference_evaluation.py", "reference_training.py", "policy_metrics.py", "simulation.py"):
         shutil.copy2(Path(__file__).with_name(name), sources / name)
     records = [record(checkpoint, output / "mean-201", seed=201, sampled=False)]
+    if notebook_seeds:
+        for seed in range(202, 213):
+            records.append(record(checkpoint, output / f"mean-{seed}", seed=seed, sampled=False))
     for seed in range(201, 213):
         records.append(record(checkpoint, output / f"sampled-{seed}", seed=seed, sampled=True))
-    result = summarize(records, _references()["mean_speed_m_s"])
+    result = summarize(records, _references()["mean_speed_m_s"], notebook_seeds=notebook_seeds)
+    result["notebook_seeds"] = notebook_seeds
     result["records"] = records
     (output / "acceptance.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     return result
@@ -133,8 +139,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--notebook-seeds", action="store_true",
+                        help="Match Notebook 4: sampled and mean actions for seeds 201..212")
     args = parser.parse_args()
-    result = evaluate(args.checkpoint, args.output)
+    result = evaluate(args.checkpoint, args.output, notebook_seeds=args.notebook_seeds)
     print(json.dumps({k: v for k, v in result.items() if k != "records"}, indent=2))
     return 0 if result["goal_numerical_pass"] else 1
 
