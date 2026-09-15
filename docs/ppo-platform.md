@@ -5,6 +5,73 @@ Notebook 04 is frozen at the accepted
 It owns the experiment record and the user's learner. Runtime policy execution
 lives in `spider/policy.py` and `spider/policy_run.py`. Neither imports `lab` or
 reads notebook code. These modules perform inference; they do not train PPO.
+The separate `spider/policy_training.py` module now supports continuation
+training. Each new training round requires the user's approval.
+
+## Reviewed result: action-rate round, 2026-09-15
+
+The user rejected all three continuation treatments: the motion still looked
+like vibration, not a deliberate stride. No candidate was promoted. The accepted
+crude baseline remains the comparison; this round does not earn STRIDE.
+
+Run evidence is in `telemetry/tuning/20260915-rate-round-01/`: `plan.json`,
+`summary.csv`, per-branch training configurations/checkpoints, exact evaluation
+recordings, and `comparison.mp4`. These are local ignored artifacts. The film
+shows five seconds at normal speed, with four synchronized panels at 50 fps.
+
+Each branch started independently from PPO-100, used the lower posture treatment,
+and trained for ten updates. Action-rate weights were 0, 3.731162618445504, and
+9.32790654611376. The pedagogical action range and base reward remained fixed.
+Evaluation used twelve sampled seeds (201 through 212) and one mean-action
+episode (201) per policy, including the frozen lower control. All 52 five-second
+episodes completed without a fall. Mean-action resets are deterministic; repeating
+them with different sampling seeds would not provide independent scenarios.
+
+| Mean-action treatment | Forward speed (m/s) | Absolute lateral travel (m) | Target-change RMS (rad) |
+| --- | ---: | ---: | ---: |
+| Frozen lower | 0.3927 | 0.1056 | 0.03834 |
+| Continued, no penalty | 0.3959 | 0.2344 | 0.03889 |
+| Small penalty | 0.4039 | 0.3355 | 0.04044 |
+| Medium penalty | 0.3334 | 0.7601 | 0.03857 |
+
+The small penalty increased speed but did not reduce target-change RMS or produce
+an accepted stride. Endpoint stance-foot velocity is only a diagnostic: it can
+miss movement within a control interval and excludes contact transitions.
+
+The next proposed treatment starts with fresh weights and optimizer state,
+larger per-joint target ranges, previous-action and phase observations, and
+explicit speed, support, and clearance objectives. The proposed first budget is
+three initialization seeds through 50 updates, followed by review. The user
+approved this next round on 2026-09-15. Approval is not evidence of a learned gait.
+
+## Fresh phase-guided round
+
+The approved treatment starts from new weights and optimizer state. It uses a
+phase clock to specify support and swing timing; PPO learns the joint targets.
+No authored joint trajectory or playback speed change supplies forward travel.
+
+| Parameter | First round |
+| --- | --- |
+| Initialization seeds | 11, 22, 33 |
+| Budget | 50 updates per seed; stop for review |
+| Control interval | 40 ms; 20 unchanged 2 ms physics steps |
+| Joint target ranges, rad | Coxa [-0.65, 0.65], hip [-0.70, 0.55], knee [0.15, 1.35] |
+| Observation | 47 physical-state values plus 18 previous targets, speed command, sine/cosine phase |
+| Gait timing | 1.25 Hz; alternating tripods; 60% stance |
+| Torso height target | 0.43 m |
+| Initial speed command | 0.25 m/s |
+| Swing foot-centre peak | 0.11 m, about 0.065 m ground clearance |
+
+The initial speed command deliberately starts below the final speed acceptance
+threshold. This first round asks whether visible strides begin to form. It cannot
+complete the project goal unless later evidence meets the full speed, stability,
+and user-reviewed motion requirements. Larger target bounds permit exploration;
+they do not establish collision-free or stable motion throughout those bounds.
+
+The new modules are `spider/stride_policy.py` and `spider/stride_training.py`.
+`spider/stride_round.py` owns the bounded run. The old continuation trainer remains
+available to reproduce the rejected experiment. All training belongs to the
+Python platform; the notebook and accepted checkpoint stay frozen.
 
 ## Run the prepared comparison
 
@@ -87,8 +154,8 @@ changing the physical subject.
 This image is a saved baseline frame with the new presentation, **not a result
 from the lower/stalk controller**. The first pass was too dark; brighter broad
 fill and a charcoal floor improved leg visibility in the inspected static image.
-Moving-view appearance still needs user review. A shareable video comes after
-an accepted motion treatment; no Twitter post or video export was produced here.
+The later comparison film documents the rejected motion treatment above. A final
+social clip still requires an accepted gait. No Twitter post was made.
 
 ## Preparation checks
 

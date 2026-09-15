@@ -45,7 +45,10 @@ class PolicyRunTests(unittest.TestCase):
 
         def observed(*args):
             return SimpleNamespace(time=data.time, torso_position=(data.time, 0., .45),
-                                   foot_contacts=(1, 2, 3), support_margin=.02)
+                                   joint_positions=(0.,) * 18,
+                                   torso_velocity=(1., 0., 0.),
+                                   foot_positions={name: (0., 0., .045) for name in policy_run.simulation.FOOT_NAMES},
+                                   foot_contacts=policy_run.simulation.FOOT_NAMES[:3], support_margin=.02)
 
         def step(model, data, targets):
             commands.append(targets)

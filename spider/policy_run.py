@@ -18,6 +18,7 @@ import numpy as np
 
 from . import simulation
 from .recording import TreatmentReplay
+from .policy_metrics import transition_metrics, episode_metrics
 
 
 DEFAULT_CHECKPOINT = (
@@ -34,18 +35,26 @@ def run_policy(
     sampled: bool = False,
     seconds: float = 5.0,
     directory: Path,
+    label_suffix: str = "",
 ) -> dict:
     """Execute and record one bounded episode only when explicitly called.
 
-    The saved observation/action contract uses 10 physics steps per decision.
+    The checkpoint's saved observation/action contract defines its control cadence.
     Evaluation never updates the actor or changes model parameters.
     """
-    from .policy import PPOPolicy
-
     if not math.isfinite(seconds) or seconds <= 0:
         raise ValueError("seconds must be finite and positive")
     model = simulation.load_model()
-    policy = PPOPolicy(checkpoint, model, seed=seed, sampled=sampled, treatment=treatment)
+    if treatment == "stride":
+        from .stride_policy import StridePolicy
+
+        policy = StridePolicy(checkpoint, model, seed=seed, sampled=sampled)
+        policy_source = "stride_policy.py"
+    else:
+        from .policy import PPOPolicy
+
+        policy = PPOPolicy(checkpoint, model, seed=seed, sampled=sampled, treatment=treatment)
+        policy_source = "policy.py"
     interval = policy.settings["physics_steps"] * float(model.opt.timestep)
     decisions = round(seconds / interval)
     if decisions < 1 or not math.isclose(decisions * interval, seconds, abs_tol=1e-9):
@@ -60,6 +69,8 @@ def run_policy(
     origin = np.asarray(observed.torso_position)
     mode = "sampled" if sampled else "mean"
     label = f"PPO n={policy.updates} | {treatment} | {mode} | seed={seed}"
+    if label_suffix:
+        label += f" | {label_suffix}"
     replay = TreatmentReplay(model, label)
     replay.capture(data)
     metadata = dict(
@@ -72,12 +83,14 @@ def run_policy(
         runtime_versions={name: version(name) for name in ("mujoco", "numpy", "torch")},
         runtime_source_sha256={
             name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
-            for name in ("policy.py", "policy_run.py", "simulation.py")
+            for name in (policy_source, "policy_run.py", "simulation.py")
         },
     )
     (directory / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     rows = []
+    previous_targets = np.asarray(simulation.neutral_targets())
     for decision in range(decisions):
+        before = observed
         targets = policy.targets(observed)
         for _ in range(policy.settings["physics_steps"]):
             simulation.step(model, data, targets)
@@ -94,8 +107,12 @@ def run_policy(
             contacts=len(observed.foot_contacts),
             support_margin_m=observed.support_margin,
             terminated=bool(terminated),
+            **transition_metrics(before, observed, targets, previous_targets, interval),
             **{f"target_{i}_rad": float(target) for i, target in enumerate(targets)},
+            **{f"joint_{i}_rad": float(position)
+               for i, position in enumerate(observed.joint_positions)},
         ))
+        previous_targets = np.asarray(targets)
         if terminated:
             break
     mujoco.mj_saveModel(model, str(directory / "model.mjb"))
@@ -111,6 +128,7 @@ def run_policy(
         minimum_height_m=min(float(origin[2]), *(row["height_m"] for row in rows)),
         terminated=rows[-1]["terminated"],
         truncated=not rows[-1]["terminated"] and len(rows) == decisions,
+        label=label, **episode_metrics(rows),
     )
     (directory / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     return metadata

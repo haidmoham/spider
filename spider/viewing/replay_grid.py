@@ -17,6 +17,21 @@ def pane_heading(label, training_updates=None):
     if name.startswith('ppo n='):
         fields = [part.strip() for part in label.split('|')]
         treatment = fields[1].lower() if len(fields) > 1 else ''
+        tuning_labels = {
+            'frozen_lower': ('FROZEN LOWER / n=100', 'Parent policy; no continuation'),
+            'control': ('CONTINUED CONTROL / n=110', '10 updates; no command-rate penalty'),
+            'rate_small': ('SMALL PENALTY / n=110', '10 updates; rate weight 3.73116'),
+            'rate_medium': ('MEDIUM PENALTY / n=110', '10 updates; rate weight 9.32791'),
+        }
+        if fields[-1] in tuning_labels:
+            title, description = tuning_labels[fields[-1]]
+            return title, description, (.13, .17, .20)
+        if fields[-1] == 'accepted_baseline':
+            return 'ACCEPTED BASELINE / n=100', 'Frozen comparison policy', (.13, .17, .20)
+        stride_seed = re.fullmatch(r'stride_seed_(\d+)', fields[-1])
+        if stride_seed:
+            return (f'FRESH STRIDE / seed={stride_seed.group(1)} / n=50',
+                    'Phase-guided training; motion quality under review', (.18, .13, .22))
         descriptions = {
             'baseline': 'Accepted policy; original action mapping',
             'lower': 'Unvalidated: hip/knee posture ramp',

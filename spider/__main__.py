@@ -38,7 +38,7 @@ def main():
     grid.add_argument("--presentation", choices=("original", "stalk"), default="original")
     policy = actions.add_parser("policy", help="execute a saved PPO policy; no training or notebook dependency")
     policy.add_argument("--checkpoint", type=Path)
-    policy.add_argument("--treatment", choices=("baseline", "lower", "smooth", "stalk"), default="baseline")
+    policy.add_argument("--treatment", choices=("baseline", "lower", "smooth", "stalk", "stride"), default="baseline")
     policy.add_argument("--compare", action="store_true", help="record baseline/lower/smooth/stalk on one seed")
     policy.add_argument("--seed", type=int, default=201)
     policy.add_argument("--sampled", action="store_true", help="use saved Gaussian exploration; default is mean action")
@@ -46,6 +46,10 @@ def main():
     policy.add_argument("--output", type=Path)
     policy.add_argument("--headless", action="store_true", help="record only; do not open replay")
     policy.add_argument("--presentation", choices=("original", "stalk"), default="stalk")
+    tune = actions.add_parser("tune-rate", help="run three independent 10-update PPO command-rate trials")
+    tune.add_argument("--output", type=Path, required=True)
+    train_stride = actions.add_parser("train-stride", help="run the approved three-seed, 50-update stride round")
+    train_stride.add_argument("--output", type=Path, required=True)
     render = actions.add_parser("render", help="render matched model views")
     render.add_argument("--output", type=Path, default=Path("artifacts/c1n_redesign"))
     render.add_argument("--before-directory", type=Path)
@@ -125,6 +129,12 @@ def main():
             if error.name != "torch":
                 raise
             parser.error("PPO inference needs PyTorch: python -m pip install -r requirements-policy.txt")
+    elif args.action == "tune-rate":
+        from .tuning_round import run_rate_round
+        run_rate_round(args.output)
+    elif args.action == "train-stride":
+        from .stride_round import run_stride_round
+        run_stride_round(args.output)
     else:
         from .viewing.render import main as render_main
 
