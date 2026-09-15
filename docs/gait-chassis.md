@@ -131,6 +131,49 @@ Neither is promoted. Both labelled windows opened at 1x without viewer errors.
 [Weights, all 48 recordings, metrics, and source evidence](../artifacts/reference-ppo-evaluation-20260915/README.md)
 are preserved independently of the frozen baselines.
 
+### Continue from saved weights
+
+`reference_training --resume CHECKPOINT --updates N` restores actor, critic,
+both Adam optimizers, optimizer RNG, seed, saved model and controller settings.
+`N` means **additional** updates: resuming n=100 with `--updates 20` ends at n=120.
+The output directory must be new. Parent checkpoint path/hash and starting update
+are recorded; local step/update logs contain only the continuation segment.
+
+`--frequency-hz` changes the reference cadence and its speed observation while
+preserving stroke length, stance fraction, chassis, actuator parameters and weights.
+The change is saved in checkpoint provenance. `--prepare-only` saves restored
+weights and selected cadence without rollouts or PPO updates. For example:
+
+```powershell
+.venv/Scripts/python -m spider.reference_training --resume artifacts/reference-ppo-evaluation-20260915/checkpoint-00100.pt --frequency-hz 1.5 --prepare-only --output telemetry/tuning/cadence-prepared-new
+```
+
+Three variants are prepared locally in `telemetry/tuning/20260915-cadence-prepared-01`
+at 1.1, 1.35 and 1.5 Hz. Preparation ran no rollouts or continuation updates.
+The user then approved three five-second deterministic evaluations and a four-pane
+replay. The completed probes used identical actor weights and physical models:
+
+| Cadence | Mean speed | Falls | Stance foot-speed RMS |
+| --- | ---: | ---: | ---: |
+| 1.1 Hz | 0.317506 m/s | 0/1 | 0.069600 m/s |
+| 1.35 Hz | 0.396974 m/s | 0/1 | 0.084540 m/s |
+| 1.5 Hz | 0.470187 m/s | 0/1 | 0.125228 m/s |
+
+All three completed five seconds with finite states and no joint-limit violations.
+The faster cadences exceed baseline speed on this one mean-action run, without
+retraining. Increased stance foot speed and raw contact transitions warrant review
+for slip and contact chatter; raw liftoff counts do not identify clean strides.
+Neither faster cadence has passed the twelve-seed population gate. No promotion
+or new PPO updates occurred. [Saved probe evidence](../artifacts/cadence-evaluation-20260915/README.md).
+
+The user subsequently authorized **100 additional updates at 1.5 Hz**, restoring
+the saved n=100 weights and both optimizer states. The continuation directory is
+`telemetry/tuning/20260915-reference-ppo-cadence-15-round-01`; its budget ends at
+n=200. Evaluations at n=150 and n=200 use both modes and seeds 201–212.
+`reference_comparison --control RECORDING` can put the pre-continuation 1.5 Hz
+mean recording at top right, so the view separates further training gains from
+the cadence change. The original accepted PPO-100 remains top left.
+
 Acceptance remains a user-approved normal-speed learned stride, a full five-second
 mean-action run, and twelve fixed five-second sampled runs with zero falls and
 average speed at least **0.37882745 m/s**. A design animation, an untrained controller,
