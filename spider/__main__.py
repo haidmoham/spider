@@ -29,6 +29,12 @@ def main():
     replay.add_argument("directory", type=Path)
     replay.add_argument("--speed", type=float, default=1.0)
     replay.add_argument("--actuator", default="")
+    grid = actions.add_parser("replay-grid", help="four recorded treatments in one window")
+    grid.add_argument("directories", type=Path, nargs=4)
+    grid.add_argument("--speed", type=float, default=0.5)
+    grid.add_argument("--ready", type=Path)
+    grid.add_argument("--screenshot", type=Path)
+    grid.add_argument("--frames", type=int)
     render = actions.add_parser("render", help="render matched model views")
     render.add_argument("--output", type=Path, default=Path("artifacts/c1n_redesign"))
     render.add_argument("--before-directory", type=Path)
@@ -74,6 +80,11 @@ def main():
         if not math.isfinite(args.speed) or args.speed <= 0:
             parser.error("--speed must be finite and greater than zero")
         replay(args.directory, args.speed, args.actuator)
+    elif args.action == "replay-grid":
+        from .viewing.replay_grid import replay_grid
+
+        replay_grid(args.directories, args.speed, ready=args.ready,
+                    screenshot=args.screenshot, max_frames=args.frames)
     else:
         from .viewing.render import main as render_main
 

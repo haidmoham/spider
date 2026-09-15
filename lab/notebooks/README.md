@@ -1,10 +1,12 @@
 # Experiments and their robot connections
 
-Start with the question you need. The current learning task remains the first
-policy notebook; the mechanics experiments are references, not prerequisites.
+Start with [04_mdp_contract.ipynb](04_mdp_contract.ipynb) for issue #33.
+It is a prepared scaffold; the task choices and experiments remain user-owned.
+The mechanics experiments are references, not prerequisites.
 
 | Notebook | Bounded question | Robot connection |
 | --- | --- | --- |
+| [REINFORCE robot debugging lab and MDP contract](04_mdp_contract.ipynb) | Can an inspectable policy-gradient loop learn useful forward steps? | Deliberately flawed learning code; real-robot collector, logs, checkpoints, paired evaluation and replays; no training executed during preparation |
 | [Policy sampling and first REINFORCE update](03_coordinated_baseline.ipynb) | Can aligned transitions and returns drive one inspectable policy update? | Visible PyTorch math with `spider/learning.py`; prepared training cells and zero-policy comparison; earlier outputs preserved |
 | [First policy](02_first_policy.ipynb) | Can the current policy produce valid target offsets and an inspectable rollout? | `spider/learning.py`: action interface, recording and measurements |
 | [Control step](01_control_step.ipynb) | What changes between a command and the measured next state? | `spider/simulation.py`: targets, stepping and measurement |
@@ -22,7 +24,7 @@ The [migration map](../history/migration.json) identifies every
 source file and its original commit and hash. Historical queue documents do not
 select current work; [LEARNING.md](../../LEARNING.md) does.
 
-- [02_first_policy.ipynb](02_first_policy.ipynb): current policy session. Run setup, then edit the marked policy cell.
+- [02_first_policy.ipynb](02_first_policy.ipynb): earlier policy session. Preserves the marked policy cell and recorded outputs.
 - [01_control_step.ipynb](01_control_step.ipynb): earlier control-step experiment. Preserve the user's treatment and outputs.
 - [stand_rollout_diagnostics.ipynb](stand_rollout_diagnostics.ipynb): reads saved STAND traces.
 

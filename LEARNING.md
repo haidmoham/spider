@@ -2,7 +2,20 @@
 
 ## Resume
 
-Open [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb).
+Open [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for
+[issue #33](https://github.com/haidmoham/spider/issues/33). It is a prepared scaffold
+that continues notebook 03's final fixed-shuffle versus feedback-policy comparison.
+The active section is **REINFORCE robot debugging lab**. It carries the existing gait
+reference and provides deliberately flawed learning code at the user's request.
+The user fixes observation/sampling/reward/credit assignment and training behavior;
+the agent owns collection, logs, artifacts, and replay plumbing. No bug count or
+answer key is supplied. No robot training ran during preparation.
+Initialize a fresh run, inspect a bounded training block, then evaluate and replay
+paired policies and controls. Use the later MDP sections to document design choices.
+Evaluation uses one synchronized four-pane replay: before, after, neutral, and
+fixed shuffle. Space pauses; R restarts; arrows and +/- change the shared camera.
+Keep [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb)
+as the prior REINFORCE and gait reference.
 Next: experiment 1 in [TODO.md](TODO.md), **Establish the task and a predictable
 action interface**. This is a proposed five-experiment route toward visible stride
 and explicit PPO. The user owns implementation and interpretation; preparing the
