@@ -144,6 +144,30 @@ qualify. The default runtime checkpoint remains the accepted PPO-100. This
 presentation requirement does not authorize new training; each experimental
 round still needs prior approval.
 
+### Forward reward audit after user rejection
+
+An analytic check of the archived reward found that increasing the command and
+weight did not uniformly strengthen the forward incentive. The term is
+`weight * exp(-((vx - command) / 0.20)^2)`. With the initial command 0.25 m/s
+and weight 1.5, increasing speed from zero to 0.01 m/s adds 0.04097 reward.
+With command 0.4 m/s and weight 4, that same improvement adds only 0.01600.
+The reward slope at rest falls from 3.9302 to 1.4653 per m/s. Moving the narrow
+reward peak farther away weakened the local signal near this failed policy's
+operating point despite the larger weight.
+
+The term also rewards some zero-net oscillation. As a mathematical example,
+equal time at +0.1 and -0.1 m/s gives zero mean velocity but an average combined
+velocity reward of 0.21466, versus 0.07326 at rest. This is not a recorded gait
+or a total-reward comparison; slip, rotation, and other penalties also matter.
+The physical-velocity slope is not the PPO parameter gradient. These facts
+identify an objective weakness, not proof of the cause of policy failure.
+
+The calculation and configuration hashes are saved in the round's local
+`velocity-reward-audit.json`. No rollout or training ran. Any later experimental
+objective should be checked for useful progress signals near rest and for
+zero-net oscillation before spending a training budget. This audit does not
+establish or recommend a replacement policy.
+
 ### Post-round optimizer audit and proposed comparison
 
 Read-only analysis of the saved update and reward CSVs found that the combined
