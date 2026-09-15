@@ -68,3 +68,9 @@ These instructions apply to the entire repository.
 - The human writes RL and PPO with PyTorch operations, autograd, and optimizers. Do not prewrite algorithm solutions or substitute a ready-made trainer.
 - The agent owns setup and verification. The human owns hypotheses, observation and reward design, algorithm implementation, and interpretation.
 - Rebuild mathematics as needed. Use trace -> predict -> change -> diagnose as the readiness check for regular pairing.
+
+## Demo style
+
+- Use [docs/demo-style.md](docs/demo-style.md) for short C-1N checkpoint films.
+- Match the established 1080 × 1350, 50 fps, ten-second two-view format, purple stage, thin world grid, and gradient overlays unless the user requests another format.
+- Render saved measured states at 1× with the repository renderer. Keep dynamic pupils and life lights active. State replay provenance and checkpoint evidence accurately.
