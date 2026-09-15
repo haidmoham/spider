@@ -21,6 +21,41 @@ if TORCH_AVAILABLE:
 class CadenceActionTrainingTests(unittest.TestCase):
     parent = Path(__file__).resolve().parents[1] / "artifacts/walk_stable_100/walk_stable_100.pt"
 
+    def test_resume_preserves_trained_heads_adam_and_next_update(self):
+        checkpoint = self.parent.parents[1] / (
+            "walk_fast_200/experiments/policy-cadence-action-20260915/checkpoint-00200.pt")
+        payload = torch.load(checkpoint, weights_only=True)
+        def equal(left, right):
+            if torch.is_tensor(left):
+                self.assertTrue(torch.equal(left, right))
+            elif isinstance(left, dict):
+                self.assertEqual(left.keys(), right.keys())
+                for key in left: equal(left[key], right[key])
+            elif isinstance(left, (list, tuple)):
+                self.assertEqual(len(left), len(right))
+                for a, b in zip(left, right): equal(a, b)
+            else:
+                self.assertEqual(left, right)
+        with tempfile.TemporaryDirectory() as directory:
+            session = CadenceTrainingSession.from_checkpoint(checkpoint, Path(directory) / "a")
+            restored_path = session.prepare()
+            restored = torch.load(restored_path, weights_only=True)
+            for key in ("actor", "critic", "actor_optimizer", "critic_optimizer",
+                        "optimizer_rng_state", "cadence_seed_offset", "updates", "seed",
+                        "ppo", "reward", "settings", "model_xml", "reference_config"):
+                equal(payload[key], restored[key])
+            other = CadenceTrainingSession.from_checkpoint(restored_path, Path(directory) / "b")
+            obs = torch.randn(8, 68, generator=torch.Generator().manual_seed(42))
+            for candidate in (session, other):
+                for network, optimizer in ((candidate.actor, candidate.actor_optimizer),
+                                           (candidate.critic, candidate.critic_optimizer)):
+                    optimizer.zero_grad()
+                    network(obs).square().mean().backward()
+                    optimizer.step()
+            equal(session.actor.state_dict(), other.actor.state_dict())
+            equal(session.critic.state_dict(), other.critic.state_dict())
+            self.assertFalse((Path(directory) / "a/steps.csv").exists())
+
     def test_transfer_and_zero_adjustment_match_locked_mean_policy(self):
         with tempfile.TemporaryDirectory() as directory:
             session = CadenceTrainingSession.from_stable(self.parent, Path(directory) / "prepared")

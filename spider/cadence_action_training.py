@@ -26,7 +26,7 @@ from .chassis_candidate import PARAMETER_MANIFEST
 from .reference_training import (
     ACTION_SIZE, CONTROL_INTERVAL_S, RAMP_DURATION_S, ReferenceTrainingSession,
     ResidualActor, effective_control_bounds, fallen, model_signature,
-    observation_from, residual_target, reward_terms,
+    observation_from, residual_target, reward_terms, build_critic,
 )
 from .stride_training import gae_episode
 
@@ -253,6 +253,47 @@ class CadenceTrainingSession(ReferenceTrainingSession):
     """Additional PPO updates from the locked stable policy."""
 
     @classmethod
+    def from_checkpoint(cls, checkpoint: str | Path, output_directory: str | Path):
+        """Resume all 19 actions and Adam state at a saved update boundary."""
+        checkpoint = Path(checkpoint).resolve()
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+        model = mujoco.MjModel.from_xml_string(payload["model_xml"])
+        policy = CadenceResidualPolicy(checkpoint, model)
+        session = cls.__new__(cls)
+        session.output_directory = Path(output_directory)
+        session.seed = int(payload["seed"])
+        session.model_xml, session.model = payload["model_xml"], model
+        session.bounds, session.reference = policy.bounds, policy.reference
+        session.residual_limit_rad = policy.residual_limit_rad.copy()
+        session.filter_time_constant_s = policy.filter_time_constant_s
+        session.ppo, session.reward, session.settings = policy.ppo, policy.reward, policy.settings
+        session.neutral = policy.neutral.copy()
+        session.actor = policy.actor
+        session.actor.train()
+        session.critic = build_critic(session.seed + 1)
+        session.critic.load_state_dict(payload["critic"], strict=True)
+        # Preserve the original transfer's parameter order in both Adam groups.
+        session.actor_optimizer = torch.optim.Adam([
+            {"params": session.actor.legacy.parameters()},
+            {"params": session.actor.cadence_parameters()},
+        ], lr=session.ppo["actor_lr"])
+        session.critic_optimizer = torch.optim.Adam(
+            session.critic.parameters(), lr=session.ppo["critic_lr"])
+        session.actor_optimizer.load_state_dict(payload["actor_optimizer"])
+        session.critic_optimizer.load_state_dict(payload["critic_optimizer"])
+        session.generator = torch.Generator()
+        session.generator.set_state(payload["optimizer_rng_state"])
+        session.cadence_seed_offset = int(payload["cadence_seed_offset"])
+        session.updates = int(payload["updates"])
+        session.rows, session.update_rows = [], []
+        session.parent_payload_parent = payload["parent_checkpoint"]
+        session.parent_checkpoint = dict(
+            path=str(checkpoint), updates=session.updates, policy_kind=POLICY_KIND,
+            sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest())
+        session.treatment_changes = {}
+        return session
+
+    @classmethod
     def from_stable(cls, checkpoint: str | Path, output_directory: str | Path):
         base = ReferenceTrainingSession.from_checkpoint(checkpoint, output_directory)
         manifest = json.loads((simulation.ROOT / "artifacts/walk_stable_100/manifest.json").read_text())
@@ -388,7 +429,7 @@ class CadenceTrainingSession(ReferenceTrainingSession):
             hashes[name] = hashlib.sha256(source.read_bytes()).hexdigest()
         (self.output_directory / "candidate.xml").write_text(self.model_xml, encoding="utf-8")
         config = {
-            "status": "RESTORED locked stable checkpoint; no additional updates yet",
+            "status": "RESTORED parent checkpoint; no additional updates yet",
             "policy_kind": POLICY_KIND, "seed": self.seed,
             "starting_updates": self.updates, "parent_checkpoint": self.parent_checkpoint,
             "parent_payload_parent": self.parent_payload_parent,
@@ -413,13 +454,17 @@ class CadenceTrainingSession(ReferenceTrainingSession):
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--from-stable", type=Path, required=True)
+    parent = parser.add_mutually_exclusive_group(required=True)
+    parent.add_argument("--from-stable", type=Path)
+    parent.add_argument("--from-checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--updates", type=int, help="Number of additional PPO updates")
     action.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args(argv)
-    session = CadenceTrainingSession.from_stable(args.from_stable, args.output)
+    session = (CadenceTrainingSession.from_stable(args.from_stable, args.output)
+               if args.from_stable else
+               CadenceTrainingSession.from_checkpoint(args.from_checkpoint, args.output))
     print(session.prepare() if args.prepare_only else session.train(args.updates))
     return 0
 
