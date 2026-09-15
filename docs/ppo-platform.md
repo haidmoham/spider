@@ -1,5 +1,9 @@
 # PPO in the C-1N platform
 
+The latest user-approved direction is the [six-leg chassis and tripod work](gait-chassis.md).
+The historical rounds below remain preserved. Candidate chassis redesign is now
+authorized; the original model and notebook remain frozen controls.
+
 Notebook 04 is frozen at the accepted
 [PPO-100 crude baseline](../artifacts/ppo-crude-baseline-20260915/README.md).
 It owns the experiment record and the user's learner. Runtime policy execution
