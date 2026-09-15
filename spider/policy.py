@@ -32,6 +32,36 @@ EXPECTED_ACTUATORS = tuple(
 )
 
 
+def build_actor() -> torch.nn.Sequential:
+    """Build the preserved 47-64-64-18 actor without consuming global RNG."""
+    with torch.random.fork_rng():
+        return torch.nn.Sequential(
+            torch.nn.Linear(OBSERVATION_SIZE, HIDDEN_SIZE),
+            torch.nn.Tanh(),
+            torch.nn.Linear(HIDDEN_SIZE, HIDDEN_SIZE),
+            torch.nn.Tanh(),
+            torch.nn.Linear(HIDDEN_SIZE, ACTION_SIZE),
+        )
+
+
+def observation_from(observed: MeasuredState) -> torch.Tensor:
+    """Apply the frozen checkpoint observation order."""
+    values = np.asarray(
+        [
+            *observed.torso_velocity,
+            *observed.torso_angular_velocity,
+            *observed.torso_orientation,
+            *observed.joint_positions,
+            *observed.joint_velocities,
+            observed.torso_position[2],
+        ],
+        dtype=np.float32,
+    )
+    if values.shape != (OBSERVATION_SIZE,) or not np.isfinite(values).all():
+        raise ValueError("observed state must produce 47 finite policy values")
+    return torch.from_numpy(values)
+
+
 def _finite_tree(value: Any) -> bool:
     if isinstance(value, bool):
         return True
@@ -65,14 +95,7 @@ class PPOPolicy:
         self._validate_payload(payload)
         # Linear constructors initialize parameters from the global RNG. Restore
         # that state because loading saved weights makes the initialization moot.
-        with torch.random.fork_rng():
-            self.actor = torch.nn.Sequential(
-                torch.nn.Linear(OBSERVATION_SIZE, HIDDEN_SIZE),
-                torch.nn.Tanh(),
-                torch.nn.Linear(HIDDEN_SIZE, HIDDEN_SIZE),
-                torch.nn.Tanh(),
-                torch.nn.Linear(HIDDEN_SIZE, ACTION_SIZE),
-            )
+        self.actor = build_actor()
         self.actor.load_state_dict(payload["actor"], strict=True)
         self.actor.eval()
 
@@ -184,33 +207,14 @@ class PPOPolicy:
 
     @staticmethod
     def _observation(observed: MeasuredState) -> torch.Tensor:
-        values = np.asarray(
-            [
-                *observed.torso_velocity,
-                *observed.torso_angular_velocity,
-                *observed.torso_orientation,
-                *observed.joint_positions,
-                *observed.joint_velocities,
-                observed.torso_position[2],
-            ],
-            dtype=np.float32,
-        )
-        if values.shape != (OBSERVATION_SIZE,) or not np.isfinite(values).all():
-            raise ValueError("observed state must produce 47 finite policy values")
-        return torch.from_numpy(values)
+        return observation_from(observed)
 
-    def targets(self, observed: MeasuredState) -> tuple[float, ...]:
-        """Return one absolute 18-actuator command without advancing physics."""
-        observation = self._observation(observed)
-        with torch.inference_mode():
-            latent = self.actor(observation)
-            if self.sampled:
-                latent = torch.normal(
-                    latent,
-                    float(self.settings["std"]),
-                    generator=self._generator,
-                )
-            learned = self._neutral + self._bound * torch.tanh(latent).numpy().astype(np.float64)
+    def targets_from_latent(self, latent: torch.Tensor) -> tuple[float, ...]:
+        """Map one PPO latent sample through the shared stateful treatment."""
+        if latent.shape != (ACTION_SIZE,) or not torch.isfinite(latent).all():
+            raise ValueError("latent action must contain 18 finite values")
+        with torch.no_grad():
+            learned = self._neutral + self._bound * torch.tanh(latent).detach().cpu().numpy()
 
         learned_offset = learned - self._neutral
         if self.treatment in {"smooth", "stalk"}:
@@ -228,3 +232,16 @@ class PPOPolicy:
         if command.shape != (ACTION_SIZE,) or not np.isfinite(command).all():
             raise ValueError("policy produced an invalid actuator command")
         return tuple(float(value) for value in command)
+
+    def targets(self, observed: MeasuredState) -> tuple[float, ...]:
+        """Return one absolute 18-actuator command without advancing physics."""
+        observation = self._observation(observed)
+        with torch.inference_mode():
+            latent = self.actor(observation)
+            if self.sampled:
+                latent = torch.normal(
+                    latent,
+                    float(self.settings["std"]),
+                    generator=self._generator,
+                )
+        return self.targets_from_latent(latent)
