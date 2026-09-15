@@ -1,0 +1,2220 @@
+{
+  "goal_numerical_pass": true,
+  "failures": [],
+  "accepted": false,
+  "visual_review_required": true,
+  "threshold_m_s": 0.37882745001803586,
+  "sampled_mean_speed_m_s": 0.5160976535306038,
+  "limitation": "Action-noise seeds at fixed initial state; not terrain or push robustness",
+  "notebook_seeds": true,
+  "records": [
+    {
+      "mode": "mean",
+      "seed": 201,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=201 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 202,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=202 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 203,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=203 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 204,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=204 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 205,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=205 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 206,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=206 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 207,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=207 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 208,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=208 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 209,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=209 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 210,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=210 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 211,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=211 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "mean",
+      "seed": 212,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5181499839214587,
+      "action_delta_rms_rad": 0.04530005372473452,
+      "stance_foot_speed_rms_m_s": 0.12466684836852021,
+      "steady_height_mean_m": 0.3677096109631357,
+      "steady_height_std_m": 0.006700234265183152,
+      "vertical_velocity_rms_m_s": 0.22752483629399473,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.436,
+        "middle_left": 0.368,
+        "middle_right": 0.388,
+        "rear_left": 0.4,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06364785567627788,
+        "front_right": 0.07386822448134571,
+        "middle_left": 0.06356677374426979,
+        "middle_right": 0.056667735306080616,
+        "rear_left": 0.07407527566039078,
+        "rear_right": 0.07057479995694173
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 33,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 24,
+        "rear_right": 28
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08312499999999445,
+        "front_right": 0.08187499999999501,
+        "middle_left": 0.15047619047618027,
+        "middle_right": 0.10962962962962249,
+        "rear_left": 0.12499999999999216,
+        "rear_right": 0.0978571428571362
+      },
+      "joint_range_of_motion_rad": [
+        0.4784253321738217,
+        0.6074203151028468,
+        1.0539824367441752,
+        0.5099926518857336,
+        0.639503518830162,
+        1.075476706354877,
+        0.7093953267772772,
+        0.6529476546016573,
+        0.3137796415827345,
+        0.7294453962725027,
+        0.6251735369665514,
+        0.3250981515226793,
+        0.47149616977043096,
+        0.6713576125222308,
+        1.0660766288335273,
+        0.4548846098936814,
+        0.6029741059073459,
+        1.051936419255981
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | mean | seed=212 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 201,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5082112887305913,
+      "action_delta_rms_rad": 0.04631178066763074,
+      "stance_foot_speed_rms_m_s": 0.12885340234578288,
+      "steady_height_mean_m": 0.3669612009339009,
+      "steady_height_std_m": 0.005821608100867027,
+      "vertical_velocity_rms_m_s": 0.22077537126285532,
+      "contact_duty": {
+        "front_left": 0.448,
+        "front_right": 0.444,
+        "middle_left": 0.432,
+        "middle_right": 0.412,
+        "rear_left": 0.444,
+        "rear_right": 0.42
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07064970599736418,
+        "front_right": 0.08457828788356046,
+        "middle_left": 0.06660395816106353,
+        "middle_right": 0.05913065042954978,
+        "rear_left": 0.07143402724907609,
+        "rear_right": 0.06722262235361752
+      },
+      "liftoff_count": {
+        "front_left": 28,
+        "front_right": 28,
+        "middle_left": 20,
+        "middle_right": 27,
+        "rear_left": 23,
+        "rear_right": 29
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09857142857142263,
+        "front_right": 0.094074074074068,
+        "middle_left": 0.14199999999999088,
+        "middle_right": 0.10888888888888258,
+        "rear_left": 0.12086956521738366,
+        "rear_right": 0.09999999999999333
+      },
+      "joint_range_of_motion_rad": [
+        0.5216174151238728,
+        0.6355042483324902,
+        1.0634850337957307,
+        0.5705659283740199,
+        0.680140937412911,
+        1.090440832997514,
+        0.7388319104976313,
+        0.6551965759428154,
+        0.35738575039646325,
+        0.7444692254577621,
+        0.6303141054102545,
+        0.3696937388102365,
+        0.49196445414611845,
+        0.6495379813968674,
+        1.0908096948409827,
+        0.4881479457461605,
+        0.6298449277891585,
+        1.060950008824241
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=201 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 202,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5247280077132883,
+      "action_delta_rms_rad": 0.04608427741089009,
+      "stance_foot_speed_rms_m_s": 0.14878522084654852,
+      "steady_height_mean_m": 0.36811573657054225,
+      "steady_height_std_m": 0.007035641414145588,
+      "vertical_velocity_rms_m_s": 0.24280534619556576,
+      "contact_duty": {
+        "front_left": 0.444,
+        "front_right": 0.416,
+        "middle_left": 0.356,
+        "middle_right": 0.384,
+        "rear_left": 0.424,
+        "rear_right": 0.436
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07974870424284504,
+        "front_right": 0.0823821062483802,
+        "middle_left": 0.06208725730237276,
+        "middle_right": 0.06677492618574181,
+        "rear_left": 0.07664962559453227,
+        "rear_right": 0.0663138507234682
+      },
+      "liftoff_count": {
+        "front_left": 27,
+        "front_right": 26,
+        "middle_left": 23,
+        "middle_right": 26,
+        "rear_left": 22,
+        "rear_right": 25
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.10296296296295639,
+        "front_right": 0.10639999999999333,
+        "middle_left": 0.13999999999999058,
+        "middle_right": 0.11846153846153064,
+        "rear_left": 0.13090909090908293,
+        "rear_right": 0.11083333333332564
+      },
+      "joint_range_of_motion_rad": [
+        0.506963698452584,
+        0.6293776262734377,
+        1.0878025577839965,
+        0.5467223421143167,
+        0.6432320864602505,
+        1.0704953630850365,
+        0.7492255792621911,
+        0.6554054255510943,
+        0.38776025457205376,
+        0.7454630016315635,
+        0.6251524000137838,
+        0.360908577053798,
+        0.5123718793607426,
+        0.6731334240997396,
+        1.0789004209636117,
+        0.48900510070971015,
+        0.618445409173976,
+        1.0648956322552525
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=202 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 203,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5187324907720019,
+      "action_delta_rms_rad": 0.045953098175198236,
+      "stance_foot_speed_rms_m_s": 0.14934186921526457,
+      "steady_height_mean_m": 0.3684352761726034,
+      "steady_height_std_m": 0.007098814010928777,
+      "vertical_velocity_rms_m_s": 0.2206760831063448,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.38,
+        "middle_left": 0.368,
+        "middle_right": 0.408,
+        "rear_left": 0.416,
+        "rear_right": 0.4
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07657896897561701,
+        "front_right": 0.08887774151503917,
+        "middle_left": 0.07164241666493297,
+        "middle_right": 0.07000123946287533,
+        "rear_left": 0.07893826457655011,
+        "rear_right": 0.057364064407749646
+      },
+      "liftoff_count": {
+        "front_left": 25,
+        "front_right": 28,
+        "middle_left": 24,
+        "middle_right": 24,
+        "rear_left": 25,
+        "rear_right": 24
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.10666666666666065,
+        "front_right": 0.10592592592591954,
+        "middle_left": 0.12869565217390505,
+        "middle_right": 0.12333333333332512,
+        "rear_left": 0.11679999999999272,
+        "rear_right": 0.12499999999999185
+      },
+      "joint_range_of_motion_rad": [
+        0.5146133355025241,
+        0.6465733994068216,
+        1.0462714842124872,
+        0.5262103294423431,
+        0.6439139800100431,
+        1.095216988688789,
+        0.7481393154133438,
+        0.6457149835464937,
+        0.3997442514724454,
+        0.752824725892238,
+        0.6407798508943033,
+        0.3728214409930013,
+        0.5232881906962625,
+        0.661783000701559,
+        1.0668804456648366,
+        0.46719512275480335,
+        0.6302303929956391,
+        1.0369240537941757
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=203 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 204,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5427735194577814,
+      "action_delta_rms_rad": 0.04608732312009884,
+      "stance_foot_speed_rms_m_s": 0.1499899600745928,
+      "steady_height_mean_m": 0.36842107108651345,
+      "steady_height_std_m": 0.007433854929405753,
+      "vertical_velocity_rms_m_s": 0.24248525197390697,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.368,
+        "middle_left": 0.352,
+        "middle_right": 0.42,
+        "rear_left": 0.412,
+        "rear_right": 0.396
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.08619751968789559,
+        "front_right": 0.07115018373549235,
+        "middle_left": 0.06594398682802848,
+        "middle_right": 0.05665649696008705,
+        "rear_left": 0.07407290042203381,
+        "rear_right": 0.06122642922542672
+      },
+      "liftoff_count": {
+        "front_left": 25,
+        "front_right": 26,
+        "middle_left": 24,
+        "middle_right": 25,
+        "rear_left": 25,
+        "rear_right": 25
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.10639999999999318,
+        "front_right": 0.11679999999999274,
+        "middle_left": 0.13499999999999104,
+        "middle_right": 0.11749999999999261,
+        "rear_left": 0.11759999999999238,
+        "rear_right": 0.12079999999999166
+      },
+      "joint_range_of_motion_rad": [
+        0.5070762711385685,
+        0.6178601585569733,
+        1.0982651212112757,
+        0.5395710739936743,
+        0.6341787751974507,
+        1.0822010224659482,
+        0.7688276455805962,
+        0.6519429681448895,
+        0.3522486537277907,
+        0.7387916163824462,
+        0.6179457924655527,
+        0.38320287961588306,
+        0.5100144666281008,
+        0.6631259476266694,
+        1.0694024116653105,
+        0.4636454036063167,
+        0.6230108289691796,
+        1.0617841473452643
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=204 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 205,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5376197184870751,
+      "action_delta_rms_rad": 0.04603339027182419,
+      "stance_foot_speed_rms_m_s": 0.13842739404696344,
+      "steady_height_mean_m": 0.3680673254510354,
+      "steady_height_std_m": 0.00660807405239739,
+      "vertical_velocity_rms_m_s": 0.22357193570729697,
+      "contact_duty": {
+        "front_left": 0.408,
+        "front_right": 0.436,
+        "middle_left": 0.356,
+        "middle_right": 0.412,
+        "rear_left": 0.404,
+        "rear_right": 0.416
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07285066178423456,
+        "front_right": 0.07657899208110923,
+        "middle_left": 0.07027064357947192,
+        "middle_right": 0.05437230361949415,
+        "rear_left": 0.07691733420093962,
+        "rear_right": 0.06318942364215656
+      },
+      "liftoff_count": {
+        "front_left": 30,
+        "front_right": 29,
+        "middle_left": 23,
+        "middle_right": 24,
+        "rear_left": 25,
+        "rear_right": 23
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09866666666666046,
+        "front_right": 0.09071428571427993,
+        "middle_left": 0.13999999999999035,
+        "middle_right": 0.12521739130433965,
+        "rear_left": 0.11919999999999263,
+        "rear_right": 0.12695652173912195
+      },
+      "joint_range_of_motion_rad": [
+        0.50970813585471,
+        0.6159364438899628,
+        1.0666312554119854,
+        0.5622040127209944,
+        0.6476582055512028,
+        1.1010401759534054,
+        0.7266551139761397,
+        0.6636129472588039,
+        0.3566314824590189,
+        0.7477041944303069,
+        0.6194745806103319,
+        0.372481945120937,
+        0.49529037941112475,
+        0.6710482536352551,
+        1.0644012712913296,
+        0.48805544248909827,
+        0.6219449924970758,
+        1.091491754584425
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=205 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 206,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.492532136609228,
+      "action_delta_rms_rad": 0.04613193465731674,
+      "stance_foot_speed_rms_m_s": 0.14801630790532194,
+      "steady_height_mean_m": 0.3679345447051845,
+      "steady_height_std_m": 0.0064823794999169775,
+      "vertical_velocity_rms_m_s": 0.20933169675193314,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.46,
+        "middle_left": 0.392,
+        "middle_right": 0.388,
+        "rear_left": 0.38,
+        "rear_right": 0.392
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06791130594946622,
+        "front_right": 0.08181485159325651,
+        "middle_left": 0.0642611508814694,
+        "middle_right": 0.05829043456439169,
+        "rear_left": 0.0887670661559574,
+        "rear_right": 0.062046222187614145
+      },
+      "liftoff_count": {
+        "front_left": 28,
+        "front_right": 29,
+        "middle_left": 24,
+        "middle_right": 24,
+        "rear_left": 24,
+        "rear_right": 22
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09499999999999423,
+        "front_right": 0.08999999999999357,
+        "middle_left": 0.12666666666665807,
+        "middle_right": 0.12749999999999162,
+        "rear_left": 0.12916666666665882,
+        "rear_right": 0.1381818181818091
+      },
+      "joint_range_of_motion_rad": [
+        0.4981542937627557,
+        0.6205554365489325,
+        1.0667627515646978,
+        0.5445975294118208,
+        0.677101359435905,
+        1.1055334565781383,
+        0.7412078061664369,
+        0.6556352486455772,
+        0.3620321871200044,
+        0.7443315415792151,
+        0.6290898671987725,
+        0.38206908270006057,
+        0.5060345522206958,
+        0.664347835531293,
+        1.0927880017067677,
+        0.4911601750534187,
+        0.6340511612891859,
+        1.0881141733161148
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=206 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 207,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5245582120629123,
+      "action_delta_rms_rad": 0.04610321174085787,
+      "stance_foot_speed_rms_m_s": 0.1420365582591776,
+      "steady_height_mean_m": 0.36796995032852886,
+      "steady_height_std_m": 0.006357497909633226,
+      "vertical_velocity_rms_m_s": 0.22666585812774023,
+      "contact_duty": {
+        "front_left": 0.424,
+        "front_right": 0.384,
+        "middle_left": 0.392,
+        "middle_right": 0.38,
+        "rear_left": 0.416,
+        "rear_right": 0.452
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07368350707324527,
+        "front_right": 0.08366275375241854,
+        "middle_left": 0.06378294357682111,
+        "middle_right": 0.06213186951526324,
+        "rear_left": 0.07367730666072488,
+        "rear_right": 0.05859188529699651
+      },
+      "liftoff_count": {
+        "front_left": 32,
+        "front_right": 30,
+        "middle_left": 25,
+        "middle_right": 27,
+        "rear_left": 27,
+        "rear_right": 27
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08999999999999467,
+        "front_right": 0.09724137931033863,
+        "middle_left": 0.11416666666665992,
+        "middle_right": 0.11481481481480776,
+        "rear_left": 0.1084615384615318,
+        "rear_right": 0.10148148148147482
+      },
+      "joint_range_of_motion_rad": [
+        0.5010678012353252,
+        0.6308945839481033,
+        1.0728205873650758,
+        0.5481032158568548,
+        0.6546819322236734,
+        1.106200917062307,
+        0.734518854961475,
+        0.662568782051117,
+        0.3719119871243213,
+        0.7851775644134982,
+        0.6427722608286903,
+        0.3816583792353532,
+        0.5090309749949757,
+        0.7045015944072601,
+        1.1120227730197985,
+        0.4886475644886643,
+        0.6160032218513078,
+        1.0625775956924897
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=207 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 208,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.49876011886919047,
+      "action_delta_rms_rad": 0.04598491943673744,
+      "stance_foot_speed_rms_m_s": 0.15473553318577943,
+      "steady_height_mean_m": 0.3695292213083776,
+      "steady_height_std_m": 0.006907275485623007,
+      "vertical_velocity_rms_m_s": 0.22450809851333675,
+      "contact_duty": {
+        "front_left": 0.496,
+        "front_right": 0.368,
+        "middle_left": 0.356,
+        "middle_right": 0.384,
+        "rear_left": 0.408,
+        "rear_right": 0.436
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.08438600017848845,
+        "front_right": 0.08022128852668924,
+        "middle_left": 0.07036929087090081,
+        "middle_right": 0.057086082451591344,
+        "rear_left": 0.06928254323884254,
+        "rear_right": 0.056894143663018856
+      },
+      "liftoff_count": {
+        "front_left": 26,
+        "front_right": 28,
+        "middle_left": 24,
+        "middle_right": 24,
+        "rear_left": 24,
+        "rear_right": 25
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09692307692307035,
+        "front_right": 0.10888888888888214,
+        "middle_left": 0.13416666666665772,
+        "middle_right": 0.12833333333332483,
+        "rear_left": 0.12347826086955749,
+        "rear_right": 0.11279999999999159
+      },
+      "joint_range_of_motion_rad": [
+        0.5082069045381268,
+        0.6158215428816324,
+        1.0673967755081597,
+        0.5837675941151874,
+        0.6463515262390954,
+        1.090804755759856,
+        0.7539007191921652,
+        0.6442326508528454,
+        0.366793345830842,
+        0.7352853930577095,
+        0.624926954300564,
+        0.37905590388632404,
+        0.4953051036346232,
+        0.6625032416529162,
+        1.0903546157019726,
+        0.505734271370453,
+        0.6030753978314984,
+        1.054943916395331
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=208 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 209,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.501775270343228,
+      "action_delta_rms_rad": 0.04605847632857398,
+      "stance_foot_speed_rms_m_s": 0.15584256377878386,
+      "steady_height_mean_m": 0.36870001102202093,
+      "steady_height_std_m": 0.006850443134003318,
+      "vertical_velocity_rms_m_s": 0.22889239513860882,
+      "contact_duty": {
+        "front_left": 0.468,
+        "front_right": 0.388,
+        "middle_left": 0.376,
+        "middle_right": 0.428,
+        "rear_left": 0.404,
+        "rear_right": 0.436
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.10088163101950921,
+        "front_right": 0.08210380016994469,
+        "middle_left": 0.05991392827849808,
+        "middle_right": 0.061412279570231224,
+        "rear_left": 0.06504461318046433,
+        "rear_right": 0.0656972887057763
+      },
+      "liftoff_count": {
+        "front_left": 28,
+        "front_right": 29,
+        "middle_left": 24,
+        "middle_right": 28,
+        "rear_left": 19,
+        "rear_right": 23
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09555555555554988,
+        "front_right": 0.09999999999999384,
+        "middle_left": 0.12999999999999132,
+        "middle_right": 0.102222222222216,
+        "rear_left": 0.1568421052631474,
+        "rear_right": 0.12260869565216534
+      },
+      "joint_range_of_motion_rad": [
+        0.5227960127384425,
+        0.626380073675022,
+        1.0844529964494891,
+        0.5265037095131517,
+        0.6705749613402864,
+        1.1013434701016045,
+        0.7502390803057333,
+        0.6501607551324667,
+        0.35541711656877506,
+        0.7263254156921419,
+        0.6268398000394741,
+        0.352276580995995,
+        0.5319598815480404,
+        0.6462821855998857,
+        1.0769282923994183,
+        0.48995086204052307,
+        0.6142900227852407,
+        1.0853904991600383
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=209 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 210,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5172477866451766,
+      "action_delta_rms_rad": 0.04617881680096276,
+      "stance_foot_speed_rms_m_s": 0.12674299584663445,
+      "steady_height_mean_m": 0.36791549101023663,
+      "steady_height_std_m": 0.006820324420213737,
+      "vertical_velocity_rms_m_s": 0.23328934582011787,
+      "contact_duty": {
+        "front_left": 0.444,
+        "front_right": 0.416,
+        "middle_left": 0.376,
+        "middle_right": 0.368,
+        "rear_left": 0.404,
+        "rear_right": 0.428
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.06563675394616429,
+        "front_right": 0.0819683878716999,
+        "middle_left": 0.06547226664494639,
+        "middle_right": 0.07587946614744197,
+        "rear_left": 0.06974125839980787,
+        "rear_right": 0.058985146911005995
+      },
+      "liftoff_count": {
+        "front_left": 28,
+        "front_right": 30,
+        "middle_left": 21,
+        "middle_right": 27,
+        "rear_left": 24,
+        "rear_right": 23
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.09777777777777194,
+        "front_right": 0.09379310344826966,
+        "middle_left": 0.14199999999999102,
+        "middle_right": 0.11769230769229996,
+        "rear_left": 0.12416666666665917,
+        "rear_right": 0.12434782608694794
+      },
+      "joint_range_of_motion_rad": [
+        0.5024467128381747,
+        0.60450077018648,
+        1.0574425899252973,
+        0.5279569269190216,
+        0.6502958293150866,
+        1.0839392429575987,
+        0.7498058842992459,
+        0.662365621541675,
+        0.3655415121932628,
+        0.7554807283288482,
+        0.621835380612953,
+        0.3632409732383227,
+        0.5076350937539684,
+        0.6769039417390031,
+        1.0669719218201015,
+        0.47540470409080515,
+        0.6202684000555571,
+        1.100266346368543
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=210 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 211,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.5303752826405409,
+      "action_delta_rms_rad": 0.04605260012123257,
+      "stance_foot_speed_rms_m_s": 0.1520804624342785,
+      "steady_height_mean_m": 0.368746713241414,
+      "steady_height_std_m": 0.0070478872115068035,
+      "vertical_velocity_rms_m_s": 0.23528784304210185,
+      "contact_duty": {
+        "front_left": 0.412,
+        "front_right": 0.436,
+        "middle_left": 0.356,
+        "middle_right": 0.396,
+        "rear_left": 0.384,
+        "rear_right": 0.396
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.07112258493350158,
+        "front_right": 0.08269397696320595,
+        "middle_left": 0.06797558808118657,
+        "middle_right": 0.0598653894414176,
+        "rear_left": 0.06698770940172581,
+        "rear_right": 0.06063733055824315
+      },
+      "liftoff_count": {
+        "front_left": 28,
+        "front_right": 29,
+        "middle_left": 21,
+        "middle_right": 28,
+        "rear_left": 25,
+        "rear_right": 24
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.10499999999999392,
+        "front_right": 0.09357142857142246,
+        "middle_left": 0.15333333333332302,
+        "middle_right": 0.10785714285713636,
+        "rear_left": 0.12749999999999195,
+        "rear_right": 0.12583333333332522
+      },
+      "joint_range_of_motion_rad": [
+        0.5041665114984918,
+        0.60548958608736,
+        1.053526300574032,
+        0.5379910256800358,
+        0.6501926870600505,
+        1.0793712249206833,
+        0.74870909630426,
+        0.6663026874527823,
+        0.37213020377606465,
+        0.7551437897616522,
+        0.642249591394715,
+        0.37233772027446654,
+        0.4859765216238706,
+        0.6531965006528241,
+        1.05290340253848,
+        0.48174303701625976,
+        0.6286580986271517,
+        1.0829956372939045
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=211 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    },
+    {
+      "mode": "sampled",
+      "seed": 212,
+      "seconds": 4.999999999999671,
+      "terminated": false,
+      "max_joint_limit_violation_rad": 0.0,
+      "speed_m_s": 0.4958580100362318,
+      "action_delta_rms_rad": 0.04594819061898407,
+      "stance_foot_speed_rms_m_s": 0.12835933691498086,
+      "steady_height_mean_m": 0.3674835984527632,
+      "steady_height_std_m": 0.006904038839805256,
+      "vertical_velocity_rms_m_s": 0.2224235554497614,
+      "contact_duty": {
+        "front_left": 0.48,
+        "front_right": 0.372,
+        "middle_left": 0.376,
+        "middle_right": 0.424,
+        "rear_left": 0.432,
+        "rear_right": 0.472
+      },
+      "maximum_foot_clearance_m": {
+        "front_left": 0.08317317305316156,
+        "front_right": 0.06992977512758501,
+        "middle_left": 0.07091134339981449,
+        "middle_right": 0.05607401855906004,
+        "rear_left": 0.07206254114974124,
+        "rear_right": 0.05796516896613223
+      },
+      "liftoff_count": {
+        "front_left": 31,
+        "front_right": 34,
+        "middle_left": 30,
+        "middle_right": 29,
+        "rear_left": 25,
+        "rear_right": 27
+      },
+      "mean_complete_swing_s": {
+        "front_left": 0.08387096774193012,
+        "front_right": 0.08909090909090325,
+        "middle_left": 0.09793103448275221,
+        "middle_right": 0.09931034482758001,
+        "rear_left": 0.113599999999993,
+        "rear_right": 0.09777777777777096
+      },
+      "joint_range_of_motion_rad": [
+        0.49511962942205767,
+        0.6266502286659341,
+        1.0890493692668426,
+        0.54223956195221,
+        0.6718110591746327,
+        1.0923622281571093,
+        0.7356081552170091,
+        0.6630830692146931,
+        0.369709290409858,
+        0.7413069984320213,
+        0.6240712820275789,
+        0.36387611294514877,
+        0.5028506368603409,
+        0.6825731851401551,
+        1.0698396203753848,
+        0.4811788901900779,
+        0.6233110067721228,
+        1.0970208680423987
+      ],
+      "checkpoint_sha256": "3b843283edd0f65af4d0e8740716c88d78b348b4783470466e480f292aca101e",
+      "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+      "updates": 150,
+      "label": "REFERENCE PPO n=150 | CANDIDATE | sampled | seed=212 | cadence=1.5 Hz | cadence treatment",
+      "reference_config": {
+        "frequency_hz": 1.5,
+        "stance_fraction": 0.65,
+        "offsets": [
+          0,
+          0.5,
+          0.5,
+          0,
+          0,
+          0.5
+        ],
+        "height_m": 0.37,
+        "stride_length_m": 0.18,
+        "clearance_m": 0.04,
+        "radial_spread_m": 0.17,
+        "evidence_kind": "untrained_kinematic_reference"
+      },
+      "treatment_changes": {
+        "frequency_hz": {
+          "previous": 1.1,
+          "selected": 1.5
+        }
+      }
+    }
+  ]
+}

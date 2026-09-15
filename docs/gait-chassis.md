@@ -174,6 +174,37 @@ n=200. Evaluations at n=150 and n=200 use both modes and seeds 201–212.
 mean recording at top right, so the view separates further training gains from
 the cadence change. The original accepted PPO-100 remains top left.
 
+The user stopped that fixed-cadence continuation at saved **n=185**. The last
+evaluated checkpoint, n=150, reached 0.518150 m/s mean and 0.516098 m/s sampled
+average with zero falls across 24 evaluations and passed the numerical gate.
+It remains unapproved. [Stopped experiment evidence](../artifacts/fixed-cadence-continuation-20260915/README.md)
+preserves n=150 and n=185; no n=200 completion is claimed.
+
+## Cadence versus more PPO: literature check, 2026-09-15
+
+Our fixed-frequency residual policy learns 18 joint corrections. It cannot choose
+cadence. The 1.1→1.5 Hz probe improved mean speed by about 48%, while the next
+50 PPO updates at fixed 1.5 Hz improved it by about 10%. These are different
+interventions, not evidence that PPO adds no speed.
+
+- [Iscen et al., Policies Modulating Trajectory Generators, CoRL 2018](https://proceedings.mlr.press/v87/iscen18a/iscen18a.pdf)
+  lets learned control modify generator parameters, including frequency, as well
+  as correct its outputs. This is the missing action in our current implementation.
+- [Margolis and Agrawal, Walk These Ways, CoRL 2022](https://gmargo11.github.io/walk-these-ways/)
+  demonstrates one trained policy whose gait parameters can be tuned at runtime.
+  Its demonstrated flexibility does not establish that our fixed-cadence policy
+  will generalize to arbitrary frequencies without testing.
+- [Yang et al., Terrain-adaptive CPGs with RL for Hexapod Locomotion, 2023](https://arxiv.org/abs/2310.07744)
+  combines synchronized gait generation with learned adjustments for terrain
+  adaptation in simulation. This supports studying a generator-plus-feedback
+  structure on a six-leg robot, not a transfer guarantee for C-1N.
+
+The user's selected next experiment returns to locked `walk_stable_100` and gives
+PPO a cadence action with continuous integrated phase. The original actor outputs
+and critic should transfer exactly; new action parameters need fresh optimizer
+state. Cadence/phase traces, zero-adjustment parity, and shared training/evaluation
+timing are required before running it. Each ablation gets a separate experiment ID.
+
 Acceptance remains a user-approved normal-speed learned stride, a full five-second
 mean-action run, and twelve fixed five-second sampled runs with zero falls and
 average speed at least **0.37882745 m/s**. A design animation, an untrained controller,

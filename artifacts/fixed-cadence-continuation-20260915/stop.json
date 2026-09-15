@@ -1,0 +1,8 @@
+{
+  "status": "stopped_by_user",
+  "last_saved_update": 185,
+  "last_evaluated_update": 150,
+  "requested_final_update": 200,
+  "reason": "User requested stop and restart from walk_stable_100 with gait generation under policy control",
+  "promoted": false
+}
