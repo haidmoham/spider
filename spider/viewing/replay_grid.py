@@ -10,6 +10,20 @@ import numpy as np
 from ..recording import STATE
 
 
+def pane_heading(label):
+    """Identify the saved treatment, independent of its quadrant position."""
+    name = label.lower()
+    if name.startswith('after '):
+        return 'YOUR CODE: AFTER TRAINING', 'Saved trained policy', (.38, .18, .04)
+    if name.startswith('before '):
+        return 'BEFORE TRAINING', 'Same network, initial weights', (.10, .16, .24)
+    if name.startswith('neutral control'):
+        return 'NEUTRAL CONTROL', 'Neutral targets; no learned actions', (.12, .15, .18)
+    if name.startswith('fixed shuffle'):
+        return 'FIXED SHUFFLE', 'Hand-coded reference; not the learned policy', (.12, .15, .18)
+    return 'RECORDED TREATMENT', 'Saved replay', (.12, .15, .18)
+
+
 def quadrants(width, height, gap=4):
     """Top-left, top-right, bottom-left, bottom-right in framebuffer coordinates."""
     half_w, half_h = width // 2, height // 2
@@ -112,12 +126,19 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                                       mujoco.mjtCatBit.mjCAT_ALL, pane['scene'])
                 viewport = mujoco.MjrRect(*rectangle)
                 mujoco.mjr_render(viewport, pane['scene'], pane['context'])
-                label = '\n'.join(textwrap.wrap(pane['label'], width=max(25, rectangle[2] // 10)))
+                title, description, color = pane_heading(pane['label'])
+                left, bottom, pane_width, pane_height = rectangle
+                header = mujoco.MjrRect(left, bottom + pane_height - 82, pane_width, 82)
+                mujoco.mjr_rectangle(header, *color, 1.)
+                mujoco.mjr_overlay(mujoco.mjtFont.mjFONT_BIG,
+                                   mujoco.mjtGridPos.mjGRID_TOPLEFT, header,
+                                   title, '', pane['context'])
+                detail = '\n'.join(textwrap.wrap(pane['label'], width=max(25, pane_width // 9)))
+                mujoco.mjr_overlay(mujoco.mjtFont.mjFONT_NORMAL,
+                                   mujoco.mjtGridPos.mjGRID_BOTTOMLEFT, header,
+                                   description + '\n' + detail, '', pane['context'])
                 ended = playback['elapsed'] >= pane['times'][-1] - pane['times'][0]
                 dx, dy, _ = data.qpos[:3] - pane['origin']
-                mujoco.mjr_overlay(mujoco.mjtFontScale.mjFONTSCALE_100,
-                                   mujoco.mjtGridPos.mjGRID_TOPLEFT, viewport,
-                                   'RECORDED / ' + label, '', pane['context'])
                 text = (f"t={pane['times'][index]:.2f}s  dx={dx:+.3f}m  dy={dy:+.3f}m\n"
                         f"{speed:g}x | {'PAUSED' if playback['paused'] else 'END HOLD' if ended else 'PLAY'}\n"
                         'Space pause | R restart | arrows orbit | +/- zoom | Esc close')
