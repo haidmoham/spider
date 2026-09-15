@@ -16,6 +16,10 @@ def pane_heading(label, training_updates=None):
     name = label.lower()
     if name.startswith('reference ppo n='):
         fields = [part.strip() for part in label.split('|')]
+        cadence = re.search(r'cadence=([\d.]+) Hz', label)
+        if cadence:
+            return (f'{fields[0].replace("REFERENCE ", "")} / {cadence.group(1)} Hz / {fields[2].upper()}',
+                    'Cadence treatment; measured evaluation', (.20, .10, .12))
         return (f'{fields[0]} / {fields[2].upper()}',
                 'Candidate chassis; measured evaluation; not promoted', (.20, .10, .12))
     if 'kinematic' in name and 'untrained' in name:
@@ -210,7 +214,10 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                 mujoco.mjr_overlay(mujoco.mjtFont.mjFONT_BIG,
                                    mujoco.mjtGridPos.mjGRID_TOPLEFT, header,
                                    title, '', pane['context'])
-                detail = '\n'.join(textwrap.wrap(pane['label'], width=max(25, pane_width // 9)))
+                detail_label = pane['label']
+                if detail_label.lower().startswith('reference ppo n='):
+                    detail_label = ' | '.join(detail_label.split('|')[1:]).strip()
+                detail = '\n'.join(textwrap.wrap(detail_label, width=max(25, pane_width // 9)))
                 mujoco.mjr_overlay(mujoco.mjtFont.mjFONT_NORMAL,
                                    mujoco.mjtGridPos.mjGRID_BOTTOMLEFT, header,
                                    description + '\n' + detail, '', pane['context'])

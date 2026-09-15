@@ -24,7 +24,8 @@ from .gait_preview import _accepted_baseline
 from .reference_evaluation import evaluate
 
 
-def compare(training: Path, output: Path, checkpoints=(50, 100), *, view=True) -> dict:
+def compare(training: Path, output: Path, checkpoints=(50, 100), *, view=True,
+            control: Path | None = None) -> dict:
     training, output = training.resolve(), output.resolve()
     paths = [training / f"checkpoint-{step:05d}.pt" for step in checkpoints]
     payloads = [torch.load(path, map_location="cpu", weights_only=True) for path in paths]
@@ -37,12 +38,19 @@ def compare(training: Path, output: Path, checkpoints=(50, 100), *, view=True) -
     baseline = _accepted_baseline()
     output.mkdir(parents=True, exist_ok=False)
     shutil.copy2(Path(__file__), output / "reference_comparison.py")
-    approved = output / "approved_tripod"
-    with zipfile.ZipFile(simulation.ROOT / "artifacts/tripod-openloop-baseline-20260915/replay.zip") as archive:
-        archive.extractall(approved)
+    if control is None:
+        approved = output / "approved_tripod"
+        with zipfile.ZipFile(simulation.ROOT / "artifacts/tripod-openloop-baseline-20260915/replay.zip") as archive:
+            archive.extractall(approved)
+    else:
+        approved = control.resolve()
+        for name in ("model.mjb", "states.npz", "metadata.json"):
+            if not (approved / name).is_file():
+                raise FileNotFoundError(approved / name)
     report = dict(training=str(training), checkpoints=list(checkpoints),
                   protocol="Notebook 4: seeds 201..212, sampled and mean, five seconds",
-                  comparison_scope="New chassis and residual controller versus frozen original controls",
+                  comparison_scope="Candidate versus accepted PPO-100 and selected measured control",
+                  selected_control=str(approved),
                   accepted=False, evaluations=[], windows=[])
     rows = []
     for step, checkpoint in zip(checkpoints, paths):
@@ -80,8 +88,9 @@ def main() -> None:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--checkpoints", type=int, nargs="+", default=[50, 100])
     parser.add_argument("--no-view", action="store_true")
+    parser.add_argument("--control", type=Path, help="Measured top-right control instead of the approved tripod")
     args = parser.parse_args()
-    compare(args.training, args.output, args.checkpoints, view=not args.no_view)
+    compare(args.training, args.output, args.checkpoints, view=not args.no_view, control=args.control)
 
 
 if __name__ == "__main__":

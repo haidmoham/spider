@@ -268,10 +268,60 @@ class ReferenceTrainingSession:
         self.updates = 0
         self.rows: list[dict] = []
         self.update_rows: list[dict] = []
+        self.parent_checkpoint = None
+        self.treatment_changes = {}
+
+    @classmethod
+    def from_checkpoint(cls, checkpoint: str | Path, output_directory: str | Path):
+        """Restore a saved training boundary without collecting or optimizing."""
+        checkpoint = Path(checkpoint).resolve()
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+        model = mujoco.MjModel.from_xml_string(payload["model_xml"])
+        policy = ReferenceResidualPolicy(checkpoint, model)
+        session = cls.__new__(cls)
+        session.output_directory = Path(output_directory)
+        session.seed = int(payload["seed"])
+        session.model_xml, session.model = payload["model_xml"], model
+        session.bounds, session.reference = policy.bounds, policy.reference
+        session.residual_limit_rad = policy.residual_limit_rad.copy()
+        session.filter_time_constant_s = policy.filter_time_constant_s
+        session.ppo, session.reward, session.settings = policy.ppo, policy.reward, policy.settings
+        session.neutral = policy.neutral.copy()
+        session.actor = policy.actor
+        session.actor.train()
+        session.critic = build_critic(session.seed + 1)
+        session.critic.load_state_dict(payload["critic"], strict=True)
+        session.actor_optimizer = torch.optim.Adam(session.actor.parameters(), lr=session.ppo["actor_lr"])
+        session.critic_optimizer = torch.optim.Adam(session.critic.parameters(), lr=session.ppo["critic_lr"])
+        session.actor_optimizer.load_state_dict(payload["actor_optimizer"])
+        session.critic_optimizer.load_state_dict(payload["critic_optimizer"])
+        session.generator = torch.Generator()
+        session.generator.set_state(payload["optimizer_rng_state"])
+        session.updates = int(payload["updates"])
+        session.rows, session.update_rows = [], []
+        session.parent_checkpoint = dict(path=str(checkpoint), updates=session.updates,
+                                        sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest())
+        session.treatment_changes = {}
+        return session
+
+    def set_frequency(self, frequency_hz: float) -> None:
+        """Select an explicit cadence treatment; preserves geometry and weights."""
+        if not math.isfinite(frequency_hz) or frequency_hz <= 0:
+            raise ValueError("frequency must be finite and positive")
+        previous = self.reference.config["frequency_hz"]
+        self.reference.config["frequency_hz"] = float(frequency_hz)
+        self.reference.speed_mps = (self.reference.config["stride_length_m"] * frequency_hz
+                                    / self.reference.config["stance_fraction"])
+        if frequency_hz != previous:
+            self.treatment_changes["frequency_hz"] = dict(previous=previous, selected=frequency_hz)
 
     def _episode(self, episode_seed: int) -> dict[str, torch.Tensor]:
         data = mujoco.MjData(self.model)
-        neutral = np.asarray(reset_candidate(self.model, data))
+        simulation.reset(self.model, data)
+        neutral = self.neutral.copy()
+        data.qpos[7:] = neutral
+        data.ctrl[:] = neutral
+        mujoco.mj_forward(self.model, data)
         observed = simulation.measured_state(self.model, data)
         previous_target = neutral.copy()
         previous_residual = np.zeros(ACTION_SIZE)
@@ -366,6 +416,8 @@ class ReferenceTrainingSession:
                     "actor_optimizer": self.actor_optimizer.state_dict(),
                     "critic_optimizer": self.critic_optimizer.state_dict(),
                     "updates": self.updates, "seed": self.seed, "ppo": self.ppo,
+                    "parent_checkpoint": self.parent_checkpoint,
+                    "treatment_changes": self.treatment_changes,
                     "reward": self.reward, "settings": self.settings,
                     "optimizer_rng_state": self.generator.get_state(),
                     "reference_config": self.reference.config,
@@ -390,7 +442,10 @@ class ReferenceTrainingSession:
             sources[name] = hashlib.sha256(source.read_bytes()).hexdigest()
         xml = self.model_xml
         (self.output_directory / "candidate.xml").write_text(xml, encoding="utf-8")
-        config = {"status": "UNTRAINED PPO residual preparation", "seed": self.seed,
+        config = {"status": ("UNTRAINED PPO residual preparation" if self.updates == 0 else
+                             "RESTORED PPO checkpoint; no additional updates yet"), "seed": self.seed,
+                  "starting_updates": self.updates, "parent_checkpoint": self.parent_checkpoint,
+                  "treatment_changes": self.treatment_changes,
                   "reference_config": self.reference.config, "chassis_manifest": PARAMETER_MANIFEST,
                   "ppo": self.ppo, "reward": self.reward, "settings": self.settings,
                   "residual_limit_rad": self.residual_limit_rad.tolist(),
@@ -425,7 +480,7 @@ class ReferenceTrainingSession:
         return latest
 
     def prepare(self) -> Path:
-        """Write a reviewable, explicitly untrained checkpoint zero without rollouts."""
+        """Save initial or restored state without rollouts or optimization."""
         self._prepare_output()
         return self._save()
 
@@ -433,12 +488,19 @@ class ReferenceTrainingSession:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--seed", type=int, default=20260915)
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--resume", type=Path, help="Restore weights, optimizers, RNG, and update count")
+    parser.add_argument("--frequency-hz", type=float, help="Explicit gait cadence treatment")
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--updates", type=int)
     action.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args(argv)
-    session = ReferenceTrainingSession(args.output, args.seed)
+    if args.resume and args.seed is not None:
+        parser.error("--resume preserves the saved seed; do not supply --seed")
+    session = (ReferenceTrainingSession.from_checkpoint(args.resume, args.output) if args.resume else
+               ReferenceTrainingSession(args.output, args.seed if args.seed is not None else 20260915))
+    if args.frequency_hz is not None:
+        session.set_frequency(args.frequency_hz)
     print(session.prepare() if args.prepare_only else session.train(args.updates))
     return 0
 

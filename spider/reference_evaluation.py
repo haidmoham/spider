@@ -71,6 +71,8 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
     previous_target = policy.neutral.copy()
     mode = "sampled" if sampled else "mean"
     label = f"REFERENCE PPO n={payload['updates']} | CANDIDATE | {mode} | seed={seed}"
+    if payload.get("treatment_changes"):
+        label += f" | cadence={policy.reference.config['frequency_hz']:g} Hz | cadence treatment"
     replay = TreatmentReplay(model, label)
     replay.capture(data)
     interval = model.opt.timestep * policy.settings["physics_steps"]
@@ -113,6 +115,8 @@ def record(checkpoint: Path, output: Path, *, seed: int, sampled: bool) -> dict:
                   checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
                   model_sha256=hashlib.sha256(payload["model_xml"].encode()).hexdigest(),
                   updates=payload["updates"], label=label)
+    result["reference_config"] = policy.reference.config
+    result["treatment_changes"] = payload.get("treatment_changes", {})
     (output / "metadata.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     return result
 

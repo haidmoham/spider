@@ -114,6 +114,42 @@ class ReferenceTrainingTest(unittest.TestCase):
                 with self.subTest(value=value), self.assertRaises(ValueError):
                     session.train(value)
 
+    def test_resume_preserves_next_optimizer_step_and_rng(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            session = ReferenceTrainingSession(Path(directory) / "parent", seed=11)
+            # Synthetic gradients populate Adam moments without robot rollouts.
+            def step(optimizer):
+                optimizer.zero_grad(set_to_none=True)
+                for group in optimizer.param_groups:
+                    for parameter in group["params"]:
+                        parameter.grad = torch.full_like(parameter, .125)
+                optimizer.step()
+            step(session.actor_optimizer)
+            step(session.critic_optimizer)
+            session.updates = 7
+            torch.randperm(17, generator=session.generator)
+            checkpoint = session.prepare()
+            resumed = ReferenceTrainingSession.from_checkpoint(checkpoint, Path(directory) / "child")
+            self.assertEqual(resumed.updates, 7)
+            self.assertEqual(resumed.model_xml, session.model_xml)
+            self.assertTrue(torch.equal(torch.randperm(17, generator=session.generator),
+                                        torch.randperm(17, generator=resumed.generator)))
+            for first, second in ((session.actor_optimizer, resumed.actor_optimizer),
+                                  (session.critic_optimizer, resumed.critic_optimizer)):
+                step(first); step(second)
+                for a, b in zip(first.param_groups[0]["params"], second.param_groups[0]["params"]):
+                    self.assertTrue(torch.equal(a, b))
+            resumed.set_frequency(1.5)
+            self.assertAlmostEqual(resumed.reference.speed_mps, .18 * 1.5 / .65)
+            saved = resumed.prepare()
+            policy = ReferenceResidualPolicy(saved, resumed.model)
+            self.assertEqual(policy.reference.config["frequency_hz"], 1.5)
+            self.assertEqual(policy.updates, 7)
+            self.assertFalse((Path(directory) / "child/steps.csv").exists())
+            for frequency in (0, -1, float("nan"), float("inf")):
+                with self.assertRaises(ValueError):
+                    resumed.set_frequency(frequency)
+
 
 if __name__ == "__main__":
     unittest.main()
