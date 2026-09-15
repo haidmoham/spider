@@ -39,6 +39,12 @@ and evaluation rollouts, never the training cell:
 .venv/Scripts/python -m lab.heldout_reinforce telemetry/reinforce-debug/20260915T010216441278Z --updates 20
 ```
 
+## Latest user observation
+
+The user describes the trained replay as "a little box step". Whether a complete
+repetition retains forward progress, and why the objective favors it, remain open.
+Resume from that observation; do not restart the completed REINFORCE debugging.
+
 ## User's next attempt
 
 1. Describe the trained pane's repeated motion without using its score.
