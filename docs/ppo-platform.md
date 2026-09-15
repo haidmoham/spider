@@ -99,6 +99,41 @@ walk baseline. The full speed and stability goal remains unmet. A proposed next
 comparison raises the speed command to 0.4 m/s and the forward tracking weight;
 it requires approval before execution. No further updates ran in this round.
 
+### Forward incentive and exploration round, 2026-09-15
+
+The user approved three fresh seed-11 treatments, each for 50 updates. Lower
+exploration used initial noise scale 0.4 and entropy coefficient 0; stronger
+forward incentive used a 0.4 m/s command and velocity weight 4. The combined
+treatment used both. Other settings and physics stayed fixed. Initial actor
+mean weights and critic weights matched across treatments.
+
+The round completed 150 updates and 52 evaluations in 869.0 seconds. Local
+ignored evidence is in `telemetry/tuning/20260915-forward-exploration-round-01/`:
+the approved plan, checkpoints 0 through 50, archived sources and hashes,
+reward traces, exact recordings, `summary.csv`, and `acceptance.json`.
+
+| Policy | Mean-action speed (m/s) | Sampled mean speed (m/s) | Sampled falls / 12 |
+| --- | ---: | ---: | ---: |
+| Accepted PPO-100 | 0.37883 | 0.27428 | 0 |
+| Lower exploration | 0.00387 | 0.06506 | 0 |
+| Stronger forward incentive | 0.02257 | 0.26043 | 9 |
+| Combined | 0.00281 | 0.11572 | 0 |
+
+All mean-action episodes completed without falls. Both lower-exploration
+treatments also completed all 400 training episodes without falls. Their mean
+policies still barely move. Stronger forward incentive alone retained frequent
+sampled falls; its speed includes incomplete episodes and is not a successful
+walking result. All three candidates failed the speed acceptance thresholds;
+stronger forward also failed stability. The baseline passed.
+
+The four-pane viewer and `comparison.mp4` replay the recorded mean policies at
+normal speed. The verified film is five seconds, 1280 by 720, H.264 at 25 fps,
+using exact shared timestamps without interpolation. This
+view does not show sampled failures. User gait review remains pending. No
+candidate is promoted, STRIDE remains unearned, and training stopped at the
+approved budget. These results motivate inspecting why sampled forward travel
+does not become a deliberate mean-policy stride before another training round.
+
 ## Empirical acceptance gate
 
 Notebook 04 checks PPO mechanics: saved log probabilities, GAE, loss gradients,
