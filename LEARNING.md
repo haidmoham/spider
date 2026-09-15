@@ -2,6 +2,16 @@
 
 ## Resume
 
+2026-09-15: the user ran the 50/100-update comparison and accepted it as a crude
+learned baseline. [PPO-100-CRUDE-20260915](artifacts/ppo-crude-baseline-20260915/README.md)
+owns the preserved weights, settings, measurements, and viewed replays. Notebook 04
+is its executed working surface. STRIDE remains unearned.
+Next direction: a lower, deliberate stalk inspired by RS3 Araxxor, with the physics
+model fixed. Prepare changes visibly in Jupyter; execution requires the user's
+explicit request. Preserve the accepted baseline before any new treatment.
+
+### Prior 30-update work (historical)
+
 Production training and tuning is active at the user's request (2026-09-15).
 The user implemented GAE, PPO losses and minibatch updates. Their analytic and
 update checks pass. If a PPO implementation defect becomes the next task, switch

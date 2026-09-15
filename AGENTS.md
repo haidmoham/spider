@@ -22,6 +22,7 @@ These instructions apply to the entire repository.
 ## Checkpoints
 
 - `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
+- `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). The 50/100 comparison uses fixed flat-ground development scenarios; STRIDE remains unearned.
 - Use checkpoints only for robotics capabilities or understood failures worth preserving and comparing.
 - Do not create checkpoints for instrumentation, cleanup, presentation polish, or elapsed time.
 - Do not claim a capability before reproducible evidence supports it.

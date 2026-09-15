@@ -80,6 +80,9 @@ is named **Headless C-1N simulation**.
 
 STAND is the earned six-contact baseline. Disturbance recovery is excluded.
 SPAWN and SHUFFLE remain historical comparisons; STRIDE is not earned.
+The [crude PPO baseline](artifacts/ppo-crude-baseline-20260915/README.md) preserves
+the user-accepted 50/100-update comparison, both model checkpoints, and four recorded
+replays. It records learned forward travel on the fixed task, not a reliable crawl.
 The next work is learned locomotion through [spider #17](https://github.com/haidmoham/spider/issues/17)
 with [test-bench #25](https://github.com/haidmoham/robotics-test-bench/issues/25)
 retained as source provenance. `LEARNING.md` selects the current work.

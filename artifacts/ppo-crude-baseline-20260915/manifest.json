@@ -1,0 +1,83 @@
+{
+  "id": "PPO-100-CRUDE-20260915",
+  "status": "user-accepted crude learned baseline; STRIDE unearned",
+  "run": "telemetry/ppo/20260915T152940537445Z",
+  "comparison": "checkpoint-comparison-153230927015",
+  "provenance": "Notebook 04 saved outputs: ppo-setup execution 24, ppo-smoke 35, ppo-100 37, ppo-checkpoint-run 39. Exact execution Git revision and package versions were not recorded.",
+  "files": {
+    "checkpoint-00050.pt": {
+      "sha256": "625d273d2034846e5f69c6b83efe0718b1b0ed149891db3dea4be022da1196a4",
+      "bytes": 203897,
+      "source": "telemetry/ppo/20260915T152940537445Z/checkpoint-00050.pt"
+    },
+    "checkpoint-00100.pt": {
+      "sha256": "588ace3607a7b239a633d5ceabea98312f619c18ee35dbb42ee5688b8a8b5c8d",
+      "bytes": 203897,
+      "source": "telemetry/ppo/20260915T152940537445Z/checkpoint-00100.pt"
+    },
+    "settings.json": {
+      "sha256": "bc7683ad413d00f4f0848927396fd80df4e21a6405dc552dbca0a693b0e3d71a",
+      "bytes": 855,
+      "source": "telemetry/ppo/20260915T152940537445Z/settings.json"
+    },
+    "training.csv": {
+      "sha256": "6613084d1ac0621645ffee3abc90bd269f50dde549194eb3e3da8251580eeee5",
+      "bytes": 16362,
+      "source": "telemetry/ppo/20260915T152940537445Z/training.csv"
+    },
+    "comparison.csv": {
+      "sha256": "3d0bd95678baf7ab552b01323738043501badffc5d6617478b7deee71d2fe717",
+      "bytes": 7485,
+      "source": "telemetry/ppo/20260915T152940537445Z/checkpoint-comparison-153230927015/comparison.csv"
+    },
+    "learning-functions.json": {
+      "sha256": "683f78a57249f68e176772fcb8cbc4c4ef9720abe524f8a6b1a95fe519bd7ad9",
+      "bytes": 4849,
+      "source": "telemetry/ppo/20260915T152940537445Z/functions-00050-153106609508.json"
+    },
+    "spider.xml": {
+      "sha256": "fc5d1f1832c02627907a0a0359f5666428d3d3ec9839e162cfb601ed8475f94e",
+      "bytes": 15755,
+      "source": "model/spider.xml"
+    },
+    "replays.zip": {
+      "sha256": "1019c349859a3b87c8eb470a0ae775c77639627f0cce9d8f6e0c7d5b0d5e8a1a",
+      "bytes": 858640,
+      "source": "telemetry/ppo/20260915T152940537445Z/checkpoint-comparison-153230927015/views/grid-x40c9o7u"
+    }
+  },
+  "replay_entries": {
+    "0/model.mjb": {
+      "sha256": "41548fd870805cf5bfb9d2b5e21b9adaa9c8c973fefb4679007ebc457941fb55",
+      "bytes": 4767959
+    },
+    "0/states.npz": {
+      "sha256": "f1657a94ecedbb987b2495c14ef07b0e83d802e6e6b159647794209ba06f42bd",
+      "bytes": 404562
+    },
+    "1/model.mjb": {
+      "sha256": "41548fd870805cf5bfb9d2b5e21b9adaa9c8c973fefb4679007ebc457941fb55",
+      "bytes": 4767959
+    },
+    "1/states.npz": {
+      "sha256": "d14d0f4181354e2f016a3b4b93cce5d0a63659b9076cbedde85695aee72686f1",
+      "bytes": 404566
+    },
+    "2/model.mjb": {
+      "sha256": "41548fd870805cf5bfb9d2b5e21b9adaa9c8c973fefb4679007ebc457941fb55",
+      "bytes": 4767959
+    },
+    "2/states.npz": {
+      "sha256": "31f8d9a82d14b8be95e3cfda16293bfba3fd52e863f197695c383366b8dd3b90",
+      "bytes": 404550
+    },
+    "3/model.mjb": {
+      "sha256": "41548fd870805cf5bfb9d2b5e21b9adaa9c8c973fefb4679007ebc457941fb55",
+      "bytes": 4767959
+    },
+    "3/states.npz": {
+      "sha256": "20c4af6540080d01205d2b11f29d9a371b024bacb5ec62b0b5eb814b990f2745",
+      "bytes": 404554
+    }
+  }
+}
