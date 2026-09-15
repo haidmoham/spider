@@ -1,0 +1,3 @@
+# Integrated inference without Jupyter or the notebook training stack.
+-r requirements.txt
+torch==2.14.0

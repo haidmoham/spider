@@ -76,6 +76,20 @@ the public CLI, and notebook structure/syntax. It does not run lesson cells or
 graphical viewers. Native display checks remain local. The required GitHub check
 is named **Headless C-1N simulation**.
 
+## Integrated PPO policy
+
+The accepted PPO actor now has a Python runtime entry point, separate from the
+frozen notebook. With the C-1N environment installed:
+
+```powershell
+.venv/Scripts/python -m spider policy --compare
+```
+
+This runs four bounded episodes and opens the stitched viewer: accepted policy,
+lower posture, filtered commands, and both together. The three treatments are
+unvalidated; the physics model stays fixed. See [the integration guide](docs/ppo-platform.md)
+for exact changes, inference-only dependencies, recordings, and review criteria.
+
 ## Preserved capability and evidence
 
 STAND is the earned six-contact baseline. Disturbance recovery is excluded.

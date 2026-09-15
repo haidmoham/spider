@@ -18,6 +18,12 @@ class ReplayGridTests(unittest.TestCase):
         self.assertIsNone(recorded_training_updates('run/unknown/1'))
         self.assertEqual(pane_heading('after mean', 20)[0], 'YOUR CODE: n=20 training updates')
 
+    def test_integrated_policy_labels_keep_interventions_explicit(self):
+        title, description, _ = pane_heading('PPO n=100 | stalk | mean | seed=201')
+        self.assertEqual(title, 'PPO n=100 / STALK')
+        self.assertIn('Unvalidated', description)
+        self.assertEqual(pane_heading('PPO n=50 | sampled | seed=201')[0], 'PPO n=50')
+
     def test_shared_time_and_short_episode_hold(self):
         long = np.array([10., 10.02, 10.04, 10.06])
         short = np.array([0., .02])

@@ -53,10 +53,15 @@ def _inspection(model, states, times, actuator_name):
     return reference, geoms, changes, figure
 
 
-def replay(run: Path, speed: float, actuator_name: str = "") -> None:
+def replay(run: Path, speed: float, actuator_name: str = "", *, presentation: str = "original") -> None:
     import mujoco.viewer
 
     model = mujoco.MjModel.from_binary_path(str(run / "model.mjb"))
+    if presentation not in ("original", "stalk"):
+        raise ValueError("Unknown presentation")
+    if presentation == "stalk":
+        from .stalk import apply_stalk_presentation
+        apply_stalk_presentation(model)
     data = mujoco.MjData(model)
     with np.load(run / "states.npz", allow_pickle=False) as archive:
         states, times = archive["states"], archive["times"]
@@ -71,6 +76,8 @@ def replay(run: Path, speed: float, actuator_name: str = "") -> None:
         viewer.cam.distance = 1.55
         viewer.cam.azimuth = 225
         viewer.cam.elevation = -25
+        if presentation == "stalk":
+            viewer.cam.distance, viewer.cam.azimuth, viewer.cam.elevation = 1.36, 222, -13
         if inspection:
             reference, geoms, changes, figure = inspection
             viewer.cam.lookat[:] = np.mean(reference.geom_xpos[geoms], axis=0)
@@ -102,6 +109,8 @@ def replay(run: Path, speed: float, actuator_name: str = "") -> None:
                 mujoco.mj_setState(model, data, states[index], STATE)
                 # Rebuild display transforms; never integrate physics in the viewer.
                 mujoco.mj_forward(model, data)
+                if presentation == "stalk":
+                    viewer.cam.lookat[:] = (float(data.qpos[0]) + .10, float(data.qpos[1]), .24)
             viewer.set_texts(
                 [
                     (

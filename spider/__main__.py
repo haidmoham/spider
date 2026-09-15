@@ -35,6 +35,17 @@ def main():
     grid.add_argument("--ready", type=Path)
     grid.add_argument("--screenshot", type=Path)
     grid.add_argument("--frames", type=int)
+    grid.add_argument("--presentation", choices=("original", "stalk"), default="original")
+    policy = actions.add_parser("policy", help="execute a saved PPO policy; no training or notebook dependency")
+    policy.add_argument("--checkpoint", type=Path)
+    policy.add_argument("--treatment", choices=("baseline", "lower", "smooth", "stalk"), default="baseline")
+    policy.add_argument("--compare", action="store_true", help="record baseline/lower/smooth/stalk on one seed")
+    policy.add_argument("--seed", type=int, default=201)
+    policy.add_argument("--sampled", action="store_true", help="use saved Gaussian exploration; default is mean action")
+    policy.add_argument("--seconds", type=float, default=5.0)
+    policy.add_argument("--output", type=Path)
+    policy.add_argument("--headless", action="store_true", help="record only; do not open replay")
+    policy.add_argument("--presentation", choices=("original", "stalk"), default="stalk")
     render = actions.add_parser("render", help="render matched model views")
     render.add_argument("--output", type=Path, default=Path("artifacts/c1n_redesign"))
     render.add_argument("--before-directory", type=Path)
@@ -84,7 +95,36 @@ def main():
         from .viewing.replay_grid import replay_grid
 
         replay_grid(args.directories, args.speed, ready=args.ready,
-                    screenshot=args.screenshot, max_frames=args.frames)
+                    screenshot=args.screenshot, max_frames=args.frames,
+                    presentation=args.presentation)
+    elif args.action == "policy":
+        from datetime import datetime, timezone
+        from .policy_run import DEFAULT_CHECKPOINT, compare_policies, run_policy
+        from .simulation import ROOT
+
+        checkpoint = args.checkpoint or DEFAULT_CHECKPOINT
+        directory = args.output or ROOT / "telemetry/policy" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        try:
+            if args.compare:
+                if args.treatment != "baseline":
+                    parser.error("--compare selects all four treatments; omit --treatment")
+                result = compare_policies(checkpoint, directory=directory, seed=args.seed,
+                    sampled=args.sampled, seconds=args.seconds, watch=not args.headless,
+                    presentation=args.presentation)
+                print(f"Saved comparison: {result}")
+            else:
+                result = run_policy(checkpoint, directory=directory, treatment=args.treatment,
+                    seed=args.seed, sampled=args.sampled, seconds=args.seconds)
+                print(json.dumps(result, indent=2))
+                if not args.headless:
+                    from .viewing.replay import replay
+                    replay(directory, speed=1, presentation=args.presentation)
+        except (ValueError, FileNotFoundError, FileExistsError) as error:
+            parser.error(str(error))
+        except ModuleNotFoundError as error:
+            if error.name != "torch":
+                raise
+            parser.error("PPO inference needs PyTorch: python -m pip install -r requirements-policy.txt")
     else:
         from .viewing.render import main as render_main
 

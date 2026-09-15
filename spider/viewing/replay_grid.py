@@ -14,6 +14,18 @@ from ..recording import STATE
 def pane_heading(label, training_updates=None):
     """Identify the saved treatment, independent of its quadrant position."""
     name = label.lower()
+    if name.startswith('ppo n='):
+        fields = [part.strip() for part in label.split('|')]
+        treatment = fields[1].lower() if len(fields) > 1 else ''
+        descriptions = {
+            'baseline': 'Accepted policy; original action mapping',
+            'lower': 'Unvalidated: hip/knee posture ramp',
+            'smooth': 'Unvalidated: command filter only',
+            'stalk': 'Unvalidated: posture ramp + command filter',
+        }
+        if treatment in descriptions:
+            return f'{fields[0]} / {treatment.upper()}', descriptions[treatment], (.13, .17, .20)
+        return fields[0], 'Saved PPO checkpoint', (.13, .17, .20)
     if name.startswith('after '):
         title = 'YOUR CODE: AFTER TRAINING'
         if training_updates is not None:
@@ -52,11 +64,14 @@ def frame_index(times, elapsed):
                       int(np.searchsorted(times, times[0] + elapsed, side='right')) - 1))
 
 
-def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_frames=None):
+def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_frames=None,
+                presentation='original'):
     import glfw
 
     if len(directories) != 4 or not np.isfinite(speed) or speed <= 0:
         raise ValueError('Supply exactly four recordings and a finite positive speed')
+    if presentation not in ('original', 'stalk'):
+        raise ValueError('Unknown presentation')
     panes = []
     for directory in map(Path, directories):
         model = mujoco.MjModel.from_binary_path(str(directory / 'model.mjb'))
@@ -88,8 +103,13 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
         mujoco.mjv_defaultCamera(camera)
         camera.lookat[:] = (0, 0, .25)
         camera.distance, camera.azimuth, camera.elevation = 1.55, 225, -25
+        if presentation == 'stalk':
+            from .stalk import apply_stalk_presentation, stalk_camera
+            camera = stalk_camera(panes[0]['model'], panes[0]['data'])
         options = mujoco.MjvOption()
         for pane in panes:
+            if presentation == 'stalk':
+                apply_stalk_presentation(pane['model'])
             pane['scene'] = mujoco.MjvScene(pane['model'], maxgeom=10000)
             pane['context'] = mujoco.MjrContext(pane['model'], mujoco.mjtFontScale.mjFONTSCALE_100)
             contexts.append(pane['context'])
@@ -136,6 +156,9 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                 model, data = pane['model'], pane['data']
                 mujoco.mj_setState(model, data, pane['states'][index], STATE)
                 mujoco.mj_forward(model, data)
+                if presentation == 'stalk':
+                    # Camera-only follow preserves the recorded trajectory.
+                    camera.lookat[:] = (float(data.qpos[0]) + .10, float(data.qpos[1]), .24)
                 mujoco.mjv_updateScene(model, data, options, None, camera,
                                       mujoco.mjtCatBit.mjCAT_ALL, pane['scene'])
                 viewport = mujoco.MjrRect(*rectangle)

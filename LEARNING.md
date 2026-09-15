@@ -6,9 +6,11 @@
 learned baseline. [PPO-100-CRUDE-20260915](artifacts/ppo-crude-baseline-20260915/README.md)
 owns the preserved weights, settings, measurements, and viewed replays. Notebook 04
 is its executed working surface. STRIDE remains unearned.
-Next direction: a lower, deliberate stalk inspired by RS3 Araxxor, with the physics
-model fixed. Prepare changes visibly in Jupyter; execution requires the user's
-explicit request. Preserve the accepted baseline before any new treatment.
+Notebook 04 is now frozen as the baseline experiment record. The user selected
+platform integration next: [PPO runtime and deliberate-stalk comparison](docs/ppo-platform.md)
+in Python under `spider/`, with no notebook/lab runtime dependency and no physics
+parameter changes. The prepared control treatments are unvalidated. Execution
+requires the user's explicit request; preparation did not run new rollouts.
 
 ### Prior 30-update work (historical)
 
