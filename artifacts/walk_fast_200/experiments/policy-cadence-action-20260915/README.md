@@ -25,3 +25,20 @@ terrain or push robustness.
 as its checkpoint. Visual review and explicit user approval remain required.
 `manifest.json` records SHA-256 digests for the checkpoints, summaries, and
 compressed evidence.
+
+## Movement-quality review
+
+The deterministic seed-201 traces show a speed/support tradeoff against the
+locked stable walk. Over five seconds, observed contact-to-no-contact
+transitions per foot rise from 10–15 to 21–28. The stance-foot speed RMS proxy
+rises from 0.069600 to 0.123560 m/s. These are sampled contact transitions, not
+clean stride counts. Contact traces at 20 ms resolution show more fragmented
+support in the candidate; this suggests contact chatter but does not identify
+its cause. The proxy cannot resolve sliding within each sampling interval.
+
+Thus the numerical gate passes, but a more legible lift/reach/plant/support
+sequence is not established. Review the normal-speed recording before any
+promotion. Sources: locked `walk_stable_100/replay/trace.csv` and the archived
+`comparison-n00200/n00200/mean-201/trace.csv`; metrics use
+`spider.policy_metrics.episode_metrics`. No new rollout or PPO update was used
+for this review.
