@@ -1,0 +1,17 @@
+{
+  "name": "walk_fast_200",
+  "status": "user_selected_speed_checkpoint",
+  "approval": "checkpoint this ... create a demo with a speed comparison against the stable baseline, and then train",
+  "updates": 200,
+  "checkpoint": "walk_fast_200.pt",
+  "policy_class": "spider.cadence_action_training.CadenceResidualPolicy",
+  "source_experiment": "experiments/policy-cadence-action-20260915",
+  "mean_speed_m_s": 0.5976164914130955,
+  "sampled_mean_speed_m_s": 0.5916938220329816,
+  "falls": 0,
+  "evaluation_count": 24,
+  "scope": "User-selected continuation checkpoint. Contact fragmentation remains; this does not establish the full deliberate-stride goal or terrain/push robustness.",
+  "sha256": {
+    "walk_fast_200.pt": "8b5972202cdf0f97420669ba7d851075287407eae9c19e7e6d385c4c864a2743"
+  }
+}

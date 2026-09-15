@@ -6,7 +6,7 @@ identify exact assets and their approval status, not whichever training file is 
 | Name | Status | Weights and replay | Evidence |
 | --- | --- | --- | --- |
 | `walk_stable_100` | Locked; user-approved walking baseline | [Manifest](artifacts/walk_stable_100/manifest.json) | 1.1 Hz; 100 PPO updates; 0/24 falls; mean 0.317506 m/s |
-| `walk_fast_200` | Development target; no accepted checkpoint assigned | [Cadence-action candidate](artifacts/walk_fast_200/experiments/policy-cadence-action-20260915/README.md) | n=200 numerical pass; visual review and user approval are required |
+| `walk_fast_200` | User-selected speed checkpoint; stride-quality limits remain | [Manifest](artifacts/walk_fast_200/manifest.json) | n=200; mean 0.597616 m/s; 0/24 falls; preserved before continuation |
 
 `walk_stable_100` has the approved metallic-black chassis, red lighting, six legs
 and gravity-responsive googly eyes. Its mean replay is in
@@ -40,7 +40,9 @@ under ignored `telemetry/`. Do not label a cadence-only probe as further trainin
   byte-for-byte equal in state arrays to the locked baseline. At n=200 it reached
   0.597616 m/s mean and 0.591694 m/s sampled average with zero falls and zero
   joint-limit violations in 24 evaluations. [Archived evidence](artifacts/walk_fast_200/experiments/policy-cadence-action-20260915/README.md).
-  This is an unapproved candidate. It does not assign `walk_fast_200`.
+  The user subsequently selected this as `walk_fast_200` before requesting
+  a speed-comparison demo and n=200→300 continuation. Contact fragmentation
+  remains documented; this selection does not complete the full stride goal.
 
 The original chassis, crude PPO-100 and Notebook 4 remain controls. The original
 speed threshold is 0.37882745 m/s. User approval of the stable walking baseline
