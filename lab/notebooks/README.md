@@ -1,7 +1,8 @@
 # Experiments and their robot connections
 
 Start with [04_mdp_contract.ipynb](04_mdp_contract.ipynb) for issue #33.
-It is a prepared scaffold; the task choices and experiments remain user-owned.
+It is the cell-by-cell PPO implementation path. GAE, losses and minibatch updates
+remain user-owned; the preserved REINFORCE evidence is linked inside.
 The mechanics experiments are references, not prerequisites.
 
 | Notebook | Bounded question | Robot connection |

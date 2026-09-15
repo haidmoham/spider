@@ -2,20 +2,26 @@
 
 ## Resume
 
-Latest diagnostic: [Ant prior and control quantities](lab/notes/2026-09-14-ant-control-cost.md).
-The user's hypothesis concerns unpenalized actuator movement in the "little box
-step". Saved commands and reconstructed endpoint torque/power have been measured;
-no reward coefficient or retraining has been chosen. Resume with the user's choice
-of the behavior to suppress, not a new reward implementation supplied by the agent.
+Current path: notebook 04 now implements the standard PPO sequence cell by cell.
+Run setup; implement GAE (section 3), actor/value losses (4), and one minibatch
+update (5). Collection, tensor records, diagnostics, checkpointing and replay are
+provided. Run the analytic checks, then a two-update smoke test and held-out review.
+The final cell continues the same run to 100 total PPO updates. Training readiness
+is not a claim that PPO already walks. STRIDE remains unearned, target 48/50.
 
-Current revision (2026-09-14): the user has corrected REINFORCE sampling,
-score-function/log-probability handling, signed velocity reward, episodic returns,
-boundary credit, and loss/update diagnostics. Do not restart those exercises.
-The next step is [held-out behavior diagnosis](lab/notes/2026-09-14-heldout-reinforce.md).
-Follow the active failure-driven route and 48/50 STRIDE target in [TODO.md](TODO.md).
-The older gait-parameter/PPO sequence below is a reference, not a required next
-intervention. The user owns each hypothesis, design change and interpretation.
+The user requested direct instruction in the established algorithm, not repeated
+hypothesis gates or inventing a locomotion objective. Keep the inherited observation,
+action and reward fixed for this transition. The control-cost diagnostic remains a
+reference; no coefficient was selected. User owns the learning operations.
 
+The full prior notebook is preserved byte-for-byte in
+[the REINFORCE archive](lab/history/notebooks/04_reinforce_before_ppo_20260914.ipynb).
+Its SHA256 is `850be75c6642fc9ab89a5550294e425cfa6efe12113d6977fc8da95fcaa1ac12`.
+Original executed REINFORCE cells also remain in notebook 04's reference section.
+No PPO training ran during this refactor. Begin with a fresh kernel; do not execute
+the reference section during the PPO path because it resets shared names.
+
+### Earlier route and evidence (preserved context)
 
 Open [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for
 [issue #33](https://github.com/haidmoham/spider/issues/33). It is a prepared scaffold

@@ -8,7 +8,15 @@ into the new notebook, then follow the experiments below.
 [LEARNING.md](LEARNING.md) selects the active step; this file owns its planned
 sequence. The archived test-bench queue does not select current work.
 
-## Active route - 2026-09-14 revision
+## Current implementation step
+
+User-directed revision: proceed through standard explicit PPO in notebook 04 now.
+Do not require solving coordination or reward design before adding the critic, GAE,
+and clipped updates. The numbered notebook sections are the current implementation
+order. Its two-update check and 100-total-update continuation are prepared, not run.
+The earlier failure-driven route below is context; the 48/50 STRIDE target remains.
+
+## Earlier route - 2026-09-14 revision
 
 Continue from the user's corrected REINFORCE learner in notebook 04. The five
 experiments below are earlier proposals, not a required order or permission to
