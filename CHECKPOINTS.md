@@ -7,6 +7,8 @@ identify exact assets and their approval status, not whichever training file is 
 | --- | --- | --- | --- |
 | `walk_stable_100` | Locked; user-approved walking baseline | [Manifest](artifacts/walk_stable_100/manifest.json) | 1.1 Hz; 100 PPO updates; 0/24 falls; mean 0.317506 m/s |
 | `walk_fast_200` | User-selected speed checkpoint; stride-quality limits remain | [Manifest](artifacts/walk_fast_200/manifest.json) | n=200; mean 0.597616 m/s; 0/24 falls; preserved before continuation |
+| `walk_fast_300` | User-requested named checkpoint; stride-quality limits remain | [Manifest](artifacts/walk_fast_300/manifest.json) | n=300; mean 0.758568 m/s; 0/24 falls |
+| `walk_fast_500` | Authorized training target; not yet recorded | Pending n=500 | Evaluate at 400 and 500; stop at 500 |
 
 `walk_stable_100` has the approved metallic-black chassis, red lighting, six legs
 and gravity-responsive googly eyes. Its mean replay is in
