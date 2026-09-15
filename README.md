@@ -2,6 +2,8 @@
 
 A six-legged MuJoCo robot for learned locomotion and simulation experiments.
 
+For integrated walking demos and auditable weights, use the [named checkpoint catalog](CHECKPOINTS.md).
+
 Start in [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for the current
 policy work. [LEARNING.md](LEARNING.md) explains setup and ownership.
 [01_control_step.ipynb](lab/notebooks/01_control_step.ipynb) is the earlier control-step exercise.

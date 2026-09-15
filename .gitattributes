@@ -4,3 +4,4 @@ lab/history/** -text whitespace=cr-at-eol
 artifacts/ppo-crude-baseline-20260915/** -text whitespace=cr-at-eol
 artifacts/tripod-openloop-baseline-20260915/** -text whitespace=cr-at-eol
 artifacts/chassis-design-20260915/** -text whitespace=-blank-at-eol,cr-at-eol
+artifacts/walk_stable_100/** -text whitespace=cr-at-eol

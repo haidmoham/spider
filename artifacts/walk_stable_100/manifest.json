@@ -1,0 +1,25 @@
+{
+  "name": "walk_stable_100",
+  "status": "locked_user_approved_walking_baseline",
+  "approval": "walk_stable_100 should be locked in",
+  "updates": 100,
+  "cadence_hz": 1.1,
+  "checkpoint": "walk_stable_100.pt",
+  "source_checkpoint": "../reference-ppo-evaluation-20260915/checkpoint-00100.pt",
+  "policy_class": "spider.reference_training.ReferenceResidualPolicy",
+  "evaluation": "../reference-ppo-evaluation-20260915/summary.json",
+  "replay": "replay",
+  "playback_speed": 1,
+  "mean_speed_m_s": 0.31750619506970296,
+  "sampled_mean_speed_m_s": 0.32162396208124827,
+  "falls": 0,
+  "evaluation_count": 24,
+  "scope": "Accepted gait baseline; does not meet original PPO-100 speed threshold .37882745 m/s; no terrain or push robustness claim",
+  "sha256": {
+    "walk_stable_100.pt": "e05af6842939989cb9a48899bccb0fd5aee18640ed4084d1ab65c0a481b6130d",
+    "replay/metadata.json": "f68ff6880f7b9e8ea8833ace8e2dd62fc03288380d2e3f606f49d7706110b4e9",
+    "replay/model.mjb": "b7762429b8ab2f9e6563c89ccbf406a24044435e18e8d521447ca6c0c9882ef1",
+    "replay/states.npz": "902910af123a285e4db57ca1d6059104a15a510f6dcc24129b25d27580824eb3",
+    "replay/trace.csv": "d7a7b5b0a9e17c5fb7c9591152765a6b1c89d18683872cddf87fc21dc372e002"
+  }
+}

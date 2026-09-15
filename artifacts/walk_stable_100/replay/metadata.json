@@ -1,0 +1,69 @@
+{
+  "mode": "mean",
+  "seed": 201,
+  "seconds": 4.999999999999671,
+  "terminated": false,
+  "max_joint_limit_violation_rad": 0.0,
+  "speed_m_s": 0.31750619506970296,
+  "action_delta_rms_rad": 0.03307108761388083,
+  "stance_foot_speed_rms_m_s": 0.06959955883562881,
+  "steady_height_mean_m": 0.36469579134733127,
+  "steady_height_std_m": 0.0013874428910637952,
+  "vertical_velocity_rms_m_s": 0.09476792815431333,
+  "contact_duty": {
+    "front_left": 0.636,
+    "front_right": 0.544,
+    "middle_left": 0.624,
+    "middle_right": 0.628,
+    "rear_left": 0.496,
+    "rear_right": 0.592
+  },
+  "maximum_foot_clearance_m": {
+    "front_left": 0.0663313143289813,
+    "front_right": 0.04946986129725338,
+    "middle_left": 0.04801876088016031,
+    "middle_right": 0.06569711161722404,
+    "rear_left": 0.08447190313293833,
+    "rear_right": 0.06524521210235455
+  },
+  "liftoff_count": {
+    "front_left": 13,
+    "front_right": 15,
+    "middle_left": 10,
+    "middle_right": 11,
+    "rear_left": 10,
+    "rear_right": 14
+  },
+  "mean_complete_swing_s": {
+    "front_left": 0.13999999999999174,
+    "front_right": 0.14285714285713413,
+    "middle_left": 0.187999999999988,
+    "middle_right": 0.16909090909090135,
+    "rear_left": 0.25199999999998557,
+    "rear_right": 0.14571428571427653
+  },
+  "joint_range_of_motion_rad": [
+    0.45571723416185267,
+    0.6139036511901224,
+    1.0630151184915466,
+    0.47133574846398996,
+    0.6170364151464844,
+    1.024296499484257,
+    0.6847950315554933,
+    0.6193075369460238,
+    0.30518409918684597,
+    0.7251828299743035,
+    0.6033385530432378,
+    0.3182560816595076,
+    0.46177222597700696,
+    0.6265445289380689,
+    1.0195500572646443,
+    0.4319836279174964,
+    0.5798242843543806,
+    1.0156537053289016
+  ],
+  "checkpoint_sha256": "e05af6842939989cb9a48899bccb0fd5aee18640ed4084d1ab65c0a481b6130d",
+  "model_sha256": "227598162f0c1307ca7c43cadbaf3f9d3f99cb79d55937e99bec8d40789fedad",
+  "updates": 100,
+  "label": "REFERENCE PPO n=100 | CANDIDATE | mean | seed=201"
+}
