@@ -117,6 +117,40 @@ def write_rollout_trace(
 STATE = mujoco.mjtState.mjSTATE_INTEGRATION
 
 
+def launch_replay_grid(replays, directory: Path, speed: float = 0.5) -> subprocess.Popen:
+    """Save four TreatmentReplay objects and display them on one shared clock."""
+    if len(replays) != 4 or not np.isfinite(speed) or speed <= 0:
+        raise ValueError('Supply four replays and a finite positive speed')
+    if any(not replay.states for replay in replays):
+        raise ValueError('Each replay needs recorded states')
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    run = Path(tempfile.mkdtemp(prefix='grid-', dir=directory)).resolve()
+    panes = []
+    for index, replay in enumerate(replays):
+        pane = run / str(index)
+        pane.mkdir()
+        mujoco.mj_saveModel(replay.model, str(pane / 'model.mjb'))
+        np.savez(pane / 'states.npz', states=np.asarray(replay.states),
+                 times=np.asarray(replay.times), label=replay.label)
+        panes.append(str(pane))
+    with (run / 'viewer.log').open('w', encoding='utf-8') as log:
+        process = subprocess.Popen(
+            [sys.executable, '-m', 'spider', 'replay-grid', *panes,
+             '--speed', str(speed), '--ready', str(run / 'ready')],
+            stdout=log, stderr=subprocess.STDOUT, cwd=ROOT,
+            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        if (run / 'ready').exists():
+            print(f'Four-pane replay opened (PID {process.pid}): {run}')
+            return process
+        if process.poll() is not None:
+            raise RuntimeError((run / 'viewer.log').read_text(encoding='utf-8'))
+        time.sleep(.05)
+    raise TimeoutError(f'Viewer startup pending (PID {process.pid}); see {run / "viewer.log"}')
+
+
 class TreatmentReplay:
     """Capture states without stepping or changing the experiment."""
 
