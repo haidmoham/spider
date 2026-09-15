@@ -54,7 +54,9 @@ class ReinforceWorkbenchTests(unittest.TestCase):
             nbformat.write(notebook, target)
             scope = dict(REPO_ROOT=root, sim=SyntheticSimulation(), np=np, pd=pd,
                          geometry_gait=lambda state: np.zeros(18))
-            with contextlib.redirect_stdout(io.StringIO()), patch.object(PolicyRecording, 'watch', return_value=None):
+            with (contextlib.redirect_stdout(io.StringIO()),
+                  patch.object(PolicyRecording, 'watch', return_value=None) as solo_viewer,
+                  patch('spider.recording.launch_replay_grid', return_value=None) as grid_viewer):
                 exec(compile(cells['rf4-initialize'], str(target), 'exec'), scope)
                 exec(compile(cells['draft-reward-workbench'], str(target), 'exec'), scope)
                 scope['SETTINGS'].update(horizon=3, batch_episodes=2, eval_seeds=[101])
@@ -63,6 +65,9 @@ class ReinforceWorkbenchTests(unittest.TestCase):
                              str(target), 'exec'), scope)
                 before_evaluation = copy.deepcopy(scope['actor'].state_dict())
                 exec(compile(cells['rf4-evaluate'], str(target), 'exec'), scope)
+                solo_viewer.assert_not_called()
+                grid_viewer.assert_called_once()
+                self.assertEqual(len(grid_viewer.call_args.args[0]), 4)
             self.assertEqual(scope['updates'], 1)
             self.assertEqual(len(scope['last_batch']), 2)
             for key, value in scope['actor'].state_dict().items():

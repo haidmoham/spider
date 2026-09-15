@@ -12,6 +12,8 @@ the agent owns collection, logs, artifacts, and replay plumbing. No bug count or
 answer key is supplied. No robot training ran during preparation.
 Initialize a fresh run, inspect a bounded training block, then evaluate and replay
 paired policies and controls. Use the later MDP sections to document design choices.
+Evaluation uses one synchronized four-pane replay: before, after, neutral, and
+fixed shuffle. Space pauses; R restarts; arrows and +/- change the shared camera.
 Keep [03_coordinated_baseline.ipynb](lab/notebooks/03_coordinated_baseline.ipynb)
 as the prior REINFORCE and gait reference.
 Next: experiment 1 in [TODO.md](TODO.md), **Establish the task and a predictable
