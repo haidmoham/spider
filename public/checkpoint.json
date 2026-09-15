@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "checkpoint": {
+    "id": "v0.3",
+    "label": "C-1N // 03 · STRIDE",
+    "policy": "walk_fast_500",
+    "source_commit": "14808d5dd08af8f003f1e445e039c588c1f55bd1",
+    "evidence_url": "https://github.com/haidmoham/spider/blob/14808d5dd08af8f003f1e445e039c588c1f55bd1/docs/checkpoints/stride.md"
+  },
+  "metrics": {
+    "mean_speed_m_s": 0.8879874507126051,
+    "sampled_mean_speed_m_s": 0.8211391845151228,
+    "falls": 0,
+    "evaluations": 24
+  },
+  "copy": {
+    "title": "c-1n / learning to walk",
+    "description": "six-legged locomotion learned with PPO.",
+    "summary": "walk_fast_500 reaches 0.888 m/s in the recorded mean-policy run, with 0 falls across 24 fixed flat-ground evaluations. PPO learns joint corrections and gait cadence. compare the preserved policies in the film."
+  },
+  "scope": "Five-second flat-ground evaluations, seeds 201–212 in mean and sampled modes. Deterministic mean runs share an initial state and are not independent robustness trials.",
+  "limits": [
+    "foot slip and contact fragmentation remain.",
+    "terrain, push recovery, and energy efficiency are unproven."
+  ],
+  "media": {
+    "url": "https://raw.githubusercontent.com/haidmoham/spider/master/public/walking-comparison.mp4",
+    "sha256": "69fab245742d3d7e8f958db0572271f44067a06915d704a130d4eff32e0cd567",
+    "poster_url": "https://raw.githubusercontent.com/haidmoham/spider/master/public/walking-comparison.jpg",
+    "poster_sha256": "69766fde0dd282dc17054b494e0a3a20736aec36800f5fe1a7cc3ef32c281995"
+  }
+}

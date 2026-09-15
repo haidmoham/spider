@@ -1,0 +1,19 @@
+{
+  "id": "v0.3",
+  "label": "C-1N // 03 · STRIDE",
+  "policy": "walk_fast_500",
+  "source_commit": "14808d5dd08af8f003f1e445e039c588c1f55bd1",
+  "video": "walking-comparison.mp4",
+  "poster": "walking-comparison.jpg",
+  "copy": {
+    "title": "c-1n / learning to walk",
+    "description": "six-legged locomotion learned with PPO.",
+    "summary": "{policy} reaches {mean_speed_m_s:.3f} m/s in the recorded mean-policy run, with {falls} falls across {evaluations} fixed flat-ground evaluations. PPO learns joint corrections and gait cadence. compare the preserved policies in the film."
+  },
+  "scope": "Five-second flat-ground evaluations, seeds 201–212 in mean and sampled modes. Deterministic mean runs share an initial state and are not independent robustness trials.",
+  "limits": [
+    "foot slip and contact fragmentation remain.",
+    "terrain, push recovery, and energy efficiency are unproven."
+  ],
+  "evidence_path": "docs/checkpoints/stride.md"
+}
