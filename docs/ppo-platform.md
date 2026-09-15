@@ -134,6 +134,52 @@ candidate is promoted, STRIDE remains unearned, and training stopped at the
 approved budget. These results motivate inspecting why sampled forward travel
 does not become a deliberate mean-policy stride before another training round.
 
+### Post-round optimizer audit and proposed comparison
+
+Read-only analysis of the saved update and reward CSVs found that the combined
+trial used one optimizer epoch in 49 of 50 updates (51 total epochs). Lower
+exploration used one epoch in every update. Their median full-batch KL values
+were 0.02252 and 0.02083, above the configured 0.015 stopping threshold.
+`FreshTrainingSession.train` stops both actor and critic when that actor KL
+threshold is reached. Thus the critic receives only about one fifth of its
+configured five passes on these batches. This is an optimizer coupling, not
+proof that critic underfitting caused the failed gait. Saved training traces do
+not contain value targets and explained variance, so that causal claim remains
+untested.
+
+[OpenAI's reference PPO implementation](https://spinningup.openai.com/en/latest/_modules/spinup/algos/pytorch/ppo/ppo.html)
+uses separate policy and value update loops; policy early stopping does not
+terminate value fitting. This supports testing independent critic passes here,
+without replacing the repository's PPO implementation.
+
+The combined trial's weighted velocity reward rose from 0.7326 in the first ten
+updates to 0.9785 in the last ten. Clearance stayed near 0.12 and contact near
+0.11. This reward improvement did not produce useful deterministic travel.
+Action-rate cost was only about 0.0006 per decision, so it is not the largest
+recorded penalty. Reward magnitude alone does not measure its gradient effect.
+
+Proposed next round, **not approved or executed**:
+
+- Reuse the recorded combined trial and accepted PPO-100 as controls.
+- Train two fresh seed-11 candidates for 50 updates each, 8 episodes per update,
+  with the combined trial's noise, reward, target ranges, and 40 ms cadence.
+- Candidate A: give the critic five independent passes per batch; retain actor
+  learning rate 0.0003 and its five-pass maximum and KL stop.
+- Candidate B: same independent critic passes, actor learning rate 0.0001.
+- Record separate actor/critic pass counts, value loss before and after fitting,
+  explained variance, and clipping fraction. Keep the existing raw diagnostics.
+- Evaluate each candidate with mean seed 201 and sampled seeds 201 through 212,
+  five seconds each: 26 new evaluation episodes. Compare the two new mean clips
+  with the two recorded controls in the four-pane viewer at normal speed.
+- Stop at 100 total training updates. Apply the same speed, zero-fall, provenance,
+  and user visual-review requirements; do not extend automatically.
+
+The expected training duration is about 12 to 15 minutes based on the completed
+low-noise runs, with uncertainty from extra critic work. This comparison tests
+optimizer use of existing experience, not whether more forward reward alone
+works. It does not promise an accepted stride. Physics and the notebook remain
+frozen. Execution requires the user's approval under the thread's per-round rule.
+
 ## Empirical acceptance gate
 
 Notebook 04 checks PPO mechanics: saved log probabilities, GAE, loss gradients,
