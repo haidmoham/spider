@@ -1,6 +1,7 @@
 """Four recorded treatments in one synchronized window; no physics integration."""
 
 from pathlib import Path
+import re
 import textwrap
 import time
 
@@ -10,18 +11,30 @@ import numpy as np
 from ..recording import STATE
 
 
-def pane_heading(label):
+def pane_heading(label, training_updates=None):
     """Identify the saved treatment, independent of its quadrant position."""
     name = label.lower()
     if name.startswith('after '):
-        return 'YOUR CODE: AFTER TRAINING', 'Saved trained policy', (.38, .18, .04)
+        title = 'YOUR CODE: AFTER TRAINING'
+        if training_updates is not None:
+            title = f'YOUR CODE: n={training_updates} training updates'
+        return title, 'Saved trained policy', (.38, .18, .04)
     if name.startswith('before '):
-        return 'BEFORE TRAINING', 'Same network, initial weights', (.10, .16, .24)
+        return 'BEFORE TRAINING (n=0)', 'Same network, initial weights', (.10, .16, .24)
     if name.startswith('neutral control'):
         return 'NEUTRAL CONTROL', 'Neutral targets; no learned actions', (.12, .15, .18)
     if name.startswith('fixed shuffle'):
         return 'FIXED SHUFFLE', 'Hand-coded reference; not the learned policy', (.12, .15, .18)
     return 'RECORDED TREATMENT', 'Saved replay', (.12, .15, .18)
+
+
+def recorded_training_updates(directory):
+    """Read the notebook's saved evaluation count; unknown paths stay unknown."""
+    for parent in (Path(directory), *Path(directory).parents):
+        match = re.fullmatch(r'evaluation-(\d+)-\d+', parent.name)
+        if match:
+            return int(match.group(1))
+    return None
 
 
 def quadrants(width, height, gap=4):
@@ -58,7 +71,8 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
         mujoco.mj_setState(model, data, states[0], STATE)
         mujoco.mj_forward(model, data)
         panes.append(dict(model=model, data=data, states=states, times=times,
-                          label=label, origin=data.qpos[:3].copy()))
+                          label=label, training_updates=recorded_training_updates(directory),
+                          origin=data.qpos[:3].copy()))
     if not glfw.init():
         raise RuntimeError('GLFW could not initialize a display')
     window = None
@@ -126,7 +140,7 @@ def replay_grid(directories, speed=0.5, *, ready=None, screenshot=None, max_fram
                                       mujoco.mjtCatBit.mjCAT_ALL, pane['scene'])
                 viewport = mujoco.MjrRect(*rectangle)
                 mujoco.mjr_render(viewport, pane['scene'], pane['context'])
-                title, description, color = pane_heading(pane['label'])
+                title, description, color = pane_heading(pane['label'], pane['training_updates'])
                 left, bottom, pane_width, pane_height = rectangle
                 header = mujoco.MjrRect(left, bottom + pane_height - 82, pane_width, 82)
                 mujoco.mjr_rectangle(header, *color, 1.)

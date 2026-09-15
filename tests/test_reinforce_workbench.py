@@ -7,6 +7,7 @@ import copy
 from dataclasses import replace
 import io
 import importlib.util
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -61,8 +62,11 @@ class ReinforceWorkbenchTests(unittest.TestCase):
                 exec(compile(cells['draft-reward-workbench'], str(target), 'exec'), scope)
                 scope['SETTINGS'].update(horizon=3, batch_episodes=2, eval_seeds=[101])
                 scope['collect'] = lambda *a, **kw: collect(*a, **kw, env_factory=SyntheticSimulation)
-                exec(compile(cells['rf4-train'].replace('UPDATES_THIS_BLOCK = 2', 'UPDATES_THIS_BLOCK = 1'),
-                             str(target), 'exec'), scope)
+                training_source, replacements = re.subn(
+                    r'^UPDATES_THIS_BLOCK\s*=\s*\d+\s*$', 'UPDATES_THIS_BLOCK = 1',
+                    cells['rf4-train'], count=1, flags=re.MULTILINE)
+                self.assertEqual(replacements, 1)
+                exec(compile(training_source, str(target), 'exec'), scope)
                 before_evaluation = copy.deepcopy(scope['actor'].state_dict())
                 exec(compile(cells['rf4-evaluate'], str(target), 'exec'), scope)
                 solo_viewer.assert_not_called()
