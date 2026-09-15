@@ -1,0 +1,2 @@
+# Installer security baseline; apply before installing an environment's requirements.
+pip==26.2.1

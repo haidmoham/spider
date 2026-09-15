@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+.venv-ant/
 venv/
 .pytest_cache/
 telemetry/

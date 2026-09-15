@@ -67,14 +67,30 @@ interface before deciding how to initialize a learned policy.
 
 ```powershell
 py -3.12 -m venv .venv
+.venv/Scripts/python -m pip install --upgrade -r requirements-bootstrap.txt
 .venv/Scripts/python -m pip install -r requirements-learning.txt
 .venv/Scripts/python -m ipykernel install --user --name c1n-pairing --display-name "C-1N pairing (.venv Python 3.12)"
-.venv/Scripts/python -m jupyter lab lab/notebooks/02_first_policy.ipynb
+.venv/Scripts/python -m jupyter lab lab/notebooks/04_mdp_contract.ipynb
 ```
 
 In VS Code, select the **C-1N pairing** kernel. The notebook finds the repository
 from its root or `lab/notebooks/`. Setup imports helpers and resets the robot.
 Run All also calls your policy and executes the inspection cells.
+
+The legacy Ant notebook has its own environment:
+
+```powershell
+py -3.12 -m venv .venv-ant
+.venv-ant/Scripts/python -m pip install --upgrade -r requirements-bootstrap.txt
+.venv-ant/Scripts/python -m pip install -r requirements-ant.txt
+.venv-ant/Scripts/python -m ipykernel install --user --name c1n-ant --display-name "C-1N Ant (.venv-ant Python 3.12)"
+```
+
+Use **C-1N Ant** only for `ant_policy_learning.ipynb`. The shared parent `../.venv`
+remains a legacy environment for other notebooks; neither active manifest installs there.
+Run each environment's `python -m pip check` after installation. Direct dependencies
+are pinned; these files are not a complete transitive lock. Saved run receipts retain
+the model and training settings used by an experiment. Restart a kernel to load upgraded packages.
 
 ## Read only the path you need
 
