@@ -222,6 +222,14 @@ terrain, pushes, or distinct initial postures. Zero observed falls in twelve
 episodes is a finite test result, not a guarantee of zero fall probability.
 The frozen notebook and its historical findings remain unchanged.
 
+The thread goal is stricter than this historical like-for-like comparison:
+the twelve-seed sampled average must match the accepted **mean-action** speed,
+0.378827 m/s. Each policy now also reports `goal_numerical_pass` and
+`goal_failures`, using that stronger threshold plus every existing evidence and
+stability check. `numerical_pass` alone does not establish goal completion.
+The accepted baseline itself does not meet this stronger sampled-speed goal.
+User approval of the continuous real-time gait remains required in either case.
+
 On the saved first fresh round, the accepted baseline passes the numerical gate.
 All three fresh candidates fail for sampled falls, incomplete episodes, and
 forward speed below the reference. The round is marked `failed-acceptance`.

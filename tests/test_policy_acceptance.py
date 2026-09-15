@@ -21,7 +21,7 @@ MODEL_HASH = hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest()
 class AcceptanceTests(unittest.TestCase):
     def fixture(self, root: Path, *, low_speed=False, fall=False, missing_seed=None,
                 duplicate=False, nan=False, missing_frames=False, invalid_model=False,
-                hidden_fall=False, metadata_mismatch=False):
+                hidden_fall=False, metadata_mismatch=False, sampled_forward=1.5):
         entries = []
         model = load_model()
         data = mujoco.MjData(model)
@@ -37,7 +37,7 @@ class AcceptanceTests(unittest.TestCase):
         for mode, seed in cases:
             recording = root / "control" / "evaluation" / f"{mode}-{seed}-{len(entries)}"
             recording.mkdir(parents=True)
-            forward = 1.0 if low_speed else (2.0 if mode == "mean" else 1.5)
+            forward = 1.0 if low_speed else (2.0 if mode == "mean" else sampled_forward)
             rows = []
             times = np.arange(1, 251) * 0.02
             heights = np.full(250, 0.45)
@@ -86,6 +86,17 @@ class AcceptanceTests(unittest.TestCase):
         self.assertTrue(report["numerical_pass"])
         self.assertFalse(report["accepted"])
         self.assertTrue(report["visual_review_required"])
+
+    def test_goal_requires_sampled_speed_to_match_mean_action_baseline(self):
+        report = self.assess()
+        self.assertTrue(report["policies"]["control"]["numerical_pass"])
+        self.assertFalse(report["policies"]["control"]["goal_numerical_pass"])
+        self.assertAlmostEqual(report["goal_sampled_speed_threshold_m_s"], 0.37882745001803586)
+        faster = self.assess(sampled_forward=2.0)
+        self.assertTrue(faster["policies"]["control"]["goal_numerical_pass"])
+        self.assertFalse(faster["accepted"])
+        fallen = self.assess(sampled_forward=2.0, fall=True)
+        self.assertFalse(fallen["policies"]["control"]["goal_numerical_pass"])
 
     def test_rejects_fall_missing_duplicate_nan_and_low_speed(self):
         cases = ({"fall": True}, {"missing_seed": 212}, {"duplicate": True},

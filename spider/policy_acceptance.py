@@ -280,9 +280,16 @@ def assess_round(directory: Path) -> dict:
             failures.append("mean speed is below accepted PPO-100 mean reference")
         if sampled_mean is None or sampled_mean < reference["sampled_mean_speed_m_s"] - 1e-12:
             failures.append("sampled mean speed is below accepted PPO-100 sampled reference")
+        # Preserve the historical like-for-like comparison. The thread goal is
+        # stronger: the 12-seed sampled average must match the mean-action baseline.
+        goal_failures = list(failures)
+        if sampled_mean is None or sampled_mean < reference["mean_speed_m_s"] - 1e-12:
+            goal_failures.append("12-seed mean speed is below accepted PPO-100 mean-action goal reference")
         policies[name] = {
             "numerical_pass": not failures,
             "failures": failures,
+            "goal_numerical_pass": not goal_failures,
+            "goal_failures": goal_failures,
             "record_count": len(group),
             "mean_speed_m_s": mean_speed,
             "sampled_mean_speed_m_s": sampled_mean,
@@ -293,6 +300,7 @@ def assess_round(directory: Path) -> dict:
         "numerical_pass": bool(policies) and all(item["numerical_pass"] for item in policies.values()),
         "accepted": False,
         "visual_review_required": True,
+        "goal_sampled_speed_threshold_m_s": reference["mean_speed_m_s"],
         "policies": policies,
         "reference": reference,
         "report_source_sha256": _sha256(Path(__file__)),
