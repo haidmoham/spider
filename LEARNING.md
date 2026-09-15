@@ -7,7 +7,11 @@ GAE (section 3) is user-implemented and verified on 1,000 saved transitions acro
 four episodes: TD identity, episodic-return identity, boundary isolation, detached
 targets and actor-only normalization pass. Section 4 actor/value losses are now
 user-implemented and pass sign, clipping-gradient, zero-advantage and critic-gradient
-checks. Next: implement one minibatch update in section 5. Collection, tensor records,
+checks. Section 5 is user-implemented: isolated synthetic checks confirm separate
+actor/critic updates, finite reports, frozen inputs and fresh backward graphs.
+Its old scratch calls made two live optimizer steps. Start a fresh section-1 run
+before the recorded two-update smoke test; run definitions through section 6, then
+section 7 and held-out evaluation. No PPO robot training is claimed by these checks. Collection, tensor records,
 diagnostics, checkpointing and replay are
 provided. Run the analytic checks, then a two-update smoke test and held-out review.
 The final cell continues the same run to 100 total PPO updates. Training readiness
