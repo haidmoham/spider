@@ -9,6 +9,7 @@ loading a policy, and preparing a session never starts training.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import math
@@ -252,6 +253,37 @@ class CadenceResidualPolicy:
 class CadenceTrainingSession(ReferenceTrainingSession):
     """Additional PPO updates from the locked stable policy."""
 
+    def set_training_device(self, device: str) -> None:
+        """Move optimization and its Adam history; keep rollout inference on CPU."""
+        selected = torch.device(device)
+        if selected.type not in ("cpu", "cuda"):
+            raise ValueError("training device must be cpu or cuda")
+        if selected.type == "cuda" and not torch.cuda.is_available():
+            raise RuntimeError("CUDA training requested but unavailable; use a CUDA-enabled PyTorch environment")
+        actor_state = self.actor_optimizer.state_dict()
+        critic_state = self.critic_optimizer.state_dict()
+        self.actor.to(selected)
+        self.critic.to(selected)
+        self.actor_optimizer = torch.optim.Adam([
+            {"params": self.actor.legacy.parameters()},
+            {"params": self.actor.cadence_parameters()},
+        ], lr=self.ppo["actor_lr"])
+        self.critic_optimizer = torch.optim.Adam(
+            self.critic.parameters(), lr=self.ppo["critic_lr"])
+        self.actor_optimizer.load_state_dict(actor_state)
+        self.critic_optimizer.load_state_dict(critic_state)
+
+    @property
+    def execution_device(self) -> dict:
+        device = next(self.actor.parameters()).device
+        return dict(optimization=str(device), rollout_physics="cpu", rollout_inference="cpu",
+                    gpu_name=torch.cuda.get_device_name(device) if device.type == "cuda" else None,
+                    torch_cuda_build=torch.version.cuda)
+
+    def _optimize(self, batch):
+        device = next(self.actor.parameters()).device
+        return super()._optimize({name: value.to(device) for name, value in batch.items()})
+
     @classmethod
     def from_checkpoint(cls, checkpoint: str | Path, output_directory: str | Path):
         """Resume all 19 actions and Adam state at a saved update boundary."""
@@ -322,6 +354,12 @@ class CadenceTrainingSession(ReferenceTrainingSession):
         return session
 
     def _episode(self, episode_seed: int) -> dict[str, torch.Tensor]:
+        # MuJoCo supplies one observation at a time on CPU. Keep small inference
+        # there to avoid a device transfer on every 20 ms control step; minibatch
+        # PPO optimization uses the resident GPU networks.
+        on_cpu = next(self.actor.parameters()).device.type == "cpu"
+        actor = self.actor if on_cpu else copy.deepcopy(self.actor).cpu()
+        critic = self.critic if on_cpu else copy.deepcopy(self.critic).cpu()
         data = mujoco.MjData(self.model)
         simulation.reset(self.model, data)
         data.qpos[7:] = self.neutral
@@ -338,15 +376,15 @@ class CadenceTrainingSession(ReferenceTrainingSession):
         for step in range(self.settings["horizon"]):
             obs = controller.observation(observed)
             with torch.no_grad():
-                mean = self.actor(obs)
-                std = self.actor.log_std.clamp(-3.5, -0.5).exp()
+                mean = actor(obs)
+                std = actor.log_std.clamp(-3.5, -0.5).exp()
                 legacy = torch.normal(mean[:ACTION_SIZE], std[:ACTION_SIZE],
                                       generator=legacy_generator)
                 cadence = torch.normal(mean[ACTION_SIZE:], std[ACTION_SIZE:],
                                        generator=cadence_generator)
                 latent = torch.cat((legacy, cadence))
                 old_logp = Normal(mean, std).log_prob(latent).sum()
-                value = self.critic(obs).squeeze(-1)
+                value = critic(obs).squeeze(-1)
             previous_residual = controller.previous_residual.copy()
             target = controller.targets(observed, latent.numpy())
             previous_x = observed.torso_position[0]
@@ -364,7 +402,7 @@ class CadenceTrainingSession(ReferenceTrainingSession):
             total -= self.reward["fall"] if fell else 0.0
             with torch.no_grad():
                 next_obs = controller.observation(observed)
-                next_value = self.critic(next_obs).squeeze(-1)
+                next_value = critic(next_obs).squeeze(-1)
             records.append((obs, latent, old_logp, torch.tensor(total, dtype=torch.float32),
                             value, next_value, torch.tensor(0.0 if fell else 1.0)))
             self.rows.append({"update": self.updates + 1, "episode_seed": episode_seed,
@@ -402,6 +440,7 @@ class CadenceTrainingSession(ReferenceTrainingSession):
             "reward": self.reward, "settings": self.settings,
             "optimizer_rng_state": self.generator.get_state(),
             "cadence_seed_offset": self.cadence_seed_offset,
+            "execution_device": self.execution_device,
             "parent_checkpoint": self.parent_checkpoint,
             "parent_payload_parent": self.parent_payload_parent,
             "treatment_changes": self.treatment_changes,
@@ -431,6 +470,7 @@ class CadenceTrainingSession(ReferenceTrainingSession):
         config = {
             "status": "RESTORED parent checkpoint; no additional updates yet",
             "policy_kind": POLICY_KIND, "seed": self.seed,
+            "execution_device": self.execution_device,
             "starting_updates": self.updates, "parent_checkpoint": self.parent_checkpoint,
             "parent_payload_parent": self.parent_payload_parent,
             "treatment_changes": self.treatment_changes,
@@ -458,6 +498,8 @@ def main(argv: list[str] | None = None) -> int:
     parent.add_argument("--from-stable", type=Path)
     parent.add_argument("--from-checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda",
+                        help="PPO optimization device; CUDA requires the GPU environment")
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--updates", type=int, help="Number of additional PPO updates")
     action.add_argument("--prepare-only", action="store_true")
@@ -465,6 +507,8 @@ def main(argv: list[str] | None = None) -> int:
     session = (CadenceTrainingSession.from_stable(args.from_stable, args.output)
                if args.from_stable else
                CadenceTrainingSession.from_checkpoint(args.from_checkpoint, args.output))
+    session.set_training_device(args.device)
+    print(json.dumps(session.execution_device), flush=True)
     print(session.prepare() if args.prepare_only else session.train(args.updates))
     return 0
 

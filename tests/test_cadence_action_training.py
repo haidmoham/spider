@@ -56,6 +56,39 @@ class CadenceActionTrainingTests(unittest.TestCase):
             equal(session.critic.state_dict(), other.critic.state_dict())
             self.assertFalse((Path(directory) / "a/steps.csv").exists())
 
+    def test_device_selection_and_gpu_optimizer(self):
+        with tempfile.TemporaryDirectory() as directory:
+            session = CadenceTrainingSession.from_stable(self.parent, Path(directory) / "gpu")
+            session.set_training_device("cpu")
+            if not torch.cuda.is_available():
+                with self.assertRaisesRegex(RuntimeError, "CUDA training requested"):
+                    session.set_training_device("cuda")
+                return
+            original = {key: value.clone() for key, value in session.actor.state_dict().items()}
+            session.set_training_device("cuda")
+            self.assertEqual(session.execution_device["optimization"], "cuda:0")
+            for key, value in session.actor.state_dict().items():
+                self.assertTrue(torch.equal(original[key], value.cpu()))
+            obs = torch.randn(16, 68, generator=torch.Generator().manual_seed(123))
+            with torch.no_grad():
+                mean = session.actor(obs.cuda())
+                distribution = torch.distributions.Normal(mean, session.actor.log_std.clamp(-3.5, -.5).exp())
+                actions = mean.cpu()
+                old_logp = distribution.log_prob(mean).sum(-1).cpu()
+            batch = dict(obs=obs, actions=actions, old_logp=old_logp,
+                         advantages=torch.linspace(-1, 1, 16), targets=torch.ones(16))
+            session._optimize(batch)
+            self.assertTrue(all(p.device.type == "cuda" for p in session.actor.parameters()))
+            self.assertTrue(any(not torch.equal(original[k], v.cpu())
+                                for k, v in session.actor.state_dict().items()))
+            for optimizer in (session.actor_optimizer, session.critic_optimizer):
+                for state in optimizer.state.values():
+                    self.assertEqual(state["exp_avg"].device.type, "cuda")
+            path = session.prepare()
+            restored = CadenceTrainingSession.from_checkpoint(path, Path(directory) / "restored")
+            for key, value in session.actor.state_dict().items():
+                self.assertTrue(torch.equal(value.cpu(), restored.actor.state_dict()[key]))
+
     def test_transfer_and_zero_adjustment_match_locked_mean_policy(self):
         with tempfile.TemporaryDirectory() as directory:
             session = CadenceTrainingSession.from_stable(self.parent, Path(directory) / "prepared")

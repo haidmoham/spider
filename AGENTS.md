@@ -25,6 +25,9 @@ These instructions apply to the entire repository.
   user-selected n=200 speed checkpoint; use `CHECKPOINTS.md` and its manifest.
   Preserve both. The fast checkpoint retains documented contact fragmentation;
   do not equate its selection with completion of the deliberate-stride goal.
+- `walk_fast_300` is preserved at the user's request. The continuation to
+  `walk_fast_500` is bounded to 200 more updates with evaluations at 400 and 500.
+  Names preserve measured checkpoints; they do not imply unmeasured gait quality.
 
 - `C-1N v0.2 - STAND` is earned as the recorded six-contact baseline. Disturbance recovery is excluded. Preserve its evidence and known failures; cleanup does not raise this gate or earn STRIDE.
 - `PPO-100-CRUDE-20260915` is the user-accepted crude learned forward-travel baseline. Preserve [weights, settings, measurements, and viewed replays](artifacts/ppo-crude-baseline-20260915/README.md). The 50/100 comparison uses fixed flat-ground development scenarios; STRIDE remains unearned.
@@ -36,6 +39,13 @@ These instructions apply to the entire repository.
 - Before landing a commit that changes checkpoint state, capability claims, or test-bench provenance, use the installed `commit-boundary` skill with `.ontology/commit-rules.md`.
 
 ## Working agreements
+
+- Use the available GPU for PPO neural-network optimization. Check the selected
+  PyTorch device and CUDA backend before training, and record them with the run.
+  Do not silently fall back to CPU after an explicit GPU request. MuJoCo rollout
+  physics and small per-step inference may remain on CPU; report that split and
+  measure performance before claiming a speedup. Preserve checkpoints before
+  changing the training device or environment.
 
 - C-1N has exactly six legs, three per side. This is invariant during chassis, joint, visual, and policy redesign.
 - Keep changes small and easy to review.
