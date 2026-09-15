@@ -2,6 +2,15 @@
 
 ## Resume
 
+Current revision (2026-09-14): the user has corrected REINFORCE sampling,
+score-function/log-probability handling, signed velocity reward, episodic returns,
+boundary credit, and loss/update diagnostics. Do not restart those exercises.
+The next step is [held-out behavior diagnosis](lab/notes/2026-09-14-heldout-reinforce.md).
+Follow the active failure-driven route and 48/50 STRIDE target in [TODO.md](TODO.md).
+The older gait-parameter/PPO sequence below is a reference, not a required next
+intervention. The user owns each hypothesis, design change and interpretation.
+
+
 Open [04_mdp_contract.ipynb](lab/notebooks/04_mdp_contract.ipynb) for
 [issue #33](https://github.com/haidmoham/spider/issues/33). It is a prepared scaffold
 that continues notebook 03's final fixed-shuffle versus feedback-policy comparison.

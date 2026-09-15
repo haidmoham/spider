@@ -8,6 +8,39 @@ into the new notebook, then follow the experiments below.
 [LEARNING.md](LEARNING.md) selects the active step; this file owns its planned
 sequence. The archived test-bench queue does not select current work.
 
+## Active route - 2026-09-14 revision
+
+Continue from the user's corrected REINFORCE learner in notebook 04. The five
+experiments below are earlier proposals, not a required order or permission to
+replace the direct-joint policy with a gait wrapper. Use run -> observe -> hypothesis
+-> small reading -> one change -> rerun. Introduce baselines, advantage estimation,
+exploration changes and explicit PyTorch PPO when observed failures motivate them.
+Current evidence and references: [held-out review](lab/notes/2026-09-14-heldout-reinforce.md).
+
+### STRIDE target (unearned)
+
+The user requested a harder goal and set the success requirement to **48/50**.
+This target supersedes the earlier proposed thresholds preserved below.
+
+- Each successful trial lasts 30 seconds, covers at least 5 measured torso lengths
+  forward, and shows at least 10 visible step cycles at normal playback speed.
+- Lateral drift stays below 0.5 torso length; heading error stays below 15 degrees.
+- Pass at least 48 of 50 trials: 5 independent training seeds times 10 predeclared
+  held-out conditions, with no training seed below 8/10. This is an empirical gate,
+  not proof of a 96% population success probability.
+- Require sustained progress after startup, finite simulation, correct timestamps,
+  no resets/falls, and measured foot lift, recovery and supporting stance. Contact
+  and foot-motion traces must rule out persistent sliding. No prescribed gait.
+- Before final evaluation, declare torso-length measurement, startup window,
+  condition suite, per-window progress, contact/slip tolerance, and fall/body-contact
+  rules. Conditions must test more than changing action RNG seeds alone.
+- Compare initialization, neutral, fixed shuffle and trained checkpoints on the same
+  suite. Save all successes and failures, sources, settings, model hashes and replays.
+  Declare whether deployment uses sampled or mean actions; report both separately.
+
+These are project targets, not literature thresholds. STAND is unchanged; STRIDE
+requires evidence and checkpoint review. The user owns design and interpretation.
+
 ## Outcome and ownership
 
 Produce repeatable forward motion that visibly consists of steps, while the user
