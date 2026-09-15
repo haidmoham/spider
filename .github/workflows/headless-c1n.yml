@@ -37,3 +37,5 @@ jobs:
         run: python -m pip check
       - name: Check physics, recording, CLI, and notebook source
         run: python -m unittest discover -s tests -v
+      - name: Check published checkpoint evidence and media
+        run: python scripts/export_checkpoint_feed.py --check

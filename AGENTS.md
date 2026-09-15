@@ -97,3 +97,9 @@ These instructions apply to the entire repository.
 - Use [docs/demo-style.md](docs/demo-style.md) for short C-1N checkpoint films.
 - Match the established 1080 × 1350, 50 fps, ten-second two-view format, purple stage, thin world grid, and gradient overlays unless the user requests another format.
 - Render saved measured states at 1× with the repository renderer. Keep dynamic pupils and life lights active. State replay provenance and checkpoint evidence accurately.
+
+## Published checkpoint feed
+
+- The portfolio follows `public/checkpoint.json`. When a new checkpoint is accepted for publication, update `public/selection.json`, its matching demo and poster, then run `python scripts/export_checkpoint_feed.py`. Commit the feed with its evidence and media. Do not relabel an older demo as a newer policy.
+- Run `python scripts/export_checkpoint_feed.py --check` before publishing feed changes. The exporter verifies the preserved policy hash and reads metrics from its manifest; it does not run training or promote an experiment.
+- The website synchronizes this published record hourly and on manual dispatch. Its name, copy, measurements, limits, and demo must stay consistent. Unapproved or incomplete experimental runs do not replace the published checkpoint.
