@@ -26,6 +26,10 @@ camera scale, clock, and 1× playback in both panels. Show measured speed and
 live displacement beside each replay. Repeat both recordings from the second
 camera after five seconds. See `scripts/render_walk_speed_demo.py`.
 
+Use `scripts/render_walk_four_checkpoint_demo.py` for the four-pane walking
+comparison. It keeps the same clock, scale, angles, measured speed, and live
+displacement across all four saved trajectories.
+
 Generated videos belong outside Git. Verify the final duration, dimensions,
 frame rate, video codec, pixel format, representative frames, transition, and
 audio stream. Preserve silence when the reference has no audio.

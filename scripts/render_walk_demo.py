@@ -74,12 +74,12 @@ def draw_overlay(canvas: Image.Image, shot: int, time_s: float) -> None:
     draw.text((1026, 1254), clock, anchor="ra", font=font(27), fill="#b7b1c3")
 
 
-def add_reference_grid(renderer: mujoco.Renderer) -> None:
+def add_reference_grid(renderer: mujoco.Renderer, *, extent: float = 4.0) -> None:
     """Add the reference film's thin world grid after scene construction."""
     for axis in (0, 1):
-        for value in np.arange(-4, 4.01, 0.25):
-            start = np.array([-4, value, 0.001])
-            end = np.array([4, value, 0.001])
+        for value in np.arange(-extent, extent + 0.01, 0.25):
+            start = np.array([-extent, value, 0.001])
+            end = np.array([extent, value, 0.001])
             if axis:
                 start = start[[1, 0, 2]]
                 end = end[[1, 0, 2]]
