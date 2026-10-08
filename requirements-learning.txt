@@ -1,7 +1,7 @@
 # Keep the physics baseline identical to the CLI environment.
 -r requirements-test.txt
 # Notebook tooling. Record installed versions with comparisons.
-jupyterlab==4.6.3
+jupyterlab==4.6.4
 ipykernel==7.3.0
 nbclient==0.11.0
 pandas==3.0.5
